@@ -6,8 +6,9 @@ import {Link, useLocation} from "react-router-dom";
 
 export default function Header(props) {
     const location = useLocation();
+    const [isLogged, setIsLogged] = useState(true);
     const isAdminPanel = location.pathname === '/adminpanel';
-    const [userRole, setUserRole] = useState("manager");
+    const [userRole, setUserRole] = useState("user");
     const isManager = userRole === "manager";
     const isUser = userRole === "user";
     const isAdmin = userRole === "admin";
@@ -98,17 +99,35 @@ export default function Header(props) {
                             <LinkContainer to={'/user/referrals'}>
                                 <Button className={headerStyles['btn-header']}>Мої направлення</Button>
                             </LinkContainer>
-                            <LinkContainer to={'/user/profile'}>
-                                <Button className={headerStyles['btn-header']}>Налаштування</Button>
-                            </LinkContainer>
                         </div>
 
                     </>
                 ) : (<></>)
                 }
-                <LinkContainer to={'/sign-in'}>
-                    <Button className={headerStyles['btn-join']}>Увійти</Button>
-                </LinkContainer>
+                {
+                    isLogged ? (
+                            <>
+                                <div>
+                                    <LinkContainer to={'/user/profile'}>
+                                        <Button className={headerStyles.profileBadge}>
+                                            <div className={headerStyles.title}>Oleksandr Karas</div>
+                                            <div className={headerStyles.image}>
+                                                <img src="/assets/profile.jpg" alt="profile"/>
+                                            </div>
+                                        </Button>
+                                    </LinkContainer>
+                                </div>
+                            </>
+                        )
+                        :
+                        (
+                            <>
+                                <LinkContainer to={'/sign-in'}>
+                                    <Button className={headerStyles['btn-join']}>Увійти</Button>
+                                </LinkContainer>
+                            </>
+                        )
+                }
             </Nav>
         </Navbar>
     );

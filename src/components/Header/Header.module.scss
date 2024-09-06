@@ -1,7 +1,7 @@
 .root {
   padding: 10px 120px;
   background: #ffffff;
-  box-shadow: 0px 6px 10px rgba(2, 2, 2, 0.25);
+  box-shadow: 0 6px 10px rgba(2, 2, 2, 0.25);
 
   .brand-text {
     color: dodgerblue;
@@ -66,5 +66,37 @@
       background-color: #ffffff;
       color: black;
     }
+  }
+
+  .profileBadge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0 10px;
+    background: none;
+    color: black;
+    border: none;
+
+    &:focus {
+      border: none;
+      background: none;
+      color: black;
+    }
+  }
+
+  .image {
+    width: 50px;
+    height: 50px;
+
+    img {
+      object-fit: cover;
+      max-width: 100%;
+    }
+  }
+
+  .title {
+    font-weight: bold;
+    margin-right: 10px;
   }
 }

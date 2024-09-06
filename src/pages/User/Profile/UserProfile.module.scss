@@ -1,0 +1,66 @@
+.root {
+  margin: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  width: 1000px;
+}
+
+.leftSide {
+  border-right: 1px solid gray;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  label {
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  input {
+    flex: none;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+    outline: 0;
+    margin-bottom: 10px;
+
+  }
+  .image {
+    width: 100px;
+    height: 100px;
+
+    img {
+      object-fit: cover;
+      max-width: 100%;
+    }
+  }
+}
+
+.rightSide {
+  padding: 20px;
+  //width: 300px;
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+
+  ul > *:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .roleBadge {
+    padding: 10px 30px;
+    border: 1px solid #ebebeb;
+    box-shadow: 1px 0 2px #ebebeb;
+    border-radius: 10px;
+  }
+}
+
