@@ -1,0 +1,63 @@
+.root {
+  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  border-radius: 4px;
+  padding: 10px 20px;
+
+  display: flex;
+  align-items: center;
+  //justify-content: space-between;
+  gap: 15px;
+}
+
+.image {
+  width: 150px;
+  height: 150px;
+  background: black;
+  flex-shrink: 0;
+}
+
+.content > *:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.headContent {
+  display: flex;
+  justify-content: space-between;
+
+  .heading {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .status {
+    color: gray;
+    margin-left: auto;
+  }
+}
+.shortDesc {
+  font-size: 14px;
+  color: gray;
+  font-weight: 600;
+}
+
+.contentFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .chips {
+    color: gray;
+    font-size: 14px;
+  }
+
+  .btnWidget {
+    background: dodgerblue;
+    border: none;
+    color: white;
+
+    &:hover {
+      background: midnightblue;
+    }
+  }
+}

@@ -1,0 +1,70 @@
+.root {
+  padding: 10px 120px;
+  background: #ffffff;
+  box-shadow: 0px 6px 10px rgba(2, 2, 2, 0.25);
+
+  .brand-text {
+    color: dodgerblue;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    padding-left: 10px;
+  }
+
+  .btn-header {
+    background: none;
+    color: black;
+    border: none;
+    font-size: 16px;
+    text-transform: uppercase;
+
+    &:hover {
+      color: dodgerblue;
+      transition: all .3s ease-in-out;
+    }
+
+  }
+
+  .menu-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 50px;
+    gap: 20px;
+
+  }
+
+
+
+  .btn-join {
+    border: 1px solid dodgerblue;
+    background-color: #ffffff;
+    padding: 10px 15px;
+    margin-right: 15px;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 16px;
+
+    &:last-child{
+      background-color: dodgerblue;
+    }
+
+    &:hover {
+      scale: 1.0123;
+    }
+  }
+  .drop-link {
+    padding: 10px;
+  }
+
+  .profile {
+    background: white;
+    color: black;
+    border: none;
+    padding: 10px 20px 10px 20px;
+    &:focus {
+      background-color: #ffffff;
+      color: black;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+.root {
+  padding: 10px 20px;
+  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  border-radius: 4px;
+
+
+  .headingContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .heading {
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .starsContainer {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    & > li {
+      margin: 0 5px;
+    }
+  }
+
+  .body {
+    margin: 15px 0 10px 0;
+    color: gray;
+  }
+  
+  .footer {
+    color: gray;
+    font-size: 14px;
+  }
+}
+
+

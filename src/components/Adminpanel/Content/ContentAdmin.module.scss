@@ -1,0 +1,28 @@
+.root {
+  margin: 150px auto;
+  max-width: 1200px;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 40px;
+}
+
+.cardContent {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 5px;
+  border: 1px solid midnightblue;
+}
+
+.number {
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.desc {
+  color: rgba(0,0,0,0.7);
+}

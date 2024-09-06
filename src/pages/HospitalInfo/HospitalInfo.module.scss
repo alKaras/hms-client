@@ -1,0 +1,46 @@
+.root {
+  margin-top: 50px;
+}
+
+.doctors {
+  padding: 10px !important;
+
+  & > div {
+    margin-bottom: 20px;
+  }
+}
+
+.doctorsList > *:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.reviews {
+  margin-top: 20px;
+}
+
+.addReview {
+  width: 500px;
+  align-self: flex-start;
+  padding: 25px;
+  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
+}
+
+.reviewList {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.reviewCollection > *:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+

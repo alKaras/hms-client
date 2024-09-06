@@ -1,0 +1,30 @@
+.root {
+  max-width: 1180px;
+  margin: 125px auto 0;
+  padding: 15px;
+  border-radius: 25px;
+
+  .search-btn {
+    padding: 8px 15px;
+    background-color: dodgerblue;
+    border: none;
+    color: #ffffff;
+    font-weight: bold;
+    margin-left: 15px;
+    border-radius: 15px;
+    font-size: 16px;
+  }
+
+  .most-viewed-tags {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.search {
+  display: flex;
+  justify-content: space-between;
+}
+
