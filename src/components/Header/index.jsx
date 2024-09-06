@@ -30,16 +30,16 @@ export default function Header(props) {
                 {isAdminPanel && isManager ? (
                     <>
                         <div className={headerStyles['menu-header']}>
-                            <LinkContainer to={'/doctors'}>
+                            <LinkContainer to={'/adminpanel/doctors'}>
                                 <Button className={headerStyles['btn-header']}>Лікарі</Button>
                             </LinkContainer>
-                            <LinkContainer to={'/services'}>
+                            <LinkContainer to={'/adminpanel/services'}>
                                 <Button className={headerStyles['btn-header']}>Послуги</Button>
                             </LinkContainer>
-                            <LinkContainer to={'/users'}>
+                            <LinkContainer to={'/adminpanel/users'}>
                                 <Button className={headerStyles['btn-header']}>Пацієнти</Button>
                             </LinkContainer>
-                            <LinkContainer to={'/reports'}>
+                            <LinkContainer to={'/adminpanel/reports'}>
                                 <Button className={headerStyles['btn-header']}>Звіти</Button>
                             </LinkContainer>
                             <Dropdown>
@@ -48,9 +48,9 @@ export default function Header(props) {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
-                                    <Dropdown.Item href="/settings/hospital">Лікарня</Dropdown.Item>
-                                    <Dropdown.Item href="/settings/departments">Відділи</Dropdown.Item>
-                                    <Dropdown.Item href="/order-history">Історія замовлень</Dropdown.Item>
+                                    <Dropdown.Item href="/adminpanel/settings/hospital">Лікарня</Dropdown.Item>
+                                    <Dropdown.Item href="/adminpanel/settings/departments">Відділи</Dropdown.Item>
+                                    <Dropdown.Item href="/adminpanel/order-history">Історія замовлень</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>
@@ -58,16 +58,16 @@ export default function Header(props) {
                 ) : isAdminPanel && isDoctor ? (
                     <>
                         <div className={headerStyles['menu-header']}>
-                            <LinkContainer to={'/services'}>
+                            <LinkContainer to={'/adminpanel/services'}>
                                 <Button className={headerStyles['btn-header']}>Послуги</Button>
                             </LinkContainer>
-                            <LinkContainer to={'/users'}>
+                            <LinkContainer to={'/adminpanel/users'}>
                                 <Button className={headerStyles['btn-header']}>Пацієнти</Button>
                             </LinkContainer>
-                            <LinkContainer to={'/reports'}>
+                            <LinkContainer to={'/adminpanel/reports'}>
                                 <Button className={headerStyles['btn-header']}>Звіти</Button>
                             </LinkContainer>
-                            <LinkContainer to={'/order-history'}>
+                            <LinkContainer to={'/adminpanel/order-history'}>
                                 <Button className={headerStyles['btn-header']}>Історія замовлень</Button>
                             </LinkContainer>
                         </div>
@@ -75,13 +75,13 @@ export default function Header(props) {
                 ) : isAdminPanel && isAdmin ? (
                     <>
                         <div className={headerStyles['menu-header']}>
-                            <LinkContainer to={'/hospitals'}>
+                            <LinkContainer to={'/adminpanel/hospitals'}>
                                 <Button className={headerStyles['btn-header']}>Лікарні</Button>
                             </LinkContainer>
-                            <LinkContainer to={'/users'}>
+                            <LinkContainer to={'/adminpanel/users'}>
                                 <Button className={headerStyles['btn-header']}>Пацієнти</Button>
                             </LinkContainer>
-                            <LinkContainer to={'/order-history'}>
+                            <LinkContainer to={'/adminpanel/order-history'}>
                                 <Button className={headerStyles['btn-header']}>Історія замовлень</Button>
                             </LinkContainer>
                         </div>
