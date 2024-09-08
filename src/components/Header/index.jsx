@@ -6,7 +6,7 @@ import {Link, useLocation} from "react-router-dom";
 
 export default function Header(props) {
     const location = useLocation();
-    const [isLogged, setIsLogged] = useState(true);
+    const [isLogged, setIsLogged] = useState(false);
     const isAdminPanel = location.pathname === '/adminpanel';
     const [userRole, setUserRole] = useState("user");
     const isManager = userRole === "manager";
