@@ -13,8 +13,16 @@ import HospitalPage from "./pages/Adminpanel/Settings/HospitalPage";
 import Departments from "./pages/Adminpanel/Settings/Departments";
 import OrderHistory from "./pages/Adminpanel/Settings/OrderHistory";
 import UserProfile from "./pages/User/Profile";
+import {useDispatch} from "react-redux";
+import {useEffect} from "react";
+import {getMe} from "./redux/slices/authSlice";
 
 function App() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getMe());
+    }, [dispatch]);
+
     return (
         <div className={"_container"}>
             <Routes>

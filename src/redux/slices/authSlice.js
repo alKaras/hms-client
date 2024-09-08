@@ -4,7 +4,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     user: null,
-    token: null,
+    token: localStorage.getItem('token') || null,
     isLoading: 'loading',
     error: null,
     isRegistered: false
@@ -14,8 +14,9 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (params, {_, r
     try {
         const {data} = await axios.post('/auth/login', params);
 
-        if (data.token){
-            window.localStorage.setItem("token", data.token);
+        if (data.access_token){
+            window.localStorage.setItem("token", data.access_token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
         }
         return data;
     } catch (error){
@@ -26,6 +27,7 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (params, {_, r
 export const getMe = createAsyncThunk('auth/getMe', async (_, { rejectWithValue}) => {
     try {
         const {data} = await axios.get('/user/me');
+        console.log(data);
         return data;
     } catch (error){
         return rejectWithValue(error.response.data);
@@ -35,7 +37,6 @@ export const getMe = createAsyncThunk('auth/getMe', async (_, { rejectWithValue}
 export const registerUser = createAsyncThunk('auth/registerUser', async (params, { rejectWithValue }) => {
     try {
         const {data} = await axios.post('/auth/register', params);
-        console.log(data);
         return data;
     } catch (error){
         return rejectWithValue(error.response.data);
