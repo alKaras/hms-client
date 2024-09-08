@@ -4,7 +4,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     user: null,
-    token: localStorage.getItem('token') || null,
+    token: null,
     isLoading: 'loading',
     error: null,
     isRegistered: false
@@ -13,6 +13,7 @@ const initialState = {
 export const loginUser = createAsyncThunk('auth/loginUser', async (params, {_, rejectWithValue}) => {
     try {
         const {data} = await axios.post('/auth/login', params);
+        console.log(data);
 
         if (data.access_token){
             window.localStorage.setItem("token", data.access_token);
@@ -91,6 +92,7 @@ const authSlice = createSlice({
             .addCase(getMe.fulfilled, (state, action) => {
                 state.isLoading = 'loaded'
                 state.user = action.payload?.user
+                state.token = localStorage.getItem('token')
                 state.error = null
             })
             .addCase(getMe.rejected, (state, action) => {
@@ -103,6 +105,7 @@ const authSlice = createSlice({
 export const selectIsRegged = (state) => (state.auth.isRegistered);
 export const selectIsLogged = (state) => Boolean(state.auth.token);
 export const infoAboutUser = (state) => (state.auth.user);
+export const selectStatus = (state) => (state.auth.isLoading);
 
 export const {logout} = authSlice.actions;
 export const authReducer = authSlice.reducer;

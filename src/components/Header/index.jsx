@@ -1,22 +1,39 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Dropdown, Nav, Navbar} from "react-bootstrap";
 import {LinkContainer} from 'react-router-bootstrap';
 import headerStyles from './Header.module.scss';
-import {Link, useLocation} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {infoAboutUser, selectIsLogged} from "../../redux/slices/authSlice";
+import {Link, useLocation, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {infoAboutUser, logout, selectIsLogged, selectStatus} from "../../redux/slices/authSlice";
 
-export default function Header(props) {
+export default function Header() {
     const location = useLocation();
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const isAdminPanel = location.pathname === '/adminpanel';
-
-    const [userRole, setUserRole] = useState("user");
+    // console.log(user);
+    // console.log(isLogged);
+    const userRole = isLogged && user.roles;
+    console.log(userRole);
     const isManager = userRole === "manager";
     const isUser = userRole === "user";
     const isAdmin = userRole === "admin";
     const isDoctor = userRole === "doctor";
+
+    const logOutHandler = () => {
+        dispatch(logout());
+        window.localStorage.removeItem("token");
+        navigate("/");
+
+    }
+
+    useEffect(() => {
+        if (isAdmin || isDoctor || isManager){
+            navigate('/adminpanel');
+        }
+    }, [isAdmin, isDoctor, isManager, navigate]);
 
     return (
         <Navbar expand="md" className={`${headerStyles.root} d-flex justify-content-between fixed-top`}>
@@ -82,6 +99,21 @@ export default function Header(props) {
                                         <Button className={headerStyles['btn-header']}>Історія замовлень</Button>
                                     </LinkContainer>
                                 </div>
+                                <Dropdown align="end">
+                                    <Dropdown.Toggle id={'headerToggle'} className={` ${headerStyles.profileBadge}`}>
+                                        <div
+                                            className={headerStyles.title}>{user.data.name} {user.data.surname}</div>
+                                        <div className={headerStyles.image}>
+                                            <img src="/assets/profile.jpg" alt="profile"/>
+                                        </div>
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
+                                        <LinkContainer to={isUser ? '/profile' : '/adminpanel'}>
+                                            <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
+                                        </LinkContainer>
+                                        <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </>
                         ) : isAdminPanel && isAdmin ? (
                             <>
@@ -111,14 +143,26 @@ export default function Header(props) {
                                     </LinkContainer>
                                 </div>
                                     <div>
-                                        <LinkContainer to={'/user/profile'}>
-                                            <Button className={headerStyles.profileBadge}>
-                                                <div className={headerStyles.title}>Oleksandr Karas</div>
+                                        <Dropdown align="end">
+                                            <Dropdown.Toggle className={` ${headerStyles.profileBadge} shadow-sm rounded d-flex align-items-center justify-content-center`}>
+                                                <div
+                                                    className={headerStyles.title}>{user.data.name} {user.data.surname}</div>
                                                 <div className={headerStyles.image}>
                                                     <img src="/assets/profile.jpg" alt="profile"/>
                                                 </div>
-                                            </Button>
-                                        </LinkContainer>
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu className='mt-3 p-3'>
+                                                <LinkContainer to='/create-post'>
+                                                    <Dropdown.Item className={`${headerStyles['drop-link']}`}>Створити пост</Dropdown.Item>
+                                                </LinkContainer>
+                                                <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                        {/*<LinkContainer to={'/user/profile'}>*/}
+                                        {/*    <Button className={headerStyles.profileBadge}>*/}
+
+                                        {/*    </Button>*/}
+                                        {/*</LinkContainer>*/}
                                     </div>
                             </>
                         ) : (<></>)

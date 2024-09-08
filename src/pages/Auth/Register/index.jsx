@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import RegisterStyles from "../Auth.module.scss";
 import {Link, useNavigate} from "react-router-dom";
-import IntlTelInput from "intl-tel-input/reactWithUtils";
 import "intl-tel-input/styles";
 import {useDispatch, useSelector} from "react-redux";
 import {registerUser, selectIsRegged} from "../../../redux/slices/authSlice";
@@ -16,7 +15,6 @@ export default function Register() {
     const {
         register,
         handleSubmit,
-        setValue,
         formState: {
             errors,
         },

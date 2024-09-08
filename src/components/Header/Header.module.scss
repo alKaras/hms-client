@@ -76,6 +76,7 @@
     padding: 0 10px;
     background: none;
     color: black;
+    font-weight: 400 !important;
     border: none;
 
     &:focus {
@@ -96,7 +97,7 @@
   }
 
   .title {
-    font-weight: bold;
+
     margin-right: 10px;
   }
 }
