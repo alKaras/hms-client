@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Dropdown, Nav, Navbar} from "react-bootstrap";
-import {LinkContainer} from 'react-router-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Dropdown, Nav, Navbar } from "react-bootstrap";
+import { LinkContainer } from 'react-router-bootstrap';
 import headerStyles from './Header.module.scss';
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {infoAboutUser, logout, selectIsLogged, selectStatus} from "../../redux/slices/authSlice";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { infoAboutUser, logout, selectIsLogged, selectStatus } from "../../redux/slices/authSlice";
 
 export default function Header() {
     const location = useLocation();
@@ -13,10 +13,7 @@ export default function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isAdminPanel = location.pathname === '/adminpanel';
-    // console.log(user);
-    // console.log(isLogged);
     const userRole = isLogged && user.roles;
-    console.log(userRole);
     const isManager = userRole === "manager";
     const isUser = userRole === "user";
     const isAdmin = userRole === "admin";
@@ -30,7 +27,7 @@ export default function Header() {
     }
 
     useEffect(() => {
-        if (isAdmin || isDoctor || isManager){
+        if (isAdmin || isDoctor || isManager) {
             navigate('/adminpanel');
         }
     }, [isAdmin, isDoctor, isManager, navigate]);
@@ -44,7 +41,7 @@ export default function Header() {
                         alt="logo"
                         width={50}
                         height={50}
-                        className='align-middle'/>
+                        className='align-middle' />
                     <p className={headerStyles['brand-text']}>HMS</p>
                 </Navbar.Brand>
             </LinkContainer>
@@ -69,7 +66,7 @@ export default function Header() {
                                     </LinkContainer>
                                     <Dropdown>
                                         <Dropdown.Toggle className={headerStyles.btnDrop} variant="success"
-                                                         id="dropdown-basic">
+                                            id="dropdown-basic">
                                             Налаштування
                                         </Dropdown.Toggle>
 
@@ -104,7 +101,7 @@ export default function Header() {
                                         <div
                                             className={headerStyles.title}>{user.data.name} {user.data.surname}</div>
                                         <div className={headerStyles.image}>
-                                            <img src="/assets/profile.jpg" alt="profile"/>
+                                            <img src="/assets/profile.jpg" alt="profile" />
                                         </div>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
@@ -142,28 +139,28 @@ export default function Header() {
                                         <Button className={headerStyles['btn-header']}>Мої направлення</Button>
                                     </LinkContainer>
                                 </div>
-                                    <div>
-                                        <Dropdown align="end">
-                                            <Dropdown.Toggle className={` ${headerStyles.profileBadge} shadow-sm rounded d-flex align-items-center justify-content-center`}>
-                                                <div
-                                                    className={headerStyles.title}>{user.data.name} {user.data.surname}</div>
-                                                <div className={headerStyles.image}>
-                                                    <img src="/assets/profile.jpg" alt="profile"/>
-                                                </div>
-                                            </Dropdown.Toggle>
-                                            <Dropdown.Menu className='mt-3 p-3'>
-                                                <LinkContainer to='/user/profile'>
-                                                    <Dropdown.Item className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
-                                                </LinkContainer>
-                                                <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                        {/*<LinkContainer to={'/user/profile'}>*/}
-                                        {/*    <Button className={headerStyles.profileBadge}>*/}
+                                <div>
+                                    <Dropdown align="end">
+                                        <Dropdown.Toggle className={` ${headerStyles.profileBadge} shadow-sm rounded d-flex align-items-center justify-content-center`}>
+                                            <div
+                                                className={headerStyles.title}>{user.data.name} {user.data.surname}</div>
+                                            <div className={headerStyles.image}>
+                                                <img src="/assets/profile.jpg" alt="profile" />
+                                            </div>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu className='mt-3 p-3'>
+                                            <LinkContainer to='/user/profile'>
+                                                <Dropdown.Item className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
+                                            </LinkContainer>
+                                            <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    {/*<LinkContainer to={'/user/profile'}>*/}
+                                    {/*    <Button className={headerStyles.profileBadge}>*/}
 
-                                        {/*    </Button>*/}
-                                        {/*</LinkContainer>*/}
-                                    </div>
+                                    {/*    </Button>*/}
+                                    {/*</LinkContainer>*/}
+                                </div>
                             </>
                         ) : (<></>)
                         }
