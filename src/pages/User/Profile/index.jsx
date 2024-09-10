@@ -1,61 +1,150 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from "../../../components/Header";
 import UserProfileStyles from './UserProfile.module.scss';
-import {Button, Col, Row} from "react-bootstrap";
-import headerStyles from "../../../components/Header/Header.module.scss";
-import Form from "react-bootstrap/Form";
-import IntlTelInput from "intl-tel-input/reactWithUtils";
-import {useSelector} from "react-redux";
-import {infoAboutUser, selectIsLogged} from "../../../redux/slices/authSlice";
+import { Button, Col, Row, Spinner } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { infoAboutUser, selectIsLogged } from "../../../redux/slices/authSlice";
+import axios from '../../../utils/axios';
+import Moment from "react-moment";
+import { LinkContainer } from 'react-router-bootstrap';
 
 export default function UserProfile() {
     const user = useSelector(infoAboutUser);
     const isLogged = useSelector(selectIsLogged);
     const mainRole = isLogged && user.roles;
+    const userEmail = isLogged && user.data.email;
+    console.log(userEmail);
+    const isVerified = isLogged && user.data.email_verified_at !== null;
+    const [isButtonDisabled, setIsDisabled] = useState(false);
+
+    const resendVerification = async () => {
+        setIsDisabled(true);
+        await axios.post('/auth/email-resend-verification', { email: userEmail })
+            .then((response) => {
+                alert(response.data.message || 'Лист підтвердження надіслано');
+
+                setTimeout(() => {
+                    setIsDisabled(false);
+                }, 60000);
+            })
+            .catch((error) => {
+                alert(error.data.message || 'Сталася помилка');
+                setIsDisabled(false);
+            })
+    }
+
     return (
         <>
-            <Header/>
+            <Header />
             {isLogged ? (
                 <div className={UserProfileStyles.root}>
-                    <Row className={UserProfileStyles.content}>
-                        <Col className={UserProfileStyles.leftSide} lg={9} md={9} xs={9}>
-                            <div className={UserProfileStyles.image}>
-                                <img src="/assets/profile.jpg" alt="profile"/>
+                    <Row>
+                        <Col lg={6} md={6} xs={6} className={UserProfileStyles.leftSide}>
+                            <div className={UserProfileStyles.nestedContent}>
+                                <div className={UserProfileStyles.userFrstContent}>
+                                    <div className={UserProfileStyles.image}>
+                                        <img src="/assets/profile.jpg" alt="profile" />
+                                    </div>
+                                    <div className={UserProfileStyles.titles}>
+                                        <div
+                                            className={UserProfileStyles.title}
+                                        >
+                                            {user.data.name} {user.data.surname}
+                                        </div>
+                                        <ul>
+                                            <li className={UserProfileStyles.roleBadge}>
+                                                {mainRole}
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                    <div className={UserProfileStyles.verificationStatus}>
+                                        {user.data.email_verified_at === null ? "Unverified" : (<> Verified at  <Moment format="DD/MM/YYYY HH:mm:ss">{user.data.email_verified_at}</Moment> </>)}
+                                    </div>
+                                </div>
+                                <div className={UserProfileStyles.userSndContent}>
+                                    <div className={"d-flex justify-content-between align-items-center"}>
+                                        <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                            <label>Ім'я</label>
+                                            <input type="text" value={user.data.name} />
+                                        </div>
+                                        <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                            <label>Прізвище</label>
+                                            <input type="text" value={user.data.surname} />
+                                        </div>
+                                    </div>
+                                    <div className={"d-flex justify-content-between align-items-center"}>
+                                        <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                            <label>Пошта</label>
+                                            <input type="text" disabled={true} value={user.data.email} />
+                                        </div>
+                                        <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                            <label>Телефон</label>
+                                            <input type="text" disabled={true} value={user.data.phone} />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                    <label>Пароль</label>
+                                    <input className={UserProfileStyles.pwdInp} type="text" />
+                                </div>
+                                <Button type={"submit"}>Зберегти</Button>
                             </div>
-                            <div className={UserProfileStyles.title}>{user.data.name} {user.data.surname}</div>
-                            <div className="d-flex flex-column">
-                                <label>Пошта</label>
-                                <input
-                                    type="text"
-                                    value={user.data.email}
-                                    disabled={true}
-                                    // className={`${errors.email ? RegisterStyles['error-input'] : ''}`}
-                                />
-                            </div>
-                            <div className="d-flex flex-column">
-                                <label>Телефон</label>
-                                <input type="text" value={user.data.phone}/>
-                            </div>
-                            <div style={{marginTop: '10px'}} className="d-flex flex-column">
-                                <label>Новий пароль</label>
-                                <input
-                                    type={"password"}
-                                />
-                            </div>
-                            <Button type={"submit"}>Зберегти</Button>
+
+                            {!isVerified ? (
+                                <>
+                                    <hr />
+                                    <div className={UserProfileStyles.verificationBlock}>
+                                        <div className={UserProfileStyles.vTitle}>Верифікація</div>
+                                        <p>Для підтвердження акаунту та доступу до всіх можливостей сайту потрібно
+                                            підтвердити пошту. Ми надіслали вам лист на пошту (перевірте папку спам)
+                                            Якщо листа все-таки немає - надішлемо його знову
+                                        </p>
+                                        <Button disabled={isButtonDisabled} onClick={resendVerification}>Надіслати</Button>
+
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                </>
+                            )}
+
                         </Col>
-                        <Col className={UserProfileStyles.rightSide} lg={3} md={3} xs={3}>
-                            <ul>
-                                    <li className={UserProfileStyles.roleBadge}>
-                                        {mainRole}
-                                    </li>
-                            </ul>
+                        <Col lg={6} md={6} xs={6} className={UserProfileStyles.rightSide}>
+                            <div className={UserProfileStyles.servicesBlock}>
+                                <div className={UserProfileStyles.servicesContent}>
+                                    <div className={UserProfileStyles.rsTitle}>Мої послуги</div>
+                                    <ul className={UserProfileStyles.rsList}>
+                                        {[...Array(3)].map((obj, index) => (
+                                            <li className={UserProfileStyles.rsItem}>1</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <LinkContainer style={{color: 'white'}} to={'/user/services'}>
+                                    <Button className='btn btn-primary'>Переглянути детальніше</Button>
+                                </LinkContainer>
+                            </div>
+                            <div className={UserProfileStyles.referralsBlock}>
+                                <div className={UserProfileStyles.referralsContent}>
+                                    <div className={UserProfileStyles.rsTitle}>Мої направлення</div>
+                                    <ul className={UserProfileStyles.rsList}>
+                                        {[...Array(3)].map((obj, index) => (
+                                            <li className={UserProfileStyles.rsItem}>2</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <LinkContainer style={{color: 'white'}} to={'/user/referrals'}>
+                                    <Button className='btn btn-primary'>Переглянути детальніше</Button>
+                                </LinkContainer>
+                            </div>
                         </Col>
                     </Row>
                 </div>
             ) : (
                 <>
-                    loading...
+                    <div className={"d-flex justify-content-center align-items-center"} style={{ minHeight: '100vh' }}>
+                        <Spinner animation="border" variant="primary" />
+                    </div>
                 </>
             )}
 

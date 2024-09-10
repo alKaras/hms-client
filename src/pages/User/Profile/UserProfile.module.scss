@@ -1,21 +1,55 @@
 .root {
-  margin: 120px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  max-width: 1200px;
+  margin: 90px auto;
+  //display: flex;
+  //justify-content: center;
+  //align-items: center;
+  //box-shadow: 1px 2px 3px #000;
+  //border-radius: 10px;
 }
 
-.content {
-  width: 1000px;
+.userFrstContent {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+
+  .title {
+    font-size: 18px;
+  }
 }
+
+
 
 .leftSide {
-  border-right: 1px solid gray;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  //display: flex;
+  //flex-direction: column;
+  //align-items: center;
+  //gap: 20px;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+
+  .roleBadge {
+    margin-top: 20px;
+    padding: 10px 30px;
+    border: 1px solid #ebebeb;
+    box-shadow: 1px 0 1px #ebebeb;
+    border-radius: 10px;
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  .titles {
+    padding: 10px;
+  }
+
+  .verificationStatus {
+    padding: 10px;
+    margin-left: auto;
+  }
+
 
   label {
     font-weight: 500;
@@ -26,13 +60,17 @@
     flex: none;
     padding: 10px;
     font-size: 16px;
-    width: 100%;
+    width: 220px;
     border: 1px solid #ebebeb;
     border-radius: 8px;
     outline: 0;
     margin-bottom: 10px;
-
   }
+
+  input.pwdInp {
+    width: 100%;
+  }
+
   .image {
     width: 100px;
     height: 100px;
@@ -42,26 +80,62 @@
       max-width: 100%;
     }
   }
+
+  .verificationBlock {
+    margin: 15px 0;
+
+    .vTitle {
+      font-size: 20px;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      font-weight: bold;
+    }
+
+    p {
+      margin-top: 10px;
+      line-height: 20px;
+      font-size: 15px;
+    }
+  }
+
+
 }
 
 .rightSide {
-  padding: 20px;
-  //width: 300px;
-  flex-shrink: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
 
-  ul > *:not(:last-child) {
-    margin-bottom: 10px;
+  .servicesBlock {
+    padding: 20px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    margin-bottom: 20px;
   }
 
-  .roleBadge {
-    padding: 10px 30px;
-    border: 1px solid #ebebeb;
-    box-shadow: 1px 0 2px #ebebeb;
-    border-radius: 10px;
+  .rsTitle {
+    font-size: 18px;
+    margin-bottom: 25px;
+  }
+
+  .rsList {
+
+    & > *:not(:last-child){
+      margin-bottom: 10px;
+    }
+  }
+
+  .referralsBlock {
+    padding: 20px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+  }
+}
+.rsItem {
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.3);
+}
+.userSndContent {
+  & > div {
+    margin-bottom: 10px;
   }
 }
 
