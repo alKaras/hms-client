@@ -1,21 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from "../../../components/Header";
 import UserProfileStyles from './UserProfile.module.scss';
 import { Button, Col, Row, Spinner } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { infoAboutUser, selectIsLogged } from "../../../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getMe, infoAboutUser, selectIsLogged, selectStatus } from "../../../redux/slices/authSlice";
 import axios from '../../../utils/axios';
 import Moment from "react-moment";
 import { LinkContainer } from 'react-router-bootstrap';
 
+
 export default function UserProfile() {
-    const user = useSelector(infoAboutUser);
     const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+    const status = useSelector(selectStatus);
     const mainRole = isLogged && user.roles;
     const userEmail = isLogged && user.data.email;
-    console.log(userEmail);
     const isVerified = isLogged && user.data.email_verified_at !== null;
     const [isButtonDisabled, setIsDisabled] = useState(false);
+
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        if (isLogged && user.data) {
+            setName(user.data.name || '');
+            setSurname(user.data.surname || '');
+        }
+    }, [isLogged]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const userId = user.id;
+        let params;
+        if (password !== '') {
+            params = { name, surname, password }
+        } else {
+            params = { name, surname }
+        }
+
+        console.log(userId);
+        console.log(params);
+
+        await axios.put(`/user/edit/${userId}`, params)
+            .then((data) => {
+                alert("User data successfully changed!")
+                window.location.reload();
+            })
+            .catch((err) => {
+                alert(err.message)
+            });
+    }
 
     const resendVerification = async () => {
         setIsDisabled(true);
@@ -36,7 +72,7 @@ export default function UserProfile() {
     return (
         <>
             <Header />
-            {isLogged ? (
+            {isLogged && user?.data && status !== 'loading' ? (
                 <div className={UserProfileStyles.root}>
                     <Row>
                         <Col lg={6} md={6} xs={6} className={UserProfileStyles.leftSide}>
@@ -62,33 +98,42 @@ export default function UserProfile() {
                                         {user.data.email_verified_at === null ? "Unverified" : (<> Verified at  <Moment format="DD/MM/YYYY HH:mm:ss">{user.data.email_verified_at}</Moment> </>)}
                                     </div>
                                 </div>
-                                <div className={UserProfileStyles.userSndContent}>
-                                    <div className={"d-flex justify-content-between align-items-center"}>
-                                        <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                            <label>Ім'я</label>
-                                            <input type="text" value={user.data.name} />
+                                <form onSubmit={handleSubmit}>
+                                    <div className={UserProfileStyles.userSndContent}>
+                                        <div className={"d-flex justify-content-between align-items-center"}>
+                                            <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                                <label>Ім'я</label>
+                                                <input
+                                                    type="text"
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+
+                                                />
+                                            </div>
+                                            <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                                <label>Прізвище</label>
+                                                <input type="text" value={surname}
+                                                    onChange={(e) => setSurname(e.target.value)} />
+                                            </div>
                                         </div>
-                                        <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                            <label>Прізвище</label>
-                                            <input type="text" value={user.data.surname} />
+                                        <div className={"d-flex justify-content-between align-items-center"}>
+                                            <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                                <label>Пошта</label>
+                                                <input type="text" disabled={true} value={user.data.email} />
+                                            </div>
+                                            <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                                <label>Телефон</label>
+                                                <input type="text" disabled={true} value={user.data.phone} />
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className={"d-flex justify-content-between align-items-center"}>
-                                        <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                            <label>Пошта</label>
-                                            <input type="text" disabled={true} value={user.data.email} />
-                                        </div>
-                                        <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                            <label>Телефон</label>
-                                            <input type="text" disabled={true} value={user.data.phone} />
-                                        </div>
+                                    <div className={"d-flex flex-column justify-content-between align-items-start"}>
+                                        <label>Пароль</label>
+                                        <input className={UserProfileStyles.pwdInp} type="text" value={password}
+                                            onChange={(e) => setPassword(e.target.value)} />
                                     </div>
-                                </div>
-                                <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                    <label>Пароль</label>
-                                    <input className={UserProfileStyles.pwdInp} type="text" />
-                                </div>
-                                <Button type={"submit"}>Зберегти</Button>
+                                    <button className={'btn btn-primary'} type="submit">Зберегти</button>
+                                </form>
                             </div>
 
                             {!isVerified ? (
@@ -120,7 +165,7 @@ export default function UserProfile() {
                                         ))}
                                     </ul>
                                 </div>
-                                <LinkContainer style={{color: 'white'}} to={'/user/services'}>
+                                <LinkContainer style={{ color: 'white' }} to={'/user/services'}>
                                     <Button className='btn btn-primary'>Переглянути детальніше</Button>
                                 </LinkContainer>
                             </div>
@@ -133,7 +178,7 @@ export default function UserProfile() {
                                         ))}
                                     </ul>
                                 </div>
-                                <LinkContainer style={{color: 'white'}} to={'/user/referrals'}>
+                                <LinkContainer style={{ color: 'white' }} to={'/user/referrals'}>
                                     <Button className='btn btn-primary'>Переглянути детальніше</Button>
                                 </LinkContainer>
                             </div>

@@ -26,11 +26,11 @@ export default function Header() {
 
     }
 
-    useEffect(() => {
-        if (isAdmin || isDoctor || isManager) {
-            navigate('/adminpanel');
-        }
-    }, [isAdmin, isDoctor, isManager, navigate]);
+    // useEffect(() => {
+    //     if (isAdmin || isDoctor || isManager) {
+    //         navigate('/adminpanel');
+    //     }
+    // }, [isAdmin, isDoctor, isManager, navigate]);
 
     return (
         <Navbar expand="md" className={`${headerStyles.root} d-flex justify-content-between fixed-top`}>
@@ -112,19 +112,36 @@ export default function Header() {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </>
-                        ) : isAdminPanel && isAdmin ? (
+                        ) : isAdminPanel || isAdmin ? (
                             <>
                                 <div className={headerStyles['menu-header']}>
                                     <LinkContainer to={'/adminpanel/hospitals'}>
                                         <Button className={headerStyles['btn-header']}>Лікарні</Button>
                                     </LinkContainer>
                                     <LinkContainer to={'/adminpanel/users'}>
-                                        <Button className={headerStyles['btn-header']}>Пацієнти</Button>
+                                        <Button className={`${headerStyles['btn-header']} ${location.pathname === '/adminpanel/users' ? headerStyles['visited'] : ''}`}>
+                                            Пацієнти
+                                        </Button>
                                     </LinkContainer>
                                     <LinkContainer to={'/adminpanel/order-history'}>
                                         <Button className={headerStyles['btn-header']}>Історія замовлень</Button>
                                     </LinkContainer>
                                 </div>
+                                <Dropdown align="end">
+                                    <Dropdown.Toggle id={'headerToggle'} className={` ${headerStyles.profileBadge}`}>
+                                        <div
+                                            className={headerStyles.title}>{user.data.name} {user.data.surname}</div>
+                                        <div className={headerStyles.image}>
+                                            <img src="/assets/profile.jpg" alt="profile" />
+                                        </div>
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
+                                        <LinkContainer to={isUser ? '/profile' : '/adminpanel'}>
+                                            <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
+                                        </LinkContainer>
+                                        <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </>
                         ) : !isAdminPanel && isUser ? (
                             <>
