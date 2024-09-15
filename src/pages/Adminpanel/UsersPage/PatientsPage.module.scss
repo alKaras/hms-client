@@ -2,3 +2,35 @@
     margin: 100px auto;
     max-width: 1280px;
 }
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.table {
+    margin-top: 15px;
+    text-align: center;
+    tr > td,  tr > th {
+        vertical-align: middle;
+    }
+
+    th {
+        padding: 10px;
+        border: 1px solid gray;
+    }
+}
+
+.roleBadge {
+    display: inline-block;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: gray;
+}

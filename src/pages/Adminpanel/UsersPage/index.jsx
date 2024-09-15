@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import Header from '../../../components/Header';
 import { useDispatch, useSelector } from 'react-redux';
-import { Spinner, Table } from 'react-bootstrap';
+import { Button, Spinner, Table } from 'react-bootstrap';
 import usersPageStyles from './PatientsPage.module.scss';
 import { getUsers } from '../../../redux/slices/userSlice';
+import Pagination from '../../../components/Pagination';
 
 export default function UsersPage() {
     const dispatch = useDispatch();
@@ -23,7 +24,10 @@ export default function UsersPage() {
             {isLoading === 'loaded' ? (
                 <>
                     <div className={usersPageStyles.root}>
-                        <Table>
+                        <div className={usersPageStyles.header}>
+                            <Button className='btn btn-secondary'>Create User</Button>
+                        </div>
+                        <Table bordered className={usersPageStyles.table}>
                             <thead>
                                 <th>ID</th>
                                 <th>Name</th>
@@ -44,20 +48,28 @@ export default function UsersPage() {
                                             <td>{obj.email}</td>
                                             <td>{obj.phone}</td>
                                             <td>{obj.email_verified === 'verified' ? <><i style={{ color: "green" }} class="fa-solid fa-check"></i></> : <></>}</td>
-                                            <td>{(obj.roles).map((role) => (
+                                            <td style={{ textAlign: 'start' }}>{(obj.roles).map((role) => (
                                                 <>
-                                                    <p>{role}</p>
+                                                    <span className={usersPageStyles.roleBadge}>{role}</span>
                                                 </>
                                             ))}</td>
                                             <td>
-                                                <button className='btn btn-warning' disabled={true}>Edit</button>
+                                                <button className='btn btn-warning'><i class="fa-solid fa-pen"></i></button>
                                             </td>
                                         </tr>
                                     </>
                                 ))}
                             </tbody>
                         </Table>
+                        <Pagination
+
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+
+                        />
                     </div>
+
                 </>
 
             ) : (

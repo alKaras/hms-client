@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from "../../components/Header";
 import Hospital from "../../components/Hospital";
-import {useParams} from "react-router-dom";
-import {Button, Col, Row, Tab, Table, Tabs} from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { Button, Col, Row, Tab, Table, Tabs } from "react-bootstrap";
 import HospitalInfoStyles from './HospitalInfo.module.scss';
 import DoctorCard from "../../components/DoctorCard";
 import Form from "react-bootstrap/Form";
@@ -18,9 +18,9 @@ export default function HospitalInfo() {
     const [reviewBody, setReviewBody] = useState("");
 
     const services = [
-        {id: 1, name: 'Service 1', price: '123'},
-        {id: 2, name: 'Service 2', price: '123'},
-        {id: 3, name: 'Service 3', price: '123'},
+        { id: 1, name: 'Service 1', price: '123' },
+        { id: 2, name: 'Service 2', price: '123' },
+        { id: 3, name: 'Service 3', price: '123' },
     ];
 
     const fetchReviews = async () => {
@@ -59,8 +59,8 @@ export default function HospitalInfo() {
         const fetchDepartments = async () => {
             // Example data structure
             const data = [
-                {alias: 'dept1', content: 'Department 1'},
-                {alias: 'dept2', content: 'Department 2'},
+                { alias: 'dept1', content: 'Department 1' },
+                { alias: 'dept2', content: 'Department 2' },
                 // Add more departments here
             ];
             setDepartments(data);
@@ -69,7 +69,7 @@ export default function HospitalInfo() {
         fetchDepartments();
         fetchReviews();
     }, []);
-    const {_id} = useParams();
+    const { _id } = useParams();
     const handleDepartmentChange = (event) => {
         const selectedAlias = event.target.value;
         setSelectedDepartment(selectedAlias);
@@ -87,7 +87,7 @@ export default function HospitalInfo() {
     }
     return (
         <>
-            <Header/>
+            <Header />
             <Hospital
                 _id={_id}
                 title={"Example"}
@@ -115,7 +115,7 @@ export default function HospitalInfo() {
                     <Tab eventKey={'doctors'} title={"Лікарі"} className={`${HospitalInfoStyles.doctors}`}>
                         <div className={HospitalInfoStyles.search}>
                             <Form.Group controlId="departmentSelect">
-                                <Form.Control style={{maxWidth: "600px"}} as="select" onChange={handleDepartmentChange}>
+                                <Form.Control style={{ maxWidth: "600px" }} as="select" onChange={handleDepartmentChange}>
                                     {departments.map((department, index) => (
                                         <option key={index} value={department.alias}>
                                             {department.content}
@@ -124,15 +124,15 @@ export default function HospitalInfo() {
                                 </Form.Control>
                             </Form.Group>
                             <Button className={SearchStyles.searchBtn} type={"submit"}
-                                    onClick={fetchDoctorsBySelectedDep}>Знайти</Button>
+                                onClick={fetchDoctorsBySelectedDep}>Знайти</Button>
                         </div>
                         <div>
                             <Row className={HospitalInfoStyles.doctorsList}>
                                 {[...Array(6)].map((item, index) => (
                                     <Col lg={6} md={6} xs={6}>
                                         <DoctorCard title={"Sample Doctor"}
-                                                    description={"Lorem ipsum dolor sit amet, consectetur adipisicing elit.odit quidem, tempora ut. Cum eum exercitationem nihil."}
-                                                    active={true} specialization={"Cardiolog"}/>
+                                            description={"Lorem ipsum dolor sit amet, consectetur adipisicing elit.odit quidem, tempora ut. Cum eum exercitationem nihil."}
+                                            active={true} specialization={"Cardiolog"} />
                                     </Col>
                                 ))}
 
@@ -142,26 +142,26 @@ export default function HospitalInfo() {
 
                     </Tab>
                     <Tab eventKey={'services'} title={'Послуги'}>
-                        <Table striped bordered hover style={{marginTop: '25px'}}>
+                        <Table striped bordered hover style={{ marginTop: '25px' }}>
                             <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Service</th>
-                                <th>Price</th>
-                            </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Service</th>
+                                    <th>Price</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            {services.map((service) => (
-                                <tr key={service.id}>
-                                    <td>{service.id}</td>
-                                    <td>{service.name}</td>
-                                    <td>{service.price}</td>
-                                    <td>
-                                        <button className={"btn btn-secondary"}><i
-                                            className="fa-solid fa-cart-plus"></i></button>
-                                    </td>
-                                </tr>
-                            ))}
+                                {services.map((service) => (
+                                    <tr key={service.id}>
+                                        <td>{service.id}</td>
+                                        <td>{service.name}</td>
+                                        <td>{service.price}</td>
+                                        <td>
+                                            <button className={"btn btn-secondary"}><i
+                                                className="fa-solid fa-cart-plus"></i></button>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </Table>
                     </Tab>
@@ -173,14 +173,14 @@ export default function HospitalInfo() {
                                     {reviews.map((obj, index) => (
                                         <>
                                             <ReviewCard author={obj.author} content={obj.content} rating={obj.rating}
-                                                        createdAt={obj.createdAt}/>
+                                                createdAt={obj.createdAt} />
                                         </>
                                     ))}
                                 </div>
 
                             </Col>
                             <Col lg={6} md={6} xs={6} className={HospitalInfoStyles.addReview}>
-                                <p style={{fontWeight: 'bold', fontSize: "16px"}}>Напишіть власний відгук</p>
+                                <p style={{ fontWeight: 'bold', fontSize: "16px" }}>Напишіть власний відгук</p>
                                 <Form>
                                     <Form.Group controlId="formRating">
                                         <Form.Label>Rating (1-5)</Form.Label>
