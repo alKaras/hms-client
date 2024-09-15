@@ -34,3 +34,192 @@
     margin-bottom: 5px;
     background-color: gray;
 }
+
+
+.formCreate {
+    margin: 100px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .login-form {
+        width: 420px;
+        box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
+        padding: 20px 0;
+        border-radius: 8px;
+        background-color: white;
+    
+        @media screen and (max-width: 767px) {
+          padding: 15px 0;
+        }
+      }
+    
+      .auth-form-content {
+        padding: 0 20px;
+    
+        @media screen and (max-width: 450px) {
+          padding: 0 10px;
+        }
+      }
+    
+      .authImage {
+        width: 75px;
+        height: 75px;
+        margin: 0 auto 25px;
+    
+        img {
+          object-fit: cover;
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
+    
+    
+    
+      .auth-form-title {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 24px;
+        color: rgb(34, 34, 34);
+        font-weight: 700;
+    
+        @media screen and (max-width: 767px) {
+          font-size: calc(16px + (8 + 8 * 0.7) * ((100vw - 320px) / 1260));
+        }
+      }
+    
+      label {
+        font-size: 16px;
+        font-weight: 600;
+        color: rgb(34, 34, 34);
+        margin-bottom: 10px;
+    
+        @media screen and (max-width: 767px) {
+          font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1260));
+        }
+      }
+    
+      input {
+        flex: none;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        outline: 0;
+        margin-bottom: 10px;
+    
+        @media screen and (max-width: 767px) {
+          font-size: calc(14px + (2 + 2 * 0.7) * ((100vw - 320px) / 1260));
+        }
+      }
+    
+      input:focus {
+        outline: 1px solid dodgerblue;
+      }
+    
+      .btn-show {
+        //max-width: 50px;
+        //padding: 15px;
+        background: none;
+        position: absolute;
+        bottom: 25px;
+        right: 15px;
+      }
+    
+      button,
+      a {
+        @media screen and (max-width: 767px) {
+          font-size: calc(12px + (2 + 2 * 0.7) * ((100vw - 320px) / 1260));
+        }
+      }
+    
+      .btn {
+        background: dodgerblue;
+        color: white;
+        font-weight: 700;
+        padding: 10px 30px;
+        display: block;
+        margin: 10px auto;
+      }
+    
+      .linkReg {
+        margin-top: 25px;
+        text-align: center;
+        color: rgba(0,0,0,0.5);
+        font-size: 14px;
+        transition: all .2s ease-in-out;
+    
+    
+        &:hover {
+          color: dodgerblue;
+          transition: all .2s ease-in-out;
+        }
+      }
+    
+      .error-style {
+        color: red;
+        font-size: 12px;
+        margin: -10px 0 10px 0;
+      }
+      .error-input {
+        border: 1px solid red;
+    
+        :focus {
+          outline: 1px solid red;
+        }
+      }
+    
+      .error {
+        color: red;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 10px;
+    
+        @media screen and (max-width: 767px) {
+          font-size: calc(10px + (2 + 2 * 0.7) * ((100vw - 320px) / 1260));
+        }
+      }
+}
+
+.rootEdit {
+    margin: 100px auto;
+    max-width: 1280px;
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 1px 2px 1px rgba($color: #000000, $alpha: 0.4);
+        margin-right: 15px;
+    }
+
+    .right {
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 1px 2px 1px rgba($color: #000000, $alpha: 0.4);
+        text-align: center;
+    }
+
+    label {
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+    
+      input {
+        flex: none;
+        padding: 10px;
+        font-size: 16px;
+        width: 220px;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        outline: 0;
+        margin-bottom: 10px;
+      }
+    
+}
+
+

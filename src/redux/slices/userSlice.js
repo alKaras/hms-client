@@ -26,6 +26,15 @@ export const getUsers = createAsyncThunk('user/fetch', async({page = 1, perPage 
     return data;
 })
 
+export const getUser = createAsyncThunk('user/fetchById', async(_id, {rejectWithValue}) => {
+    try {
+        const {data} = await axios.get(`/user/fetch/${_id}`);
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.response.data);
+    }
+})
+
 const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -57,6 +66,20 @@ const userSlice = createSlice({
             state.totalPages = action.payload.meta.last_page
         })
         .addCase(getUsers.rejected, (state, action) => {
+            state.isLoading = 'error'
+            state.error = action.payload.message
+        })
+        
+        .addCase(getUser.pending, (state) => {
+            state.isLoading = 'loading'
+            state.error = null
+        })
+        .addCase(getUser.fulfilled, (state, action) => {
+            state.isLoading = 'loaded'
+            state.error = null
+            state.user = action.payload.data
+        })
+        .addCase(getUser.rejected, (state, action) => {
             state.isLoading = 'error'
             state.error = action.payload.message
         })

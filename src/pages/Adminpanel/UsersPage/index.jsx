@@ -5,6 +5,7 @@ import { Button, Spinner, Table } from 'react-bootstrap';
 import usersPageStyles from './PatientsPage.module.scss';
 import { getUsers } from '../../../redux/slices/userSlice';
 import Pagination from '../../../components/Pagination';
+import { LinkContainer } from 'react-router-bootstrap';
 
 export default function UsersPage() {
     const dispatch = useDispatch();
@@ -25,7 +26,7 @@ export default function UsersPage() {
                 <>
                     <div className={usersPageStyles.root}>
                         <div className={usersPageStyles.header}>
-                            <Button className='btn btn-secondary'>Create User</Button>
+                            <LinkContainer style={{ color: "white" }} to={'/adminpanel/user/create'}><Button className='btn btn-secondary'>Create User</Button></LinkContainer>
                         </div>
                         <Table bordered className={usersPageStyles.table}>
                             <thead>
@@ -54,9 +55,11 @@ export default function UsersPage() {
                                                 </>
                                             ))}</td>
                                             <td>
-                                                <button className='btn btn-warning'><i class="fa-solid fa-pen"></i></button>
+                                                <LinkContainer style={{ color: 'black' }} to={`/adminpanel/user/${obj.id}/edit`}>
+                                                    <button className='btn btn-warning'><i class="fa-solid fa-pen"></i></button>
+                                                </LinkContainer>
                                             </td>
-                                        </tr>
+                                        </tr >
                                     </>
                                 ))}
                             </tbody>
@@ -78,7 +81,8 @@ export default function UsersPage() {
                         <Spinner animation="border" variant="primary" />
                     </div>
                 </>
-            )}
+            )
+            }
 
         </>
     );
