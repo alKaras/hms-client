@@ -26,7 +26,6 @@ export const fetchFirstThreeReferrals = createAsyncThunk('referral/fetchFirstThr
 export const fetchReferralById = createAsyncThunk('referral/fetchOne', async(referral_id, {rejectWithValue}) => {
     try {
         const {data} = await axios.get(`userreferral/fetch/${referral_id}`);
-        console.log(data);
         return data;
     } catch (error) {
         return rejectWithValue(error.response.data);
