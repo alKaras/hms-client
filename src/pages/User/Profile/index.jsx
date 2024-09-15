@@ -7,6 +7,7 @@ import { getMe, infoAboutUser, selectIsLogged, selectStatus } from "../../../red
 import axios from '../../../utils/axios';
 import Moment from "react-moment";
 import { LinkContainer } from 'react-router-bootstrap';
+import { fetchFirstThreeReferrals } from '../../../redux/slices/userReferrals';
 
 
 export default function UserProfile() {
@@ -16,7 +17,10 @@ export default function UserProfile() {
     const mainRole = isLogged && user.roles;
     const userEmail = isLogged && user.data.email;
     const isVerified = isLogged && user.data.email_verified_at !== null;
+    const dispatch = useDispatch();
     const [isButtonDisabled, setIsDisabled] = useState(false);
+
+    const { isLoading, firstThreeReferrals } = useSelector(state => state.referral);
 
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
@@ -28,6 +32,11 @@ export default function UserProfile() {
             setSurname(user.data.surname || '');
         }
     }, [isLogged]);
+
+    useEffect(() => {
+        dispatch(fetchFirstThreeReferrals());
+    }, [dispatch])
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -173,25 +182,42 @@ export default function UserProfile() {
                                 <div className={UserProfileStyles.referralsContent}>
                                     <div className={UserProfileStyles.rsTitle}>Мої направлення</div>
                                     <ul className={UserProfileStyles.rsList}>
-                                        {[...Array(3)].map((obj, index) => (
+                                        {isLoading === 'loaded' ? (
+                                            <>
+                                                {
+                                                    firstThreeReferrals.map((obj, index) => (
+                                                        <li key={index} className={UserProfileStyles.rsItem}>
+                                                            {obj.referral_code}
+                                                        </li>
+                                                    ))
+                                                }
+                                            </>
+
+                                        ) : (
+                                            <div className={"d-flex justify-content-center align-items-center"}>
+                                                <Spinner animation="border" variant="primary" />
+                                            </div>
+                                        )}
+                                        {/* {[...Array(3)].map((obj, index) => (
                                             <li className={UserProfileStyles.rsItem}>2</li>
-                                        ))}
+                                        ))} */}
                                     </ul>
                                 </div>
                                 <LinkContainer style={{ color: 'white' }} to={'/user/referrals'}>
                                     <Button className='btn btn-primary'>Переглянути детальніше</Button>
                                 </LinkContainer>
                             </div>
-                        </Col>
-                    </Row>
-                </div>
+                        </Col >
+                    </Row >
+                </div >
             ) : (
                 <>
                     <div className={"d-flex justify-content-center align-items-center"} style={{ minHeight: '100vh' }}>
                         <Spinner animation="border" variant="primary" />
                     </div>
                 </>
-            )}
+            )
+            }
 
         </>
     );

@@ -18,6 +18,7 @@ import {useEffect} from "react";
 import {getMe} from "./redux/slices/authSlice";
 import CreateUser from "./pages/Adminpanel/UsersPage/CreateUser";
 import EditUser from "./pages/Adminpanel/UsersPage/EditUser";
+import Referrals from "./pages/User/Referrals";
 
 function App() {
     const dispatch = useDispatch();
@@ -32,7 +33,11 @@ function App() {
                 <Route path={"/sign-in"} element={<Login />} />
                 <Route path={"/sign-up"} element={<Register />} />
                 <Route path='/hospital/:id' element={<HospitalInfo />} />
+                {/* UserProfile routes */}
                 <Route path='/user/profile' element={<UserProfile />} />
+                <Route path='user/referrals' element={<Referrals />} />
+
+
                 <Route path='/adminpanel' element={<AdminHome />} />
                 <Route path='/adminpanel/doctors' element={<DoctorsPage />} />
                 <Route path='/adminpanel/services' element={<ServicesPage />} />
