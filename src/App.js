@@ -16,6 +16,8 @@ import UserProfile from "./pages/User/Profile";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {getMe} from "./redux/slices/authSlice";
+import CreateUser from "./pages/Adminpanel/UsersPage/CreateUser";
+import EditUser from "./pages/Adminpanel/UsersPage/EditUser";
 
 function App() {
     const dispatch = useDispatch();
@@ -34,7 +36,11 @@ function App() {
                 <Route path='/adminpanel' element={<AdminHome />} />
                 <Route path='/adminpanel/doctors' element={<DoctorsPage />} />
                 <Route path='/adminpanel/services' element={<ServicesPage />} />
+                {/* Users routes */}
                 <Route path='/adminpanel/users' element={<UsersPage />} />
+                <Route path='/adminpanel/user/create' element={<CreateUser />} />
+                <Route path='/adminpanel/user/:_id/edit/' element={<EditUser /> } />
+
                 <Route path='/adminpanel/reports' element={<Reports />} />
                 <Route path='/adminpanel/settings/hospital' element={<HospitalPage specific={true} />} />
                 <Route path='/adminpanel/hospitals' element={<HospitalPage specific={false} />} />

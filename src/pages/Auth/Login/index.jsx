@@ -1,16 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import AuthStyles from '../Auth.module.scss';
-import {useDispatch, useSelector} from "react-redux";
-import {loginUser, selectIsLogged, selectIsRegged} from "../../../redux/slices/authSlice";
-import {useForm} from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { infoAboutUser, loginUser, selectIsLogged, selectIsRegged, selectRoles } from "../../../redux/slices/authSlice";
+import { useForm } from "react-hook-form";
 
 export default function Login() {
     const [isShowed, setIsShowed] = useState(false);
     const [passType, setPassType] = useState("password");
 
     const isLogged = useSelector(selectIsLogged);
-    const {error} = useSelector((state) => state.auth);
+    const roles = useSelector(selectRoles);
+    console.log(roles);
+    const { error } = useSelector((state) => state.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -33,8 +35,12 @@ export default function Login() {
     }
 
     useEffect(() => {
-        if (isLogged) {
+        if (isLogged && roles === 'user') {
             navigate('/');
+            window.location.reload();
+        } else if (isLogged && (roles === 'admin' || roles === 'doctor' || roles === 'manager')) {
+            navigate('/adminpanel');
+            window.location.reload();
         }
     }, [isLogged, navigate]);
 
@@ -56,7 +62,7 @@ export default function Login() {
                     <div className={`${AuthStyles['auth-form-content']}`}>
                         <div className={AuthStyles.authImage}>
                             <Link to={'/'}>
-                                <img src="/assets/logo/logo.svg" alt="Logo"/>
+                                <img src="/assets/logo/logo.svg" alt="Logo" />
                             </Link>
                         </div>
                         <h3 className={`${AuthStyles['auth-form-title']}`}>Вхід</h3>
@@ -77,7 +83,7 @@ export default function Login() {
                         </div>
                         {errors.email && <div className={`${AuthStyles['error-style']}`}>{errors.email.message}</div>}
 
-                        <div style={{position: 'relative'}} className="d-flex flex-column">
+                        <div style={{ position: 'relative' }} className="d-flex flex-column">
                             <label>Пароль</label>
                             <input
                                 type={passType}
@@ -94,8 +100,8 @@ export default function Login() {
                             {errors.password && <div className={`${AuthStyles['error-style']}`}>{errors.password.message}</div>}
 
                             <button onClick={togglePass} className={`${AuthStyles['btn-show']}`}>
-                                {!isShowed ? <><i style={{marginLeft: '20px'}} className={`fa-regular fa-eye`}></i></>
-                                    : <><i style={{marginLeft: '20px'}} className="fa-regular fa-eye-slash"></i></>}
+                                {!isShowed ? <><i style={{ marginLeft: '20px' }} className={`fa-regular fa-eye`}></i></>
+                                    : <><i style={{ marginLeft: '20px' }} className="fa-regular fa-eye-slash"></i></>}
                             </button>
 
                         </div>
