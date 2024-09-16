@@ -32,7 +32,6 @@ function App() {
                 <Route path="/" element={<Home />}/>
                 <Route path={"/sign-in"} element={<Login />} />
                 <Route path={"/sign-up"} element={<Register />} />
-                <Route path='/hospital/:id' element={<HospitalInfo />} />
                 {/* UserProfile routes */}
                 <Route path='/user/profile' element={<UserProfile />} />
                 <Route path='user/referrals' element={<Referrals />} />
@@ -46,9 +45,13 @@ function App() {
                 <Route path='/adminpanel/user/create' element={<CreateUser />} />
                 <Route path='/adminpanel/user/:_id/edit/' element={<EditUser /> } />
 
-                <Route path='/adminpanel/reports' element={<Reports />} />
+                 {/* Hospital routes  */}
                 <Route path='/adminpanel/settings/hospital' element={<HospitalPage specific={true} />} />
                 <Route path='/adminpanel/hospitals' element={<HospitalPage specific={false} />} />
+                <Route path='/hospital/:id' element={<HospitalInfo />} />
+
+                <Route path='/adminpanel/reports' element={<Reports />} />
+
                 <Route path='/adminpanel/settings/departments' element={<Departments />} />
                 <Route path="/adminpanel/order-history" element={<OrderHistory />} />
              </Routes>

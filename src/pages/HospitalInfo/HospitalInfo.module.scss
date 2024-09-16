@@ -1,5 +1,5 @@
 .root {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .doctors {
@@ -12,12 +12,6 @@
 
 .doctorsList > *:not(:last-child) {
   margin-bottom: 10px;
-}
-
-.search {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 

@@ -97,7 +97,7 @@ export default function Login() {
                                     }
                                 })}
                             />
-                            {errors.password && <div className={`${AuthStyles['error-style']}`}>{errors.password.message}</div>}
+
 
                             <button onClick={togglePass} className={`${AuthStyles['btn-show']}`}>
                                 {!isShowed ? <><i style={{ marginLeft: '20px' }} className={`fa-regular fa-eye`}></i></>
@@ -105,6 +105,7 @@ export default function Login() {
                             </button>
 
                         </div>
+                        {errors.password && <div className={`${AuthStyles['error-style']}`}>{errors.password.message}</div>}
                         <button type="submit" className={`btn ${AuthStyles['btn']}`}>Увійти</button>
                         <p className={AuthStyles.linkReg}><Link to={"/sign-up"}>Досі ще не з нами?
                             Зареєструватись</Link></p>
