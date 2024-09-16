@@ -1,23 +1,23 @@
 import React from 'react';
-import {Spinner} from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import HospitalStyles from './Hospital.module.scss';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Hospital({
-                                     _id,
-                                     title,
-                                     imageUrl,
-                                     rating,
-                                     description,
-                                     children,
-                                     isFullContent,
-                                     isLoading
-                                 }) {
+    _id,
+    title,
+    imageUrl,
+    rating,
+    description,
+    children,
+    isFullContent,
+    isLoading
+}) {
     return (
         <>
             {isLoading ?
                 <>
-                    <Spinner animation="border" variant="warning"/>
+                    <Spinner animation="border" variant="warning" />
                 </>
                 :
                 <>
@@ -30,7 +30,7 @@ export default function Hospital({
                                     <Link to={'/'}>
                                         Головна
                                     </Link>
-                                    <span> / </span><span> {title}</span>
+                                    <span> / </span><span > {title}</span>
                                 </div>
                             </>
                             :
@@ -38,7 +38,7 @@ export default function Hospital({
                             </>
 
                         }
-                        {imageUrl ?
+                        {/* {imageUrl ?
                             <>
                                 <div
                                     className={`${!isFullContent ? HospitalStyles['post-img'] : HospitalStyles['fullpost-img']}`}>
@@ -53,14 +53,14 @@ export default function Hospital({
                             <>
                             </>
 
-                        }
+                        } */}
 
                         <div className={`${HospitalStyles['text-content']}`}>
                             <div className={`${HospitalStyles['title-wrapper']}`}>
                                 {!isFullContent ?
                                     <>
 
-                                        <Link style={{cursor: 'pointer'}} to={`/hospital/${_id}`}>
+                                        <Link style={{ cursor: 'pointer' }} to={`/hospital/${_id}`}>
                                             <div className={`${HospitalStyles['post-headtext']}`}>
                                                 {title}
                                             </div>

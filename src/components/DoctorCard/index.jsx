@@ -1,19 +1,15 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import DoctorCardStyles from './DoctorCard.module.scss';
-import {LinkContainer} from "react-router-bootstrap";
-import {Button, Modal, ProgressBar} from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { Button, Modal, ProgressBar } from "react-bootstrap";
 import DatePicker from "react-date-picker";
 
 export default function DoctorCard({
-                                       title,
-                                       description,
-                                       specialization,
-                                       active,
-                                   }) {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    title,
+    email,
+    specialization,
+    active,
+}) {
 
     const [step, setStep] = useState(1);
     const [slots, setSlots] = useState([]);
@@ -22,14 +18,11 @@ export default function DoctorCard({
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [selectedServices, setSelectedServices] = useState([]);
 
-    const nextStep = () => setStep(step + 1);
-    const prevStep = () => setStep(step - 1);
-
     return (
         <>
             <div className={DoctorCardStyles.root}>
                 <div className={DoctorCardStyles.image}>
-                    {/*<img src="" alt="doctor image"/>*/}
+                    <img src='/assets/profile.jpg' style={{ objectFit: 'cover', maxWidth: '100%', maxHeight: '100%' }} alt='profile logo' />
                 </div>
                 <div className={DoctorCardStyles.content}>
                     <div className={DoctorCardStyles.headContent}>
@@ -48,14 +41,14 @@ export default function DoctorCard({
                     </div>
 
                     <div className={DoctorCardStyles.shortDesc}>
-                        {description}
+                        {email}
                     </div>
                     <div className={DoctorCardStyles.contentFooter}>
                         <div className={DoctorCardStyles.chips}>
                             {specialization}
                         </div>
                         {/*<LinkContainer>*/}
-                        <Button className={DoctorCardStyles.btnWidget} onClick={handleShow}>Записатися до
+                        <Button className={DoctorCardStyles.btnWidget}>Записатися до
                             лікаря</Button>
                         {/*</LinkContainer>*/}
                     </div>
