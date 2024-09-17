@@ -54,7 +54,8 @@ export default function HospitalPage({
                                                 <td>{hospital.hospital_phone ?? ""}</td>
                                                 <td>{hospital.hospital_email ?? ""}</td>
                                                 <td>
-                                                    <LinkContainer to={`/adminpanel/hospital/${hospital.id}/edit`}><Button className='btn btn-warning'><i class="fa-solid fa-pen"></i></Button></LinkContainer>
+                                                    <LinkContainer style={{ marginRight: '15px' }} to={`/adminpanel/hospital/${hospital.id}/edit`}><Button className='btn btn-warning'><i class="fa-solid fa-pen"></i></Button></LinkContainer>
+                                                    <LinkContainer to={`/adminpanel/settings/${hospital.id}/hospital`}><Button className='btn btn-primary'><i style={{ color: 'white' }} class="fa-solid fa-up-right-from-square"></i></Button></LinkContainer>
                                                 </td>
                                             </tr>
                                         ))}

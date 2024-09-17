@@ -47,7 +47,7 @@ function App() {
                 <Route path='/adminpanel/user/:_id/edit/' element={<EditUser /> } />
 
                  {/* Hospital routes  */}
-                <Route path='/adminpanel/settings/hospital' element={<HospitalPage specific={true} />} />
+                <Route path='/adminpanel/settings/:_id/hospital' element={<HospitalPage specific={true} />} />
                 <Route path='/adminpanel/hospitals' element={<HospitalPage specific={false} />} />
                 <Route path='/hospital/:id' element={<HospitalInfo />} />
                 <Route path='/adminpanel/hospital/create' element={<ActionHospital isEdit={false} />} />
