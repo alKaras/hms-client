@@ -19,6 +19,7 @@ import {getMe} from "./redux/slices/authSlice";
 import CreateUser from "./pages/Adminpanel/UsersPage/CreateUser";
 import EditUser from "./pages/Adminpanel/UsersPage/EditUser";
 import Referrals from "./pages/User/Referrals";
+import ActionHospital from "./pages/Adminpanel/Settings/HospitalPage/ActionHospital";
 
 function App() {
     const dispatch = useDispatch();
@@ -46,9 +47,11 @@ function App() {
                 <Route path='/adminpanel/user/:_id/edit/' element={<EditUser /> } />
 
                  {/* Hospital routes  */}
-                <Route path='/adminpanel/settings/hospital' element={<HospitalPage specific={true} />} />
+                <Route path='/adminpanel/settings/:_id/hospital' element={<HospitalPage specific={true} />} />
                 <Route path='/adminpanel/hospitals' element={<HospitalPage specific={false} />} />
                 <Route path='/hospital/:id' element={<HospitalInfo />} />
+                <Route path='/adminpanel/hospital/create' element={<ActionHospital isEdit={false} />} />
+                <Route path='/adminpanel/hospital/:_id/edit' element={<ActionHospital isEdit={true} />} />
 
                 <Route path='/adminpanel/reports' element={<Reports />} />
 

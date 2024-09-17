@@ -1,0 +1,69 @@
+.root {
+    margin: 100px auto;
+    max-width: 1280px;
+}
+
+.actionRoot {
+    margin: 100px 0;
+
+    label {
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    .btn {
+        background: dodgerblue;
+        color: white;
+        font-weight: 700;
+        padding: 10px 30px;
+        display: block;
+        margin: 10px auto;
+    }
+
+    input {
+        flex: none;
+        padding: 10px;
+        font-size: 16px;
+        width: 300px;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        outline: 0;
+        margin-bottom: 10px;
+
+        &:focus {
+            border: 1px solid dodgerblue;
+        }
+    }
+
+    textarea {
+        &:focus {
+            border: 2px solid dodgerblue !important;
+            outline: none;
+        }
+    }
+
+    .error-style {
+        color: red;
+        font-size: 12px;
+        margin: -10px 0 10px 0;
+    }
+    .error-input {
+        border: 1px solid red;
+
+        :focus {
+            outline: 1px solid red;
+        }
+    }
+
+    .error {
+        color: red;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 10px;
+
+        @media screen and (max-width: 767px) {
+            font-size: calc(10px + (2 + 2 * 0.7) * ((100vw - 320px) / 1260));
+        }
+    }
+}
