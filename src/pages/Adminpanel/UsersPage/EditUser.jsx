@@ -26,17 +26,6 @@ export default function EditUser() {
             .catch(err => console.log(err));
     }
 
-    const fetchUser = async () => {
-        dispatch(getUser(_id));
-        if (isLoading === 'loaded') {
-            setName(user.name);
-            setSurname(user.surname);
-            setEmail(user.email);
-            setPhone(user.phone);
-            setUserRoles(user.roles);
-        }
-    }
-
     useEffect(() => {
         dispatch(getUser(_id));
         fetchRoles();
