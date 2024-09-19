@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header';
 import createUserStyle from './PatientsPage.module.scss';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { createUser } from '../../../redux/slices/userSlice';
+// import { createUser } from '../../../redux/slices/userSlice';
+import { createUser } from '../../../api/httpApiClient';
 import { LinkContainer } from 'react-router-bootstrap';
 
 export default function CreateUser(props) {
     const navigate = useNavigate();
-    const { error } = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
+    const [error, setError] = useState('');
     const [isCreated, setIsCreated] = useState(false);
 
     const {
@@ -31,8 +30,16 @@ export default function CreateUser(props) {
     });
 
     const onSubmit = (values) => {
-        dispatch(createUser(values));
-        setIsCreated(true);
+        // dispatch(createUser(values));
+        createUser(values).then((resp) => {
+            alert("User Created Successfully");
+            setIsCreated(true);
+        }).catch((err) => {
+            console.log(err);
+            alert("Something went wrong while creating user");
+            setIsCreated(false);
+        })
+
     }
     useEffect(() => {
         if (isCreated) {

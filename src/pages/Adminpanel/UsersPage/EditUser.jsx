@@ -3,8 +3,9 @@ import Header from '../../../components/Header';
 import editUserStyles from './PatientsPage.module.scss';
 import { Button, Col, Row, Spinner, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchRoles, getUser } from '../../../api/httpApiClient';
 import { useParams } from 'react-router-dom';
-import { getUser } from '../../../redux/slices/userSlice';
+// import { getUser } from '../../../redux/slices/userSlice';
 import axios from '../../../utils/axios';
 
 export default function EditUser() {
@@ -12,23 +13,27 @@ export default function EditUser() {
     const { _id } = useParams();
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
-    const { user, isLoading, error } = useSelector(state => state.user);
+    // const { user, isLoading, error } = useSelector(state => state.user);
+    const [isLoading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
+
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [UserRoles, setUserRoles] = useState([]);
     const [AllRoles, setAllRoles] = useState([]);
     const [isChanged, setChanged] = useState(false);
-
-    const fetchRoles = async () => {
-        await axios.get('/roles/search')
-            .then((resp) => setAllRoles(resp.data))
-            .catch(err => console.log(err));
-    }
-
     useEffect(() => {
-        dispatch(getUser(_id));
-        fetchRoles();
+        // dispatch(getUser(_id));
+        getUser(_id).then((resp) => {
+            setUser(resp.data.data);
+            setLoading(true);
+        }).catch((err) => {
+            setLoading(false);
+        });
+        fetchRoles().then((resp) => {
+            setAllRoles(resp.data);
+        });
     }, [dispatch, _id]);
 
     useEffect(() => {
@@ -90,7 +95,7 @@ export default function EditUser() {
 
             <Header />
             <div className={editUserStyles.rootEdit}>
-                {isLoading === 'loaded' ? (
+                {isLoading ? (
                     <Row>
                         <Col lg={6} md={6} sm={6} className={editUserStyles.left}>
                             <form onSubmit={handleSubmit}>
