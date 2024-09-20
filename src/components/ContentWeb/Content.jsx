@@ -1,19 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentStyles from './Content.module.scss';
 import SearchStyle from './Search.module.scss';
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Hospital from "../Hospital";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchHospitals } from '../../redux/slices/hospitalSlice';
+// import { fetchHospitals } from '../../redux/slices/hospitalSlice';
+import { fetchHospitals } from '../../api/httpApiClient';
 
 export default function Content(props) {
-    const dispatch = useDispatch();
-    const { isLoading, hospitals, error } = useSelector(state => state.hospital);
+    // const { isLoaded, hospitals, error } = useSelector(state => state.hospital);
+    const [isLoaded, setLoaded] = useState(false);
+    const [hospitals, setHospitals] = useState([]);
 
     useEffect(() => {
-        dispatch(fetchHospitals());
-    }, [dispatch]);
+        fetchHospitals()
+            .then((res) => {
+                setLoaded(true);
+                setHospitals(res.data.data);
+            })
+            .catch((err) => {
+                setLoaded(false);
+            })
+    }, []);
     return (
         <>
             <div className={`${ContentStyles.bgImage}`}>
@@ -33,7 +41,7 @@ export default function Content(props) {
                 </div>
             </div>
             <div className={ContentStyles.root}>
-                {isLoading === 'loaded' ? (
+                {isLoaded ? (
                     <Row>
                         {hospitals.map((obj, index) => (
                             <Col lg={4} xs={4} md={4}>

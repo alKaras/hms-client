@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Header from "../../../components/Header";
 import UserProfileStyles from './UserProfile.module.scss';
 import { Button, Col, Row, Spinner } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { getMe, infoAboutUser, selectIsLogged, selectStatus } from "../../../redux/slices/authSlice";
-import axios from '../../../utils/axios';
+import { useSelector } from "react-redux";
+import { infoAboutUser, selectIsLogged, selectStatus } from "../../../redux/slices/authSlice";
 import Moment from "react-moment";
 import { LinkContainer } from 'react-router-bootstrap';
-import { fetchFirstThreeReferrals } from '../../../redux/slices/userReferrals';
+import { editUser, fetchFirstThreeReferrals } from '../../../api/httpApiClient';
 
 
 export default function UserProfile() {
@@ -17,10 +16,12 @@ export default function UserProfile() {
     const mainRole = isLogged && user.roles;
     const userEmail = isLogged && user.data.email;
     const isVerified = isLogged && user.data.email_verified_at !== null;
-    const dispatch = useDispatch();
     const [isButtonDisabled, setIsDisabled] = useState(false);
 
-    const { isLoading, firstThreeReferrals } = useSelector(state => state.referral);
+    const [isLoaded, setLoaded] = useState(false);
+    const [firstThreeReferrals, setReferrals] = useState([]);
+
+    // const { isLoaded, firstThreeReferrals } = useSelector(state => state.referral);
 
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
@@ -34,8 +35,15 @@ export default function UserProfile() {
     }, [isLogged]);
 
     useEffect(() => {
-        dispatch(fetchFirstThreeReferrals());
-    }, [dispatch])
+        fetchFirstThreeReferrals()
+            .then((res) => {
+                setReferrals(res.data.data);
+                setLoaded(true);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [])
 
 
     const handleSubmit = async (e) => {
@@ -52,7 +60,7 @@ export default function UserProfile() {
         console.log(userId);
         console.log(params);
 
-        await axios.put(`/user/edit/${userId}`, params)
+        editUser(userId, params)
             .then((data) => {
                 alert("User data successfully changed!")
                 window.location.reload();
@@ -62,9 +70,9 @@ export default function UserProfile() {
             });
     }
 
-    const resendVerification = async () => {
+    const resendVerification = () => {
         setIsDisabled(true);
-        await axios.post('/auth/email-resend-verification', { email: userEmail })
+        resendVerification({ email: userEmail })
             .then((response) => {
                 alert(response.data.message || 'Лист підтвердження надіслано');
 
@@ -182,7 +190,7 @@ export default function UserProfile() {
                                 <div className={UserProfileStyles.referralsContent}>
                                     <div className={UserProfileStyles.rsTitle}>Мої направлення</div>
                                     <ul className={UserProfileStyles.rsList}>
-                                        {isLoading === 'loaded' ? (
+                                        {isLoaded ? (
                                             <>
                                                 {
                                                     firstThreeReferrals.map((obj, index) => (

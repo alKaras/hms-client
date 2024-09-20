@@ -8,9 +8,8 @@ import DoctorCard from "../../components/DoctorCard";
 import Form from "react-bootstrap/Form";
 import SearchStyles from '../../components/ContentWeb/Search.module.scss';
 import ReviewCard from "../../components/ReviewCard";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchHospital } from '../../redux/slices/hospitalSlice';
-import axios from '../../utils/axios';
+// import { fetchHospital } from '../../redux/slices/hospitalSlice';
+import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors } from '../../api/httpApiClient';
 
 export default function HospitalInfo() {
     const [departments, setDepartments] = useState([]);
@@ -21,18 +20,18 @@ export default function HospitalInfo() {
     const [reviewBody, setReviewBody] = useState("");
 
     const { id } = useParams();
-    const dispatch = useDispatch();
+
     const [isLoaded, setIsLoaded] = useState(false);
     const [isDoctorLoaded, setDoctorLoaded] = useState(false);
     const [hospitalContent, setHospitalContent] = useState(null);
 
     useEffect(() => {
-        dispatch(fetchHospital(id)).then((data) => {
-            setHospitalContent(data.payload);
+        fetchHospital(id).then((data) => {
+            setHospitalContent(data.data);
             setIsLoaded(true);
         })
             .catch((err) => setIsLoaded(false));
-    }, [id, dispatch]);
+    }, [id]);
 
     const services = [
         { id: 1, name: 'Service 1', price: '123' },
@@ -72,9 +71,13 @@ export default function HospitalInfo() {
 
 
     useEffect(() => {
-        axios.get(`hospital/fetch/${id}/departments`)
-            .then((resp) => { setDepartments(resp.data.data); console.log(resp.data.data) })
-            .catch((err) => console.log(err))
+        fetchHospitalDepartments(id)
+            .then((resp) => {
+                setDepartments(resp.data.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
         fetchReviews();
     }, [id]);
 
@@ -86,8 +89,8 @@ export default function HospitalInfo() {
     const fetchDoctorsBySelectedDep = async (e) => {
         e.preventDefault();
         if (selectedDepartment) {
-            console.log(selectedDepartment);
-            await axios.post('hospital/fetch/doctors', {
+
+            fetchHospitalDoctors({
                 "hospital_id": id,
                 "dep_alias": selectedDepartment
             })
@@ -98,14 +101,13 @@ export default function HospitalInfo() {
                 .catch((err) => {
                     console.log(err);
                     setDoctorLoaded(false);
-                });
+                })
         }
     }
 
     const handleSubmit = (e) => {
         fetchDoctorsBySelectedDep(e);
     }
-    console.log(isDoctorLoaded);
 
     return (
         <>
