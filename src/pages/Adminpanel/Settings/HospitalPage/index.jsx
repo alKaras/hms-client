@@ -1,20 +1,84 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../../../components/Header';
 import HospitalPageStyles from './HospitalPage.module.scss';
-import { Button, Spinner, Table } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchHospitals } from '../../../../redux/slices/hospitalSlice';
+import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals } from '../../../../api/httpApiClient';
+import { useParams } from 'react-router-dom';
 
 export default function HospitalPage({
     specific
 }) {
-    const dispatch = useDispatch();
-    const { isLoading, hospitals, error } = useSelector(state => state.hospital);
+    const [isCollectionLoaded, setCollectionLoaded] = useState(false);
+    const [isSingleLoaded, setSingleLoaded] = useState(false);
+    const [isDepsLoaded, setDepsLoaded] = useState(false);
+    const [isDoctorsLoaded, setDoctorsLoaded] = useState(false);
+    const [hospital, setHospital] = useState(null);
+    const [hospitalDeps, setDepartments] = useState([]);
+    const [hospitals, setHospitals] = useState([]);
+    const [doctorsCollections, setDoctorsCollections] = useState(null);
+    const [selectedDepartment, setSelectedDepartment] = useState('');
+    const { _id } = useParams();
+
+    const fetchDoctorsBySelectedDep = async (e) => {
+        e.preventDefault();
+        if (selectedDepartment) {
+
+            fetchHospitalDoctors(_id, selectedDepartment)
+                .then((resp) => {
+                    setDoctorsCollections(resp.data.doctors);
+                    setDoctorsLoaded(true);
+                    console.log(resp.data.doctors);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setDoctorsLoaded(false);
+                })
+        }
+    }
+
+    const handleDepartmentChange = (event) => {
+        const selectedAlias = event.target.value;
+        setSelectedDepartment(selectedAlias);
+    };
+
+    const handleSubmit = (e) => {
+        fetchDoctorsBySelectedDep(e);
+    }
+
 
     useEffect(() => {
-        dispatch(fetchHospitals());
-    }, [dispatch]);
+        if (specific) {
+            fetchHospital(_id)
+                .then((resp) => {
+                    setSingleLoaded(true);
+                    setHospital(resp.data);
+                })
+                .catch((err) => {
+                    alert("something went wrong Err: " + err);
+                    setSingleLoaded(false);
+                });
+            fetchHospitalDepartments(_id)
+                .then((resp) => {
+                    setDepsLoaded(true);
+                    setDepartments(resp.data.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+
+        } else {
+            fetchHospitals()
+                .then((resp) => {
+                    setCollectionLoaded(true);
+                    setHospitals(resp.data.data);
+                })
+                .catch((err) => {
+                    setCollectionLoaded(false);
+                    alert("Can't fetch hospitals");
+                });
+        }
+    }, [_id, specific]);
 
     return (
         <>
@@ -22,10 +86,111 @@ export default function HospitalPage({
             <div className={HospitalPageStyles.root}>
                 {specific ?
                     <>
-                        <div>1 Hospital</div>
+                        {isSingleLoaded ? (
+                            <>
+                                <div className={HospitalPageStyles.contentSingle}>
+                                    <div className={HospitalPageStyles.mainInfo}>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Основна інформація</div>
+                                        <div className={HospitalPageStyles.innerContent}>
+                                            <div><span>Назва: </span>{hospital.content.title}</div>
+                                            <div><span>Адреса: </span>{hospital.content.address}</div>
+                                            <div><p>Опис:</p>{hospital.content.description}</div>
+                                            <div><span>Телефон: </span>{hospital.hospital_phone}</div>
+                                            <div><span>Пошта: </span>{hospital.hospital_phone}</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Відділи</div>
+                                        {isDepsLoaded ? (
+                                            <>
+                                                <Table style={{ margin: '15px 0' }} bordered>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#ID</th>
+                                                            <th>Назва</th>
+                                                            <th>Пошта</th>
+                                                            <th>Публічний телефон</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {hospitalDeps.map((dep, index) => (
+                                                            <tr>
+                                                                <td>{dep.id}</td>
+                                                                <td>{dep.content.title}</td>
+                                                                <td>{dep.email}</td>
+                                                                <td>{dep.phone}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </Table>
+                                            </>
+                                        ) : (
+                                            <>
+                                                Loading...
+                                            </>
+                                        )}
+
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Лікарі</div>
+                                        <Form style={{ marginTop: '15px' }} className={'d-flex align-content-center justify-content-between'} onSubmit={(e) => handleSubmit(e)}>
+                                            <Form.Group controlId="departmentSelect">
+                                                <Form.Control style={{ maxWidth: "600px" }} as="select" onChange={handleDepartmentChange} value={"" || selectedDepartment}>
+                                                    <option value="" disabled>Виберіть відділення</option>
+                                                    {hospitalDeps.map((department, index) => (
+                                                        <option key={department.id} value={department.alias}>
+                                                            <span>{department.id}</span> <span>{department.content.title}</span>
+                                                        </option>
+                                                    ))}
+                                                </Form.Control>
+                                            </Form.Group>
+                                            <button className={`btn btn-primary`} style={{ marginLeft: 'auto' }} type={"submit"}>Знайти</button>
+                                        </Form>
+                                        {isDoctorsLoaded ? (
+                                            <>
+                                                <Table style={{ marginTop: '15px' }} bordered>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#ID</th>
+                                                            <th>Ім'я</th>
+                                                            <th>Прізвище</th>
+                                                            <th>Спеціалізація</th>
+                                                            <th>Пошта</th>
+                                                            <th>Робочий статус</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {doctorsCollections.map((doctor, index) => (
+                                                            <tr>
+                                                                <td>{doctor.id}</td>
+                                                                <td>{doctor.name}</td>
+                                                                <td>{doctor.surname}</td>
+                                                                <td>{doctor.specialization}</td>
+                                                                <td>{doctor.email}</td>
+                                                                <td style={{ textAlign: 'center' }}>{doctor.hidden === 0 ? <><i className="fa-solid fa-user-check"></i></> : <><i className="fa-solid fa-user-large-slash"></i></>}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </Table>
+                                            </>
+                                        ) : (
+                                            <>
+                                                Loading...
+                                            </>
+                                        )}
+
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <div className={"d-flex justify-content-center align-items-center"} style={{ maxHeight: '100vh' }}>
+                                <Spinner animation="border" variant="primary" />
+                            </div>
+                        )}
+
                     </> :
                     <>
-                        {isLoading === 'loaded' ? (
+                        {isCollectionLoaded ? (
                             <div className={HospitalPageStyles.contentMany}>
                                 <div className='d-flex align-items-center justify-content-end'>
                                     <LinkContainer style={{ color: 'white' }} to={'/adminpanel/hospital/create'}>

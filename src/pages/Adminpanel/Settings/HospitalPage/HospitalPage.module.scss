@@ -67,3 +67,26 @@
         }
     }
 }
+
+.contentSingle {
+    & > *:not(:last-child){
+        margin-bottom: 25px;
+    }
+}
+
+.innerContent {
+    & > *:not(:last-child) {
+        margin-bottom: 15px;
+    }
+    & > div:first-child {
+        margin-top: 15px;
+    }
+    
+    span, p {
+        font-weight: bold;
+        font-size: 15px;
+    }
+    div {
+        line-height: 150%;
+    }
+}

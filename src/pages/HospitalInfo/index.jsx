@@ -86,14 +86,11 @@ export default function HospitalInfo() {
         setSelectedDepartment(selectedAlias);
     };
 
-    const fetchDoctorsBySelectedDep = async (e) => {
+    const fetchDoctorsBySelectedDep = (e) => {
         e.preventDefault();
         if (selectedDepartment) {
 
-            fetchHospitalDoctors({
-                "hospital_id": id,
-                "dep_alias": selectedDepartment
-            })
+            fetchHospitalDoctors(id, selectedDepartment)
                 .then((resp) => {
                     setDoctorsCollections(resp.data.doctors);
                     setDoctorLoaded(true);

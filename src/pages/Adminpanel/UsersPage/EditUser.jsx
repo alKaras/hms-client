@@ -2,14 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header';
 import editUserStyles from './PatientsPage.module.scss';
 import { Button, Col, Row, Spinner, Table } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoles, getUser, attachRole, detachRole, editUser } from '../../../api/httpApiClient';
 import { useParams } from 'react-router-dom';
-// import { getUser } from '../../../redux/slices/userSlice';
-import axios from '../../../utils/axios';
 
 export default function EditUser() {
-    const dispatch = useDispatch();
     const { _id } = useParams();
     const [isLoaded, setLoaded] = useState(false);
     const [user, setUser] = useState(null);
@@ -26,7 +22,6 @@ export default function EditUser() {
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-        // dispatch(getUser(_id));
         getUser(_id).then((resp) => {
             setUser(resp.data.data);
             setLoaded(true);
@@ -36,7 +31,7 @@ export default function EditUser() {
         fetchRoles().then((resp) => {
             setAllRoles(resp.data);
         });
-    }, [dispatch, _id]);
+    }, [_id]);
 
     useEffect(() => {
         if (user) {

@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ActionHospitalStyles from './HospitalPage.module.scss';
 import Header from '../../../../components/Header';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import axios from '../../../../utils/axios';
-import { createHospital } from '../../../../redux/slices/hospitalSlice';
+import { createHospital, editHospital, fetchHospital } from '../../../../api/httpApiClient';
 
 export default function ActionHospital({ isEdit }) {
     const [title, setTitle] = useState(null);
@@ -12,45 +10,79 @@ export default function ActionHospital({ isEdit }) {
     const [alias, setAlias] = useState(null);
     const [hospitalEmail, setHospitalEmail] = useState(null);
     const [hospitalPhone, setHospitalPhone] = useState(null);
-    const [hospitalDescription, setHospDescr] = useState(null);
+    const [hospitalDescription, setHospDescr] = useState("");
+    const [hospitalData, setHospitalData] = useState(null);
+    const [isLoaded, setLoaded] = useState(false);
 
     const { _id } = useParams();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+
+
+    useEffect(() => {
+        if (isEdit) {
+            fetchHospital(_id).then((resp) => {
+                setHospitalData(resp.data);
+                setLoaded(true);
+            });
+
+        }
+    }, [_id, isEdit])
+
+    useEffect(() => {
+        if (isLoaded) {
+            setTitle(hospitalData.content.title);
+            setAddress(hospitalData.content.address);
+            setHospitalEmail(hospitalData.hospital_email);
+            setAlias(hospitalData.alias);
+            setHospitalPhone(hospitalData.hospital_phone);
+        }
+    }, [isLoaded])
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         let params;
+        console.log();
         if (isEdit) {
-            params = {
-                title,
-                address,
-                hospitalDescription,
-                hospitalEmail,
-                hospitalPhone
-            };
-            await axios.put(`hospital/edit/${_id}`, params)
-                .then((resp) => {
-                    // alert("Hospital info changed successfully");
-                    // navigate('/adminpanel/hospitals');
-                })
-                .catch((err) => {
-                    alert("Something went wrong");
-                    console.log(err);
-                })
+
+            const params = {};
+
+            if (title !== hospitalData.content.title && title) params.title = title;
+            if (address !== hospitalData.content.address && address) params.address = address;
+            if (hospitalDescription !== hospitalData.content.description && hospitalDescription) params.description = hospitalDescription;
+            if (hospitalEmail !== hospitalData.hospital_email && hospitalEmail) params.hospital_email = hospitalEmail;
+            if (hospitalPhone !== hospitalData.hospital_phone && hospitalPhone) params.hospital_phone = hospitalPhone;
+
+            if (Object.keys(params).length > 0) {
+                editHospital(_id, params)
+                    .then((resp) => {
+                        alert("Hospital info changed successfully");
+                        navigate('/adminpanel/hospitals');
+                    })
+                    .catch((err) => {
+                        alert("Something went wrong");
+                        console.log(err);
+                    })
+            } else {
+                alert("No changes detected");
+            }
+
         } else {
             params = {
-                title,
-                alias,
-                address,
-                hospitalDescription,
-                hospitalEmail,
-                hospitalPhone
+                title: title,
+                alias: alias,
+                address: address,
+                hospital_email: hospitalEmail,
+                hospital_phone: hospitalPhone
             };
-            dispatch(createHospital(params))
+            if (hospitalDescription) params.description = hospitalDescription;
+            createHospital(params)
                 .then((resp) => {
                     alert("Hospital integrated successfully");
                     navigate('/adminpanel/hospitals');
+                })
+                .catch((err) => {
+                    console.log(err);
                 })
         }
     }
