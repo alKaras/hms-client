@@ -2,34 +2,36 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header';
 import editUserStyles from './PatientsPage.module.scss';
 import { Button, Col, Row, Spinner, Table } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { fetchRoles, getUser, attachRole, detachRole, editUser } from '../../../api/httpApiClient';
 import { useParams } from 'react-router-dom';
-import { getUser } from '../../../redux/slices/userSlice';
-import axios from '../../../utils/axios';
 
 export default function EditUser() {
-    const dispatch = useDispatch();
     const { _id } = useParams();
+    const [isLoaded, setLoaded] = useState(false);
+    const [user, setUser] = useState(null);
+    const [isChanged, setChanged] = useState(false);
+    const [UserRoles, setUserRoles] = useState([]);
+    const [AllRoles, setAllRoles] = useState([]);
+
+
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
-    const { user, isLoading, error } = useSelector(state => state.user);
+    // const { user, isLoaded, error } = useSelector(state => state.user);
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
-    const [UserRoles, setUserRoles] = useState([]);
-    const [AllRoles, setAllRoles] = useState([]);
-    const [isChanged, setChanged] = useState(false);
-
-    const fetchRoles = async () => {
-        await axios.get('/roles/search')
-            .then((resp) => setAllRoles(resp.data))
-            .catch(err => console.log(err));
-    }
 
     useEffect(() => {
-        dispatch(getUser(_id));
-        fetchRoles();
-    }, [dispatch, _id]);
+        getUser(_id).then((resp) => {
+            setUser(resp.data.data);
+            setLoaded(true);
+        }).catch((err) => {
+            setLoaded(false);
+        });
+        fetchRoles().then((resp) => {
+            setAllRoles(resp.data);
+        });
+    }, [_id]);
 
     useEffect(() => {
         if (user) {
@@ -41,24 +43,29 @@ export default function EditUser() {
         }
     }, [user]);
 
-    const detachRole = async (role) => {
-        await axios.post(`/user/detach-role/${_id}`, { role: role })
-            .then((resp) => {
-                alert('Role Detached successfully');
-                dispatch(getUser(_id));
-                setChanged(prev => !prev);
-            })
-            .catch((err) => {
-                alert('Something went wrong');
-            })
+    const detach = (role) => {
+        detachRole(_id, role).then((data) => {
+            setChanged(true)
+            alert('Role detached successfully');
+        }).catch((err) => console.log(err));
+        getUser(_id).then((resp) => {
+            setUser(resp.data.data);
+            setLoaded(true);
+        }).catch((err) => {
+            setLoaded(false);
+        })
     }
 
-    const attachRole = async (role) => {
-        await axios.post(`/user/attach-role/${_id}`, { role: role })
+    const attach = async (role) => {
+        attachRole(_id, role)
             .then((resp) => {
                 alert('Role attached successfully');
-                // setChanged(prev => !prev);
-                dispatch(getUser(_id));
+                getUser(_id).then((resp) => {
+                    setUser(resp.data.data);
+                    setLoaded(true);
+                }).catch((err) => {
+                    setLoaded(false);
+                })
             })
             .catch((err) => {
                 console.log(err);
@@ -75,7 +82,7 @@ export default function EditUser() {
             params = { name, surname }
         }
 
-        await axios.put(`/user/edit/${_id}`, params)
+        editUser(_id, params)
             .then((data) => {
                 alert("User data successfully changed!")
                 window.location.reload();
@@ -90,7 +97,7 @@ export default function EditUser() {
 
             <Header />
             <div className={editUserStyles.rootEdit}>
-                {isLoading === 'loaded' ? (
+                {isLoaded ? (
                     <Row>
                         <Col lg={6} md={6} sm={6} className={editUserStyles.left}>
                             <form onSubmit={handleSubmit}>
@@ -144,7 +151,7 @@ export default function EditUser() {
                                                 <td>{role}</td>
                                                 <td>
                                                     {role === 'user' ? (<></>) : (
-                                                        <Button onClick={() => detachRole(role)} className='btn btn-danger'><i class="fa-solid fa-minus"></i></Button>
+                                                        <Button onClick={() => detach(role)} className='btn btn-danger'><i class="fa-solid fa-minus"></i></Button>
                                                     )}
 
                                                 </td>
@@ -169,7 +176,7 @@ export default function EditUser() {
                                                 <td>
                                                     {role.title === 'user' ? (
                                                         <></>
-                                                    ) : (<Button onClick={() => attachRole(role.title)} className='btn btn-primary'><i class="fa-solid fa-plus"></i></Button>)}
+                                                    ) : (<Button onClick={() => attach(role.title)} className='btn btn-primary'><i class="fa-solid fa-plus"></i></Button>)}
 
                                                 </td>
                                             </tr>

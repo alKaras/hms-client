@@ -1,28 +1,41 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Spinner, Table } from 'react-bootstrap';
 import usersPageStyles from './PatientsPage.module.scss';
-import { getUsers } from '../../../redux/slices/userSlice';
+// import { getUsers } from '../../../redux/slices/userSlice';
+import { getUsers } from '../../../api/httpApiClient';
 import Pagination from '../../../components/Pagination';
 import { LinkContainer } from 'react-router-bootstrap';
 
 export default function UsersPage() {
     const dispatch = useDispatch();
-    const { users, currentPage, totalPages, isLoading, error } = useSelector(state => state.user);
+    const [users, setUsers] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1000);
     console.log(users);
     console.log(isLoading);
     useEffect(() => {
-        dispatch(getUsers({ page: currentPage, perPage: 10 }));
+        // dispatch(getUsers({ page: currentPage, perPage: 10 }));
+        getUsers({ page: currentPage, perPage: 10 })
+            .then((resp) => {
+                console.log(resp.data);
+                setLoading(true);
+                setCurrentPage(resp.data.meta.current_page);
+                setTotalPages(resp.data.meta.last_page);
+                setUsers(resp.data.data);
+            });
     }, []);
 
     const handlePageChange = (page) => {
-        dispatch(getUsers({ page, perPage: 10 }));
+        // dispatch(getUsers({ page, perPage: 10 }));
+        getUsers({ page: currentPage, perPage: 10 });
     }
     return (
         <>
             <Header />
-            {isLoading === 'loaded' ? (
+            {isLoading ? (
                 <>
                     <div className={usersPageStyles.root}>
                         <div className={usersPageStyles.header}>
@@ -48,7 +61,7 @@ export default function UsersPage() {
                                             <td>{obj.surname}</td>
                                             <td>{obj.email}</td>
                                             <td>{obj.phone}</td>
-                                            <td>{obj.email_verified === 'verified' ? <><i style={{ color: "green" }} class="fa-solid fa-check"></i></> : <></>}</td>
+                                            <td>{obj.email_verified === 'verified' ? <><i style={{ color: "green" }} className="fa-solid fa-check"></i></> : <></>}</td>
                                             <td style={{ textAlign: 'start' }}>{(obj.roles).map((role) => (
                                                 <>
                                                     <span className={usersPageStyles.roleBadge}>{role}</span>
@@ -56,7 +69,7 @@ export default function UsersPage() {
                                             ))}</td>
                                             <td>
                                                 <LinkContainer style={{ color: 'black' }} to={`/adminpanel/user/${obj.id}/edit`}>
-                                                    <button className='btn btn-warning'><i class="fa-solid fa-pen"></i></button>
+                                                    <button className='btn btn-warning'><i className="fa-solid fa-pen"></i></button>
                                                 </LinkContainer>
                                             </td>
                                         </tr >

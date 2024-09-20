@@ -4,18 +4,30 @@ import ReferralStyle from './Referrals.module.scss';
 import { Button, Modal, Spinner, Table } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchReferralById, fetchUserReferrals } from '../../../redux/slices/userReferrals';
+// import { fetchReferralById, fetchUserReferrals } from '../../../redux/slices/userReferrals';
 import Moment from 'react-moment';
+import { fetchReferralById, fetchUserReferrals } from '../../../api/httpApiClient';
 
 export default function Referrals() {
     const dispatch = useDispatch();
-    const { isLoading, userReferrals, referral } = useSelector(state => state.referral);
+
+    const [isLoaded, setLoaded] = useState(false);
+    const [userReferrals, setReferrals] = useState([]);
+    const [referral, setReferral] = useState(null);
     const [referralId, setReferralId] = useState(null);
     const [isRefLoaded, setIsRefLoaded] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchUserReferrals());
-    }, [dispatch]);
+        fetchUserReferrals()
+            .then((resp) => {
+                setLoaded(true);
+                setReferrals(resp.data.data);
+            })
+            .catch((err) => {
+                setLoaded(false);
+                console.log(err);
+            });
+    }, []);
 
     // const fetchById = async (referral_id) => {
     //     dispatch(fetchReferralById(referral_id));
@@ -23,9 +35,12 @@ export default function Referrals() {
 
     useEffect(() => {
         if (referralId !== null) {
-            dispatch(fetchReferralById(referralId)).then(() => setIsRefLoaded(true));
+            fetchReferralById(referralId).then((resp) => {
+                setIsRefLoaded(true);
+                setReferral(resp.data.data);
+            }).catch((err) => setIsRefLoaded(false));
         }
-    }, [referralId, dispatch]);
+    }, [referralId]);
 
 
     const [show, setShow] = useState(false);
@@ -44,7 +59,7 @@ export default function Referrals() {
         <>
             <Header />
             <div className={ReferralStyle.root}>
-                {isLoading === 'loaded' ? (
+                {isLoaded ? (
                     <Table bordered style={{ verticalAlign: 'middle' }}>
                         <thead>
                             <tr>
