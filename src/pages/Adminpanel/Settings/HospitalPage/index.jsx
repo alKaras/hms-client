@@ -20,11 +20,47 @@ export default function HospitalPage({
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const { _id } = useParams();
 
+    const refreshDoctorsCollection = (e) => {
+        e.preventDefault();
+        setSelectedDepartment('');
+        fetchHospitalDoctors({
+            hospital_id: _id
+        })
+            .then((resp) => {
+                setDoctorsCollections(resp.data.doctors);
+                setDoctorsLoaded(true);
+                console.log(resp.data.doctors);
+            })
+            .catch((err) => {
+                console.log(err);
+                setDoctorsLoaded(false);
+            })
+    }
+
+    const refreshDepartments = (e) => {
+        e.preventDefault();
+        setDepsLoaded(false);
+        setDepartments([]);
+
+        fetchHospitalDepartments(_id)
+            .then((resp) => {
+                setDepsLoaded(true);
+                setDepartments(resp.data.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
     const fetchDoctorsBySelectedDep = async (e) => {
         e.preventDefault();
+        setDoctorsLoaded(false);
         if (selectedDepartment) {
-
-            fetchHospitalDoctors(_id, selectedDepartment)
+            const params = {
+                hospital_id: _id,
+                dep_alias: selectedDepartment
+            }
+            fetchHospitalDoctors(params)
                 .then((resp) => {
                     setDoctorsCollections(resp.data.doctors);
                     setDoctorsLoaded(true);
@@ -49,6 +85,7 @@ export default function HospitalPage({
 
     useEffect(() => {
         if (specific) {
+            setDoctorsLoaded(false);
             fetchHospital(_id)
                 .then((resp) => {
                     setSingleLoaded(true);
@@ -66,6 +103,7 @@ export default function HospitalPage({
                 .catch((err) => {
                     console.log(err);
                 })
+
 
         } else {
             fetchHospitals()
@@ -100,7 +138,14 @@ export default function HospitalPage({
                                         </div>
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Відділи</div>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex align-items-center justify-content-between'>
+                                            <h2>Відділи</h2>
+                                            <div>
+                                                <button className='btn' onClick={(e) => refreshDepartments(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }}>Create new</button>
+                                            </div>
+                                        </div>
                                         {isDepsLoaded ? (
                                             <>
                                                 <Table style={{ margin: '15px 0' }} bordered>
@@ -110,6 +155,7 @@ export default function HospitalPage({
                                                             <th>Назва</th>
                                                             <th>Пошта</th>
                                                             <th>Публічний телефон</th>
+                                                            <th>Дії</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -119,6 +165,11 @@ export default function HospitalPage({
                                                                 <td>{dep.content.title}</td>
                                                                 <td>{dep.email}</td>
                                                                 <td>{dep.phone}</td>
+                                                                <td>
+                                                                    <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
+                                                                        <i class="fa-solid fa-pen"></i>
+                                                                    </Button>
+                                                                </td>
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -132,7 +183,14 @@ export default function HospitalPage({
 
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Лікарі</div>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex justify-content-between align-items-center'>
+                                            <h2>Лікарі</h2>
+                                            <div>
+                                                <button className='btn' onClick={(e) => refreshDoctorsCollection(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }}>Create new</button>
+                                            </div>
+                                        </div>
                                         <Form style={{ marginTop: '15px' }} className={'d-flex align-content-center justify-content-between'} onSubmit={(e) => handleSubmit(e)}>
                                             <Form.Group controlId="departmentSelect">
                                                 <Form.Control style={{ maxWidth: "600px" }} as="select" onChange={handleDepartmentChange} value={"" || selectedDepartment}>
@@ -235,7 +293,7 @@ export default function HospitalPage({
 
                     </>
                 }
-            </div>
+            </div >
         </>
     );
 }
