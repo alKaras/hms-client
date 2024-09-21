@@ -3,7 +3,7 @@ import Header from '../../../../components/Header';
 import HospitalPageStyles from './HospitalPage.module.scss';
 import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals } from '../../../../api/httpApiClient';
+import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals, importDepartment } from '../../../../api/httpApiClient';
 import { useParams } from 'react-router-dom';
 
 export default function HospitalPage({
@@ -118,6 +118,40 @@ export default function HospitalPage({
         }
     }, [_id, specific]);
 
+    const [file, setFile] = useState(null);
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    }
+
+    const handleButtonClick = async () => {
+        document.getElementById('fileInput').click();
+    }
+
+    const handleImportSubmit = async (e) => {
+        const selectedFile = e.target.files[0];
+
+        if (selectedFile) {
+            setFile(selectedFile);
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            importDepartment(formData)
+                .then((resp) => {
+                    setMessage(resp.data.message);
+                    alert(resp.data.message);
+                })
+                .catch((err) => {
+                    alert(err.response.data.errors.file);
+                });
+        } else {
+            alert("Please select a file");
+        }
+    }
+
     return (
         <>
             <Header />
@@ -130,11 +164,11 @@ export default function HospitalPage({
                                     <div className={HospitalPageStyles.mainInfo}>
                                         <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Основна інформація</div>
                                         <div className={HospitalPageStyles.innerContent}>
-                                            <div><span>Назва: </span>{hospital.content.title}</div>
+                                            <div><span>Назва: </span>{hospital.content.title} [id: {hospital.id}]</div>
                                             <div><span>Адреса: </span>{hospital.content.address}</div>
                                             <div><p>Опис:</p>{hospital.content.description}</div>
                                             <div><span>Телефон: </span>{hospital.hospital_phone}</div>
-                                            <div><span>Пошта: </span>{hospital.hospital_phone}</div>
+                                            <div><span>Пошта: </span>{hospital.hospital_email}</div>
                                         </div>
                                     </div>
                                     <div>
@@ -142,7 +176,8 @@ export default function HospitalPage({
                                             <h2>Відділи</h2>
                                             <div>
                                                 <button className='btn' onClick={(e) => refreshDepartments(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
+                                                <input type="file" id="fileInput" accept='.xlsx' onChange={handleImportSubmit} style={{ display: 'none' }} />
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleButtonClick}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
                                                 <button className='btn btn-secondary' style={{ marginLeft: '15px' }}>Create new</button>
                                             </div>
                                         </div>

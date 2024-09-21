@@ -75,6 +75,29 @@ export const fetchHospitalDoctors = async (params) => {
     return await axios.post('hospital/fetch/doctors', params)
 }
 
-//-- Service route controller
+//Departments route controller
+export const fetchDepartments = async () => {
+    return await axios.get('department/fetch');
+}
+
+export const fetchDepartment  = async(_id) => {
+    return await axios.get(`department/fetch/${_id}`);
+}
+
+export const createDepartment = async(params) => {
+    return await axios.post('department/create', params);
+}
+
+export const importDepartment = async (file) => {
+    return await axios.post('department/import', file, {
+        headers: {
+            'Content-type': 'multipart/form-data',
+        }
+    });
+}
+
+export const editDepartment = async(_id, params) => {
+    return await axios.post(`department/edit/${_id}`, params);
+}
 
 
