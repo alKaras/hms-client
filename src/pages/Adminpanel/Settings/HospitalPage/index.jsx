@@ -3,8 +3,8 @@ import Header from '../../../../components/Header';
 import HospitalPageStyles from './HospitalPage.module.scss';
 import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals, importDepartment } from '../../../../api/httpApiClient';
-import { useParams } from 'react-router-dom';
+import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals, importDepartment, importDoctors } from '../../../../api/httpApiClient';
+import { Link, useParams } from 'react-router-dom';
 
 export default function HospitalPage({
     specific
@@ -126,11 +126,37 @@ export default function HospitalPage({
         setFile(e.target.files[0]);
     }
 
-    const handleButtonClick = async () => {
-        document.getElementById('fileInput').click();
+    const handleBtnDoctImportCtrl = async () => {
+        document.getElementById('fileDoctInput').click();
     }
 
-    const handleImportSubmit = async (e) => {
+    const handleImportDoctorSubmit = async (e) => {
+        const selectedFile = e.target.files[0];
+
+        if (selectedFile) {
+            setFile(selectedFile);
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            importDoctors(formData)
+                .then((resp) => {
+                    setMessage(resp.data.message);
+                    alert(resp.data.message);
+                })
+                .catch((err) => {
+                    alert(err.response.data.errors.file);
+                });
+        } else {
+            alert("Please select a file");
+        }
+    }
+
+    const handleBtnDepImportCtrl = async () => {
+        document.getElementById('fileDepInput').click();
+    }
+
+    const handleImportDepSubmit = async (e) => {
         const selectedFile = e.target.files[0];
 
         if (selectedFile) {
@@ -176,9 +202,14 @@ export default function HospitalPage({
                                             <h2>Відділи</h2>
                                             <div>
                                                 <button className='btn' onClick={(e) => refreshDepartments(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
-                                                <input type="file" id="fileInput" accept='.xlsx' onChange={handleImportSubmit} style={{ display: 'none' }} />
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleButtonClick}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }}>Create new</button>
+                                                <input type="file" id="fileDepInput" accept='.xlsx' onChange={handleImportDepSubmit} style={{ display: 'none' }} />
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDepImportCtrl}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
+                                                <LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
+                                                    pathname: `/adminpanel/hospital/department/create`,
+                                                    search: `?hospital=${_id}`
+                                                }}>
+                                                    <Button className='btn btn-secondary' >Create new</Button>
+                                                </LinkContainer>
                                             </div>
                                         </div>
                                         {isDepsLoaded ? (
@@ -201,9 +232,11 @@ export default function HospitalPage({
                                                                 <td>{dep.email}</td>
                                                                 <td>{dep.phone}</td>
                                                                 <td>
-                                                                    <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
-                                                                        <i class="fa-solid fa-pen"></i>
-                                                                    </Button>
+                                                                    <LinkContainer to={`/adminpanel/hospital/department/${dep.id}/edit`}>
+                                                                        <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
+                                                                            <i class="fa-solid fa-pen"></i>
+                                                                        </Button>
+                                                                    </LinkContainer>
                                                                 </td>
                                                             </tr>
                                                         ))}
@@ -222,8 +255,14 @@ export default function HospitalPage({
                                             <h2>Лікарі</h2>
                                             <div>
                                                 <button className='btn' onClick={(e) => refreshDoctorsCollection(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }}>Create new</button>
+                                                <input type="file" id="fileDoctInput" accept='.xlsx' onChange={handleImportDoctorSubmit} style={{ display: 'none' }} />
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDoctImportCtrl}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
+                                                <LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
+                                                    pathname: `/adminpanel/hospital/doctor/create`,
+                                                    search: `?hospital=${_id}`
+                                                }}>
+                                                    <Button className='btn btn-secondary' >Create new</Button>
+                                                </LinkContainer>
                                             </div>
                                         </div>
                                         <Form style={{ marginTop: '15px' }} className={'d-flex align-content-center justify-content-between'} onSubmit={(e) => handleSubmit(e)}>
@@ -250,6 +289,7 @@ export default function HospitalPage({
                                                             <th>Спеціалізація</th>
                                                             <th>Пошта</th>
                                                             <th>Робочий статус</th>
+                                                            <th>Дії</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -261,6 +301,16 @@ export default function HospitalPage({
                                                                 <td>{doctor.specialization}</td>
                                                                 <td>{doctor.email}</td>
                                                                 <td style={{ textAlign: 'center' }}>{doctor.hidden === 0 ? <><i className="fa-solid fa-user-check"></i></> : <><i className="fa-solid fa-user-large-slash"></i></>}</td>
+                                                                <td>
+                                                                    <LinkContainer to={{
+                                                                        pathname: `/adminpanel/hospital/doctor/${doctor.id}/edit`,
+                                                                        search: `?hospital=${_id}`
+                                                                    }}>
+                                                                        <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
+                                                                            <i class="fa-solid fa-pen"></i>
+                                                                        </Button>
+                                                                    </LinkContainer>
+                                                                </td>
                                                             </tr>
                                                         ))}
                                                     </tbody>

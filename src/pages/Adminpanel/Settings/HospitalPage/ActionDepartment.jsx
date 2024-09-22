@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../../../components/Header'
 import ActionHospitalStyles from './HospitalPage.module.scss';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { createDepartment, editDepartment, fetchDepartment } from '../../../../api/httpApiClient';
 
-export const ActionDepartment = ({ isEdit, hospitalId }) => {
+export const ActionDepartment = ({ isEdit }) => {
     const [currentDep, setCurrentDep] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const navigate = useNavigate();
 
     const { _id } = useParams();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const hospitalId = queryParams.get('hospital');
 
     const [alias, setAlias] = useState('');
     const [email, setEmail] = useState('');
@@ -34,7 +37,7 @@ export const ActionDepartment = ({ isEdit, hospitalId }) => {
 
     useEffect(() => {
         if (isLoaded) {
-            setTitle(currentDep.contnet.title);
+            setTitle(currentDep.content.title);
             setAlias(currentDep.alias);
             setEmail(currentDep.email);
             setPhone(currentDep.phone);
@@ -57,7 +60,7 @@ export const ActionDepartment = ({ isEdit, hospitalId }) => {
                 editDepartment(_id, params)
                     .then((resp) => {
                         alert("Department info Updated");
-                        navigate('/adminpanel/')
+                        navigate(`/adminpanel/hospitals`);
                     })
                     .catch((err) => {
                         alert("Something went wrong");
@@ -79,6 +82,7 @@ export const ActionDepartment = ({ isEdit, hospitalId }) => {
             createDepartment(params)
                 .then((resp) => {
                     alert("Department created successfully");
+                    navigate(`/adminpanel/settings/${hospitalId}/hospital`);
                 })
                 .catch((err) => {
                     console.log(err);

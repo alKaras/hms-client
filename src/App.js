@@ -20,6 +20,8 @@ import CreateUser from "./pages/Adminpanel/UsersPage/CreateUser";
 import EditUser from "./pages/Adminpanel/UsersPage/EditUser";
 import Referrals from "./pages/User/Referrals";
 import ActionHospital from "./pages/Adminpanel/Settings/HospitalPage/ActionHospital";
+import { ActionDepartment } from "./pages/Adminpanel/Settings/HospitalPage/ActionDepartment";
+import { ActionDoctors } from "./pages/Adminpanel/Settings/HospitalPage/ActionDoctors";
 
 function App() {
     const dispatch = useDispatch();
@@ -52,6 +54,14 @@ function App() {
                 <Route path='/hospital/:id' element={<HospitalInfo />} />
                 <Route path='/adminpanel/hospital/create' element={<ActionHospital isEdit={false} />} />
                 <Route path='/adminpanel/hospital/:_id/edit' element={<ActionHospital isEdit={true} />} />
+
+                {/* Department routes */}
+                <Route path='/adminpanel/hospital/department/create' element={<ActionDepartment isEdit={false} />} />
+                <Route path='/adminpanel/hospital/department/:_id/edit' element={<ActionDepartment isEdit={true} />} />
+
+                {/* Doctor routes */}
+                <Route path='/adminpanel/hospital/doctor/create' element={<ActionDoctors isEdit={false} />} />
+                <Route path='/adminpanel/hospital/doctor/:_id/edit' element={<ActionDoctors isEdit={true} />} />
 
                 <Route path='/adminpanel/reports' element={<Reports />} />
 

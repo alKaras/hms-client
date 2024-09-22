@@ -97,7 +97,31 @@ export const importDepartment = async (file) => {
 }
 
 export const editDepartment = async(_id, params) => {
-    return await axios.post(`department/edit/${_id}`, params);
+    return await axios.put(`department/edit/${_id}`, params);
 }
 
+//Doctor route controller
+export const fetchDoctorsCollection = async() => {
+    return await axios.get('doctors/fetch');
+}
+
+export const fetchSingleDoctor = async(_id) => {
+    return await axios.get(`doctors/fetch/${_id}`);
+}
+
+export const createDoctor = async (params) => {
+    return await axios.post(`doctors/create`, params);
+}
+
+export const importDoctors = async(file) => {
+    return await axios.post(`doctors/import`, file, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    })
+}
+
+export const editDoctor = async(_id, params) => {
+    return await axios.put(`doctors/edit/${_id}`, params);
+}
 

@@ -35,6 +35,11 @@
         }
     }
 
+    input[type='checkbox'] {
+        width: 50px;
+        margin-right: 15px;
+    }
+
     textarea {
         &:focus {
             border: 2px solid dodgerblue !important;
