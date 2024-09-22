@@ -78,6 +78,21 @@ export default function Header() {
                                                 замовлень</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
+                                    <Dropdown align="end">
+                                        <Dropdown.Toggle id={'headerToggle'} className={` ${headerStyles.profileBadge}`}>
+                                            <div
+                                                className={headerStyles.title}>{user.data.name} {user.data.surname}</div>
+                                            <div className={headerStyles.image}>
+                                                <img src="/assets/profile.jpg" alt="profile" />
+                                            </div>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
+                                            <LinkContainer to={isUser ? '/profile' : '/adminpanel'}>
+                                                <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
+                                            </LinkContainer>
+                                            <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
                                 </div>
                             </>
                         ) : isAdminPanel && isDoctor ? (

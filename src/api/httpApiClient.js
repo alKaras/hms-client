@@ -71,13 +71,57 @@ export const fetchHospitalDepartments = async (id) => {
     return await axios.get(`hospital/fetch/${id}/departments`);
 }
 
-export const fetchHospitalDoctors = async (id, department) => {
-    return await axios.post('hospital/fetch/doctors', {
-        "hospital_id": id,
-        "dep_alias": department
+export const fetchHospitalDoctors = async (params) => {
+    return await axios.post('hospital/fetch/doctors', params)
+}
+
+//Departments route controller
+export const fetchDepartments = async () => {
+    return await axios.get('department/fetch');
+}
+
+export const fetchDepartment  = async(_id) => {
+    return await axios.get(`department/fetch/${_id}`);
+}
+
+export const createDepartment = async(params) => {
+    return await axios.post('department/create', params);
+}
+
+export const importDepartment = async (file) => {
+    return await axios.post('department/import', file, {
+        headers: {
+            'Content-type': 'multipart/form-data',
+        }
+    });
+}
+
+export const editDepartment = async(_id, params) => {
+    return await axios.put(`department/edit/${_id}`, params);
+}
+
+//Doctor route controller
+export const fetchDoctorsCollection = async() => {
+    return await axios.get('doctors/fetch');
+}
+
+export const fetchSingleDoctor = async(_id) => {
+    return await axios.get(`doctors/fetch/${_id}`);
+}
+
+export const createDoctor = async (params) => {
+    return await axios.post(`doctors/create`, params);
+}
+
+export const importDoctors = async(file) => {
+    return await axios.post(`doctors/import`, file, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
     })
 }
 
-//-- Service route controller
-
+export const editDoctor = async(_id, params) => {
+    return await axios.put(`doctors/edit/${_id}`, params);
+}
 

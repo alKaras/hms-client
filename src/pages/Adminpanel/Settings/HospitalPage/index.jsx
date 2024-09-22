@@ -3,8 +3,8 @@ import Header from '../../../../components/Header';
 import HospitalPageStyles from './HospitalPage.module.scss';
 import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals } from '../../../../api/httpApiClient';
-import { useParams } from 'react-router-dom';
+import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals, importDepartment, importDoctors } from '../../../../api/httpApiClient';
+import { Link, useParams } from 'react-router-dom';
 
 export default function HospitalPage({
     specific
@@ -20,11 +20,47 @@ export default function HospitalPage({
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const { _id } = useParams();
 
+    const refreshDoctorsCollection = (e) => {
+        e.preventDefault();
+        setSelectedDepartment('');
+        fetchHospitalDoctors({
+            hospital_id: _id
+        })
+            .then((resp) => {
+                setDoctorsCollections(resp.data.doctors);
+                setDoctorsLoaded(true);
+                console.log(resp.data.doctors);
+            })
+            .catch((err) => {
+                console.log(err);
+                setDoctorsLoaded(false);
+            })
+    }
+
+    const refreshDepartments = (e) => {
+        e.preventDefault();
+        setDepsLoaded(false);
+        setDepartments([]);
+
+        fetchHospitalDepartments(_id)
+            .then((resp) => {
+                setDepsLoaded(true);
+                setDepartments(resp.data.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
     const fetchDoctorsBySelectedDep = async (e) => {
         e.preventDefault();
+        setDoctorsLoaded(false);
         if (selectedDepartment) {
-
-            fetchHospitalDoctors(_id, selectedDepartment)
+            const params = {
+                hospital_id: _id,
+                dep_alias: selectedDepartment
+            }
+            fetchHospitalDoctors(params)
                 .then((resp) => {
                     setDoctorsCollections(resp.data.doctors);
                     setDoctorsLoaded(true);
@@ -49,6 +85,7 @@ export default function HospitalPage({
 
     useEffect(() => {
         if (specific) {
+            setDoctorsLoaded(false);
             fetchHospital(_id)
                 .then((resp) => {
                     setSingleLoaded(true);
@@ -67,6 +104,7 @@ export default function HospitalPage({
                     console.log(err);
                 })
 
+
         } else {
             fetchHospitals()
                 .then((resp) => {
@@ -80,6 +118,66 @@ export default function HospitalPage({
         }
     }, [_id, specific]);
 
+    const [file, setFile] = useState(null);
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    }
+
+    const handleBtnDoctImportCtrl = async () => {
+        document.getElementById('fileDoctInput').click();
+    }
+
+    const handleImportDoctorSubmit = async (e) => {
+        const selectedFile = e.target.files[0];
+
+        if (selectedFile) {
+            setFile(selectedFile);
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            importDoctors(formData)
+                .then((resp) => {
+                    setMessage(resp.data.message);
+                    alert(resp.data.message);
+                })
+                .catch((err) => {
+                    alert(err.response.data.errors.file);
+                });
+        } else {
+            alert("Please select a file");
+        }
+    }
+
+    const handleBtnDepImportCtrl = async () => {
+        document.getElementById('fileDepInput').click();
+    }
+
+    const handleImportDepSubmit = async (e) => {
+        const selectedFile = e.target.files[0];
+
+        if (selectedFile) {
+            setFile(selectedFile);
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            importDepartment(formData)
+                .then((resp) => {
+                    setMessage(resp.data.message);
+                    alert(resp.data.message);
+                })
+                .catch((err) => {
+                    alert(err.response.data.errors.file);
+                });
+        } else {
+            alert("Please select a file");
+        }
+    }
+
     return (
         <>
             <Header />
@@ -92,15 +190,28 @@ export default function HospitalPage({
                                     <div className={HospitalPageStyles.mainInfo}>
                                         <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Основна інформація</div>
                                         <div className={HospitalPageStyles.innerContent}>
-                                            <div><span>Назва: </span>{hospital.content.title}</div>
+                                            <div><span>Назва: </span>{hospital.content.title} [id: {hospital.id}]</div>
                                             <div><span>Адреса: </span>{hospital.content.address}</div>
                                             <div><p>Опис:</p>{hospital.content.description}</div>
                                             <div><span>Телефон: </span>{hospital.hospital_phone}</div>
-                                            <div><span>Пошта: </span>{hospital.hospital_phone}</div>
+                                            <div><span>Пошта: </span>{hospital.hospital_email}</div>
                                         </div>
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Відділи</div>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex align-items-center justify-content-between'>
+                                            <h2>Відділи</h2>
+                                            <div>
+                                                <button className='btn' onClick={(e) => refreshDepartments(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                <input type="file" id="fileDepInput" accept='.xlsx' onChange={handleImportDepSubmit} style={{ display: 'none' }} />
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDepImportCtrl}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
+                                                <LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
+                                                    pathname: `/adminpanel/hospital/department/create`,
+                                                    search: `?hospital=${_id}`
+                                                }}>
+                                                    <Button className='btn btn-secondary' >Create new</Button>
+                                                </LinkContainer>
+                                            </div>
+                                        </div>
                                         {isDepsLoaded ? (
                                             <>
                                                 <Table style={{ margin: '15px 0' }} bordered>
@@ -110,6 +221,7 @@ export default function HospitalPage({
                                                             <th>Назва</th>
                                                             <th>Пошта</th>
                                                             <th>Публічний телефон</th>
+                                                            <th>Дії</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -119,6 +231,13 @@ export default function HospitalPage({
                                                                 <td>{dep.content.title}</td>
                                                                 <td>{dep.email}</td>
                                                                 <td>{dep.phone}</td>
+                                                                <td>
+                                                                    <LinkContainer to={`/adminpanel/hospital/department/${dep.id}/edit`}>
+                                                                        <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
+                                                                            <i class="fa-solid fa-pen"></i>
+                                                                        </Button>
+                                                                    </LinkContainer>
+                                                                </td>
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -132,7 +251,20 @@ export default function HospitalPage({
 
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Лікарі</div>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex justify-content-between align-items-center'>
+                                            <h2>Лікарі</h2>
+                                            <div>
+                                                <button className='btn' onClick={(e) => refreshDoctorsCollection(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                <input type="file" id="fileDoctInput" accept='.xlsx' onChange={handleImportDoctorSubmit} style={{ display: 'none' }} />
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDoctImportCtrl}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
+                                                <LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
+                                                    pathname: `/adminpanel/hospital/doctor/create`,
+                                                    search: `?hospital=${_id}`
+                                                }}>
+                                                    <Button className='btn btn-secondary' >Create new</Button>
+                                                </LinkContainer>
+                                            </div>
+                                        </div>
                                         <Form style={{ marginTop: '15px' }} className={'d-flex align-content-center justify-content-between'} onSubmit={(e) => handleSubmit(e)}>
                                             <Form.Group controlId="departmentSelect">
                                                 <Form.Control style={{ maxWidth: "600px" }} as="select" onChange={handleDepartmentChange} value={"" || selectedDepartment}>
@@ -157,6 +289,7 @@ export default function HospitalPage({
                                                             <th>Спеціалізація</th>
                                                             <th>Пошта</th>
                                                             <th>Робочий статус</th>
+                                                            <th>Дії</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -168,6 +301,16 @@ export default function HospitalPage({
                                                                 <td>{doctor.specialization}</td>
                                                                 <td>{doctor.email}</td>
                                                                 <td style={{ textAlign: 'center' }}>{doctor.hidden === 0 ? <><i className="fa-solid fa-user-check"></i></> : <><i className="fa-solid fa-user-large-slash"></i></>}</td>
+                                                                <td>
+                                                                    <LinkContainer to={{
+                                                                        pathname: `/adminpanel/hospital/doctor/${doctor.id}/edit`,
+                                                                        search: `?hospital=${_id}`
+                                                                    }}>
+                                                                        <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
+                                                                            <i class="fa-solid fa-pen"></i>
+                                                                        </Button>
+                                                                    </LinkContainer>
+                                                                </td>
                                                             </tr>
                                                         ))}
                                                     </tbody>
@@ -235,7 +378,7 @@ export default function HospitalPage({
 
                     </>
                 }
-            </div>
+            </div >
         </>
     );
 }
