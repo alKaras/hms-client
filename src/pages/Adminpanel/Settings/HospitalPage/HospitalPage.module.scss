@@ -95,3 +95,16 @@
         line-height: 150%;
     }
 }
+
+.badge {
+    display: inline-block;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    color: #fff;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: gray;
+}

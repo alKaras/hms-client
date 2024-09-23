@@ -46,19 +46,19 @@ export const ActionDoctors = ({ isEdit }) => {
                     const doctor = resp.data.data;
                     setDoctorLoaded(true);
                     setFormData({
-                        specialization: doctor.specialization,
-                        name: doctor.name,
-                        surname: doctor.surname,
-                        email: doctor.email,
-                        phone: doctor.phone
+                        specialization: doctor.specialization || '',
+                        name: doctor.name || '',
+                        surname: doctor.surname || '',
+                        email: doctor.email || '',
+                        phone: doctor.phone || ''
                     });
-                    setSelectedDepartments(doctor.departments.map(dep => dep.name));
+                    setSelectedDepartments(doctor.departments?.map(dep => dep.name));
                 })
                 .catch((err) => {
                     setError("Failed to load doctor data");
                 })
         }
-    }, [isEdit, _id, hospitalId])
+    }, [_id, hospitalId, isEdit])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -85,6 +85,8 @@ export const ActionDoctors = ({ isEdit }) => {
                     departments: selectedDepartments,
                 }).then((resp) => {
                     setSuccess('Doctor updated successfully');
+                    alert('Doctor updated successfully');
+                    navigate(`/adminpanel/settings/${hospitalId}/hospital`)
                 });
             } else {
                 createDoctor({
@@ -92,6 +94,8 @@ export const ActionDoctors = ({ isEdit }) => {
                     departments: selectedDepartments,
                 }).then((resp) => {
                     setSuccess('Doctor created successfully');
+                    alert('Doctor created successfully');
+                    navigate(`/adminpanel/settings/${hospitalId}/hospital`)
                 })
             }
             setFormData({
@@ -122,8 +126,9 @@ export const ActionDoctors = ({ isEdit }) => {
                             <Form.Label>Спеціалізація</Form.Label>
                             <Form.Control
                                 type="text"
+                                name='specialization'
                                 value={formData.specialization}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
                                 placeholder='Введіть спеціалізацію'
                             />
                         </Form.Group>
@@ -132,37 +137,49 @@ export const ActionDoctors = ({ isEdit }) => {
                             <Form.Control
                                 type="text"
                                 placeholder="Введіть ім'я"
+                                name='name'
                                 value={formData.name}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
+                                disabled={isEdit}
                             />
                         </Form.Group>
                         <Form.Group className="d-flex flex-column">
                             <Form.Label>Прізвище</Form.Label>
                             <Form.Control
                                 type="text"
+                                name='surname'
                                 placeholder="Введіть прізвище"
                                 value={formData.surname}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
+                                disabled={isEdit}
                             />
                         </Form.Group>
                         <Form.Group className="d-flex flex-column">
                             <Form.Label>Пошта лікаря</Form.Label>
                             <Form.Control
                                 type="email"
+                                name='email'
                                 value={formData.email}
                                 placeholder={"Введіть пошту лікаря"}
-                                onChange={handleChange}
+                                onChange={(e) => handleChange(e)}
+                                disabled={isEdit}
                             />
                         </Form.Group>
-                        <Form.Group className="d-flex flex-column">
-                            <Form.Label>Телефон лікаря</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={formData.phone}
-                                placeholder={"Введіть телефон лікаря"}
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
+                        {!isEdit ? (
+                            <>
+                                <Form.Group className="d-flex flex-column">
+                                    <Form.Label>Телефон лікаря</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name='phone'
+                                        value={formData.phone}
+                                        placeholder={"Введіть телефон лікаря"}
+                                        onChange={(e) => handleChange(e)}
+                                    />
+                                </Form.Group>
+                            </>
+                        ) : (<></>)}
+
                         <Form.Group className="d-flex flex-column">
                             <Form.Label>Відділи</Form.Label>
                             {isDepLoaded && departments.map((department) => (

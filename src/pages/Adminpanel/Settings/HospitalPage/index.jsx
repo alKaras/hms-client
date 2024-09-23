@@ -12,6 +12,7 @@ export default function HospitalPage({
     const [isCollectionLoaded, setCollectionLoaded] = useState(false);
     const [isSingleLoaded, setSingleLoaded] = useState(false);
     const [isDepsLoaded, setDepsLoaded] = useState(false);
+    const [isDepChosen, setDepChosen] = useState(false);
     const [isDoctorsLoaded, setDoctorsLoaded] = useState(false);
     const [hospital, setHospital] = useState(null);
     const [hospitalDeps, setDepartments] = useState([]);
@@ -23,6 +24,7 @@ export default function HospitalPage({
     const refreshDoctorsCollection = (e) => {
         e.preventDefault();
         setSelectedDepartment('');
+        setDepChosen(false);
         fetchHospitalDoctors({
             hospital_id: _id
         })
@@ -41,6 +43,7 @@ export default function HospitalPage({
         e.preventDefault();
         setDepsLoaded(false);
         setDepartments([]);
+
 
         fetchHospitalDepartments(_id)
             .then((resp) => {
@@ -76,6 +79,7 @@ export default function HospitalPage({
     const handleDepartmentChange = (event) => {
         const selectedAlias = event.target.value;
         setSelectedDepartment(selectedAlias);
+        setDepChosen(true);
     };
 
     const handleSubmit = (e) => {
@@ -289,6 +293,12 @@ export default function HospitalPage({
                                                             <th>Спеціалізація</th>
                                                             <th>Пошта</th>
                                                             <th>Робочий статус</th>
+                                                            {!isDepChosen ? (
+                                                                <>
+                                                                    <th>Відділи</th>
+                                                                    <th>Сервіси</th>
+                                                                </>
+                                                            ) : <></>}
                                                             <th>Дії</th>
                                                         </tr>
                                                     </thead>
@@ -301,6 +311,17 @@ export default function HospitalPage({
                                                                 <td>{doctor.specialization}</td>
                                                                 <td>{doctor.email}</td>
                                                                 <td style={{ textAlign: 'center' }}>{doctor.hidden === 0 ? <><i className="fa-solid fa-user-check"></i></> : <><i className="fa-solid fa-user-large-slash"></i></>}</td>
+                                                                {!isDepChosen ? (<td>{doctor.departments?.map((data, index) => (
+                                                                    <><span className={HospitalPageStyles.badge}>{data}</span></>
+                                                                ))}</td>) : <></>}
+
+                                                                {!isDepChosen ? (
+                                                                    <td>{doctor.services?.map((data, ind) => (
+                                                                        <><span>{data}, </span></>
+                                                                    ))}</td>
+                                                                ) : <></>}
+
+
                                                                 <td>
                                                                     <LinkContainer to={{
                                                                         pathname: `/adminpanel/hospital/doctor/${doctor.id}/edit`,
