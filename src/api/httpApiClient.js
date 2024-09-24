@@ -75,6 +75,10 @@ export const fetchHospitalDoctors = async (params) => {
     return await axios.post('hospital/fetch/doctors', params)
 }
 
+export const fetchHospitalServices = async (params) => {
+    return await axios.post('hospital/fetch/services', params);
+}
+
 //Departments route controller
 export const fetchDepartments = async () => {
     return await axios.get('department/fetch');
@@ -125,3 +129,28 @@ export const editDoctor = async(_id, params) => {
     return await axios.put(`doctors/edit/${_id}`, params);
 }
 
+//Service route controller
+
+export const fetchServicesCollection = async() => {
+    return await axios.get('services/fetch');
+}
+
+export const fetchSingleService = async(_id) => {
+    return await axios.get(`services/fetch/${_id}`);
+}
+
+export const createService = async (params) => {
+    return await axios.post(`services/create`, params);
+}
+
+export const importServices = async(file) => {
+    return await axios.post(`services/import`, file, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    })
+}
+
+export const editService = async(_id, params) => {
+    return await axios.put(`services/edit/${_id}`, params);
+}

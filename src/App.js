@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import "./index.css";
 import Home from "./pages/Home";
 import HospitalInfo from "./pages/HospitalInfo";
@@ -13,21 +13,35 @@ import HospitalPage from "./pages/Adminpanel/Settings/HospitalPage";
 import Departments from "./pages/Adminpanel/Settings/Departments";
 import OrderHistory from "./pages/Adminpanel/Settings/OrderHistory";
 import UserProfile from "./pages/User/Profile";
-import {useDispatch} from "react-redux";
-import {useEffect} from "react";
-import {getMe} from "./redux/slices/authSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+import {getMe, selectIsUnauthorized} from "./redux/slices/authSlice";
 import CreateUser from "./pages/Adminpanel/UsersPage/CreateUser";
 import EditUser from "./pages/Adminpanel/UsersPage/EditUser";
 import Referrals from "./pages/User/Referrals";
 import ActionHospital from "./pages/Adminpanel/Settings/HospitalPage/ActionHospital";
 import { ActionDepartment } from "./pages/Adminpanel/Settings/HospitalPage/ActionDepartment";
 import { ActionDoctors } from "./pages/Adminpanel/Settings/HospitalPage/ActionDoctors";
+import { ActionServices } from "./pages/Adminpanel/Settings/HospitalPage/ActionServices";
 
 function App() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [isAlertShown, setIsAlertShown] = useState(false);
+    const isUnAuthorized = useSelector(selectIsUnauthorized);
+
     useEffect(() => {
         dispatch(getMe());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (isUnAuthorized && !isAlertShown) {
+            alert("Your session has expired. Please log in again.");
+            setIsAlertShown(true);  // Mark the alert as shown
+            navigate('/sign-in');  // Redirect to login page
+        }
+    }, [isUnAuthorized, isAlertShown, navigate]);
 
     return (
         <div className={"_container"}>
@@ -65,7 +79,10 @@ function App() {
 
                 <Route path='/adminpanel/reports' element={<Reports />} />
 
-                <Route path='/adminpanel/settings/departments' element={<Departments />} />
+                {/* Services routes */}
+                <Route path='/adminpanel/hospital/service/create' element={<ActionServices />} />
+
+                {/* <Route path='/adminpanel/settings/departments' element={<Departments />} /> */}
                 <Route path="/adminpanel/order-history" element={<OrderHistory />} />
              </Routes>
         </div>
