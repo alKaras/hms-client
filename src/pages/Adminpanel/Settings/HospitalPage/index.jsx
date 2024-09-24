@@ -3,7 +3,7 @@ import Header from '../../../../components/Header';
 import HospitalPageStyles from './HospitalPage.module.scss';
 import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals, importDepartment, importDoctors } from '../../../../api/httpApiClient';
+import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals, fetchHospitalServices, importDepartment, importDoctors, importServices } from '../../../../api/httpApiClient';
 import { Link, useParams } from 'react-router-dom';
 
 export default function HospitalPage({
@@ -11,15 +11,20 @@ export default function HospitalPage({
 }) {
     const [isCollectionLoaded, setCollectionLoaded] = useState(false);
     const [isSingleLoaded, setSingleLoaded] = useState(false);
+
     const [isDepsLoaded, setDepsLoaded] = useState(false);
     const [isDepChosen, setDepChosen] = useState(false);
     const [isDoctorsLoaded, setDoctorsLoaded] = useState(false);
+
     const [hospital, setHospital] = useState(null);
     const [hospitalDeps, setDepartments] = useState([]);
     const [hospitals, setHospitals] = useState([]);
     const [doctorsCollections, setDoctorsCollections] = useState(null);
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const { _id } = useParams();
+
+    const [isCollectionServiceLoaded, setCollectionServiceLoaded] = useState(false);
+    const [ServiceCollection, setServiceCollection] = useState([]);
 
     const refreshDoctorsCollection = (e) => {
         e.preventDefault();
@@ -36,6 +41,26 @@ export default function HospitalPage({
             .catch((err) => {
                 console.log(err);
                 setDoctorsLoaded(false);
+            })
+    }
+
+    const refreshServices = (e) => {
+        e.preventDefault();
+        setCollectionServiceLoaded(false);
+        setServiceCollection([]);
+
+        fetchHospitalServices(
+            {
+                hospital_id: _id
+            }
+        )
+            .then((resp) => {
+                setCollectionServiceLoaded(true);
+                setServiceCollection(resp.data.services);
+            })
+            .catch((err) => {
+                setCollectionServiceLoaded(false);
+                console.log(err);
             })
     }
 
@@ -107,6 +132,19 @@ export default function HospitalPage({
                 .catch((err) => {
                     console.log(err);
                 })
+            fetchHospitalServices(
+                {
+                    hospital_id: _id
+                }
+            )
+                .then((resp) => {
+                    setCollectionServiceLoaded(true);
+                    setServiceCollection(resp.data.services);
+                })
+                .catch((err) => {
+                    setCollectionServiceLoaded(false);
+                    console.log(err);
+                })
 
 
         } else {
@@ -144,6 +182,32 @@ export default function HospitalPage({
             formData.append('file', selectedFile);
 
             importDoctors(formData)
+                .then((resp) => {
+                    setMessage(resp.data.message);
+                    alert(resp.data.message);
+                })
+                .catch((err) => {
+                    alert(err.response.data.errors.file);
+                });
+        } else {
+            alert("Please select a file");
+        }
+    }
+
+    const handleBtnServiceImportCtrl = async () => {
+        document.getElementById('fileServInput').click();
+    }
+
+    const handleImportServiceSubmit = async (e) => {
+        const selectedFile = e.target.files[0];
+
+        if (selectedFile) {
+            setFile(selectedFile);
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            importServices(formData)
                 .then((resp) => {
                     setMessage(resp.data.message);
                     alert(resp.data.message);
@@ -343,6 +407,77 @@ export default function HospitalPage({
                                             </>
                                         )}
 
+                                    </div>
+                                    <div style={{ marginTop: '50px' }}>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex justify-content-between align-items-center'>
+                                            <h2>Послуги</h2>
+                                            <div>
+                                                <button className='btn' onClick={(e) => refreshServices(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                <input type="file" id="fileServInput" accept='.xlsx' onChange={handleImportServiceSubmit} style={{ display: 'none' }} />
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnServiceImportCtrl}>Import <i class="fa-solid fa-file-arrow-down"></i></button><LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
+                                                    pathname: `/adminpanel/hospital/service/create`,
+                                                    search: `?hospital=${_id}`
+                                                }}>
+                                                    <Button className='btn btn-secondary' >Create new</Button>
+                                                </LinkContainer>
+                                            </div>
+                                        </div>
+                                        {isCollectionServiceLoaded ? (
+                                            <>
+                                                <Table style={{ marginTop: '25px' }} bordered>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#ID</th>
+                                                            <th>Послуга</th>
+                                                            <th>Відділення</th>
+                                                            <th>Лікарі</th>
+                                                            <th>Дії</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {ServiceCollection.map((obj, index) => (
+                                                            <>
+                                                                <tr>
+                                                                    <td>{obj.id}</td>
+                                                                    <td>{obj.service_name}</td>
+                                                                    <td>{obj.department}</td>
+                                                                    <td style={{ width: '300px' }}>
+                                                                        {obj.doctorInfo?.length > 0 ? (
+                                                                            <>
+                                                                                <ul style={{ padding: 0, width: '300px' }}>
+                                                                                    {obj.doctorInfo.map((doctor, ind) => (
+                                                                                        <>
+                                                                                            <li key={ind} style={{ lineHeight: '150%' }}>
+                                                                                                <span>[ID: {doctor.doctor_id}]</span> {doctor.name} <br /> {doctor.email}
+                                                                                            </li>
+                                                                                            <hr />
+                                                                                        </>
+                                                                                    ))}
+                                                                                </ul>
+                                                                            </>
+                                                                        ) : (<></>)}
+                                                                    </td>
+                                                                    <td>
+                                                                        <LinkContainer to={{
+                                                                            pathname: `/adminpanel/hospital/service/${obj.id}/edit`,
+                                                                            search: `?hospital=${_id}`
+                                                                        }}>
+                                                                            <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
+                                                                                <i class="fa-solid fa-pen"></i>
+                                                                            </Button>
+                                                                        </LinkContainer>
+                                                                    </td>
+                                                                </tr>
+                                                            </>
+                                                        ))}
+                                                    </tbody>
+                                                </Table>
+                                            </>
+
+                                        ) : (
+                                            <>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </>

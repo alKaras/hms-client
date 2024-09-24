@@ -108,3 +108,14 @@
     margin-bottom: 5px;
     background-color: gray;
 }
+
+.select-service {
+    padding: 10px;
+    border: 1px solid dodgerblue;
+    border-radius: 15px;
+    margin-bottom: 15px;
+
+    &:focus {
+        outline: none;
+    }
+}

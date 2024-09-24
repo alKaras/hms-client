@@ -8,7 +8,8 @@ const initialState = {
     roles: null,
     isLoading: 'loading',
     error: null,
-    isRegistered: false
+    isRegistered: false,
+    isUnAuthorized: false
 }
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (params, {_, rejectWithValue}) => {
@@ -66,6 +67,7 @@ const authSlice = createSlice({
                 state.user = action.payload.user
                 state.error = null
                 state.isRegistered = true
+                state.isUnAuthorized = false;
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.isLoading = 'error'
@@ -81,6 +83,7 @@ const authSlice = createSlice({
                 state.token = action.payload.access_token
                 state.roles = action.payload.roles
                 state.error = null
+                state.isUnAuthorized = false;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.isLoading = 'error'
@@ -95,16 +98,19 @@ const authSlice = createSlice({
                 state.user = action.payload?.user
                 state.token = localStorage.getItem('token')
                 state.error = null
+                state.isUnAuthorized = false;
             })
             .addCase(getMe.rejected, (state, action) => {
                 state.isLoading = 'error'
                 state.error = action.payload.message
+                state.isUnAuthorized = true
             })
     }
 })
 
 export const selectIsRegged = (state) => (state.auth.isRegistered);
 export const selectIsLogged = (state) => Boolean(state.auth.token);
+export const selectIsUnauthorized = (state) => (state.auth.isUnAuthorized); 
 export const infoAboutUser = (state) => (state.auth.user);
 export const selectStatus = (state) => (state.auth.isLoading);
 export const selectRoles = (state) => (state.auth.roles);
