@@ -103,7 +103,7 @@ const authSlice = createSlice({
             .addCase(getMe.rejected, (state, action) => {
                 state.isLoading = 'error'
                 state.error = action.payload.message
-                state.isUnAuthorized = true
+                state.isUnAuthorized = action.payload.message === 'Token not provided' ? false : true;
             })
     }
 })
