@@ -90,7 +90,10 @@ export default function HospitalInfo() {
         e.preventDefault();
         if (selectedDepartment) {
 
-            fetchHospitalDoctors(id, selectedDepartment)
+            fetchHospitalDoctors({
+                hospital_id: id,
+                dep_alias: selectedDepartment
+            })
                 .then((resp) => {
                     setDoctorsCollections(resp.data.doctors);
                     setDoctorLoaded(true);
@@ -146,7 +149,7 @@ export default function HospitalInfo() {
                                         <Col lg={6} md={6} xs={6}>
                                             <DoctorCard title={item.name + ' ' + item.surname}
                                                 email={item.email}
-                                                active={item.hidden === 0} specialization={item.specialization} />
+                                                active={item.hidden === 0} specialization={item.specialization} hospital_id={id} doctor_id={item.id} />
                                         </Col>
                                     )) : (
                                         <>

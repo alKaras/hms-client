@@ -23,6 +23,8 @@ import ActionHospital from "./pages/Adminpanel/Settings/HospitalPage/ActionHospi
 import { ActionDepartment } from "./pages/Adminpanel/Settings/HospitalPage/ActionDepartment";
 import { ActionDoctors } from "./pages/Adminpanel/Settings/HospitalPage/ActionDoctors";
 import { ActionServices } from "./pages/Adminpanel/Settings/HospitalPage/ActionServices";
+import { TimeSlotPicker } from "./pages/TimeslotPicker";
+import 'react-datepicker/dist/react-datepicker.css';
 
 function App() {
     const dispatch = useDispatch();
@@ -81,6 +83,9 @@ function App() {
 
                 {/* Services routes */}
                 <Route path='/adminpanel/hospital/service/create' element={<ActionServices />} />
+
+                <Route path='/hospital/doctor/:_id/timeslots' element={<TimeSlotPicker isDoctorPage={true} />} />
+                <Route path='/hospital/service/:_id/timeslots' element={<TimeSlotPicker isServicePage={true} />} />
 
                 {/* <Route path='/adminpanel/settings/departments' element={<Departments />} /> */}
                 <Route path="/adminpanel/order-history" element={<OrderHistory />} />
