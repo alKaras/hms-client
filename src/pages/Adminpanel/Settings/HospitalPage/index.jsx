@@ -381,7 +381,7 @@ export default function HospitalPage({
 
                                                                 {!isDepChosen ? (
                                                                     <td>{doctor.services?.map((data, ind) => (
-                                                                        <><span>{data}, </span></>
+                                                                        <><span key={ind}>{data}{doctor.services.length > 1 && ind < doctor.services.length - 1 ? <>, </> : <></>} </span></>
                                                                     ))}</td>
                                                                 ) : <></>}
 
