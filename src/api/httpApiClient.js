@@ -177,23 +177,24 @@ export const destroyTimeSlot = async(_id) => {
     return await axios.delete(`timeslots/${_id}/destroy`);
 }
 
-/**
- * Get Timeslot by Doctor method | timeslots/getbydoctor POST
- * @param {"doctor_id"} params 
- * @returns 
- */
-export const getTimeSlotsByDoctor = async(params) => {
-    return await axios.post(`timeslots/getbydoctor`, params);
-}
+// /**
+//  * Get Timeslot by Doctor method | timeslots/getbydoctor POST
+//  * @param {"doctor_id"} params 
+//  * @returns 
+//  */
+// export const getTimeSlotsByDoctor = async(params) => {
+//     return await axios.post(`timeslots/getbydoctor`, params);
+// }
 
-/**
- * Get Timeslot By Service method | timeslots/getbyservice POST
- * @param {"service_id"} params 
- * @returns 
- */
-export const getTimeSlotsByService = async(params) => {
-    return await axios.post(`timeslots/getbyservice`, params);
-}
+// /**
+//  * Get Timeslot By Service method | timeslots/getbyservice
+//  * @param {"service_id"} params
+//  * @method POST
+//  * @returns 
+//  */
+// export const getTimeSlotsByService = async(params) => {
+//     return await axios.post(`timeslots/getbyservice`, params);
+// }
 
 /**
  * Get Timeslot by specific date method | timeslots/getbydate POST doctor_id/service_id optional
@@ -201,7 +202,7 @@ export const getTimeSlotsByService = async(params) => {
  * @returns 
  */
 
-export const getTimeSlotsByDate = async(params) => {
+export const getTimeSlotsByFilter = async(params) => {
     return await axios.post(`timeslots/getbydate`, params);
 }
 

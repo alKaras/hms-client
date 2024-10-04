@@ -24,7 +24,6 @@ import { ActionDepartment } from "./pages/Adminpanel/Settings/HospitalPage/Actio
 import { ActionDoctors } from "./pages/Adminpanel/Settings/HospitalPage/ActionDoctors";
 import { ActionServices } from "./pages/Adminpanel/Settings/HospitalPage/ActionServices";
 import { TimeSlotPicker } from "./pages/TimeslotPicker";
-import 'react-datepicker/dist/react-datepicker.css';
 
 function App() {
     const dispatch = useDispatch();
