@@ -125,6 +125,16 @@ export const importDoctors = async(file) => {
     })
 }
 
+/**
+ * Get DoctorList by service id method
+ * @param {"service_id"} params 
+ * @method POST
+ * @returns 
+ */
+export const fetchDoctorByService = async(params) => {
+    return await axios.post(`doctors/getbyservice`, params);
+}
+
 export const editDoctor = async(_id, params) => {
     return await axios.put(`doctors/edit/${_id}`, params);
 }

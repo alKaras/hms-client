@@ -457,7 +457,7 @@ export default function HospitalPage({
                                                                             </>
                                                                         ) : (<></>)}
                                                                     </td>
-                                                                    <td>
+                                                                    <td style={{ width: '120px' }}>
                                                                         <LinkContainer to={{
                                                                             pathname: `/adminpanel/hospital/service/${obj.id}/edit`,
                                                                             search: `?hospital=${_id}`
@@ -465,6 +465,12 @@ export default function HospitalPage({
                                                                             <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
                                                                                 <i class="fa-solid fa-pen"></i>
                                                                             </Button>
+                                                                        </LinkContainer>
+                                                                        <LinkContainer style={{ color: 'white', marginLeft: '15px' }} to={`/adminpanel/hospital/service/${obj.id}/slots`}>
+                                                                            <Button style={{ textAlign: 'center' }} className='btn btn-secondary'>
+                                                                                <i class="fa-solid fa-clock"></i>
+                                                                            </Button>
+
                                                                         </LinkContainer>
                                                                     </td>
                                                                 </tr>
