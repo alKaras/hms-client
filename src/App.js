@@ -10,7 +10,6 @@ import ServicesPage from "./pages/Adminpanel/ServicesPage";
 import UsersPage from "./pages/Adminpanel/UsersPage";
 import Reports from "./pages/Adminpanel/Reports";
 import HospitalPage from "./pages/Adminpanel/Settings/HospitalPage";
-import Departments from "./pages/Adminpanel/Settings/Departments";
 import OrderHistory from "./pages/Adminpanel/Settings/OrderHistory";
 import UserProfile from "./pages/User/Profile";
 import {useDispatch, useSelector} from "react-redux";
@@ -23,6 +22,8 @@ import ActionHospital from "./pages/Adminpanel/Settings/HospitalPage/ActionHospi
 import { ActionDepartment } from "./pages/Adminpanel/Settings/HospitalPage/ActionDepartment";
 import { ActionDoctors } from "./pages/Adminpanel/Settings/HospitalPage/ActionDoctors";
 import { ActionServices } from "./pages/Adminpanel/Settings/HospitalPage/ActionServices";
+import { TimeSlotPicker } from "./pages/TimeslotPicker";
+import { ActionSlot } from "./pages/Adminpanel/Settings/HospitalPage/ActionSlot";
 
 function App() {
     const dispatch = useDispatch();
@@ -81,6 +82,11 @@ function App() {
 
                 {/* Services routes */}
                 <Route path='/adminpanel/hospital/service/create' element={<ActionServices />} />
+
+                {/* Timeslot routes */}
+                <Route path='/hospital/doctor/:_id/timeslots' element={<TimeSlotPicker isDoctorPage={true} />} />
+                <Route path='/hospital/service/:_id/timeslots' element={<TimeSlotPicker isServicePage={true} />} />
+                <Route path='/adminpanel/hospital/service/:_id/slots' element={<ActionSlot />} />
 
                 {/* <Route path='/adminpanel/settings/departments' element={<Departments />} /> */}
                 <Route path="/adminpanel/order-history" element={<OrderHistory />} />

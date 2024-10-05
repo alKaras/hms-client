@@ -125,6 +125,16 @@ export const importDoctors = async(file) => {
     })
 }
 
+/**
+ * Get DoctorList by service id method
+ * @param {"service_id"} params 
+ * @method POST
+ * @returns 
+ */
+export const fetchDoctorByService = async(params) => {
+    return await axios.post(`doctors/getbyservice`, params);
+}
+
 export const editDoctor = async(_id, params) => {
     return await axios.put(`doctors/edit/${_id}`, params);
 }
@@ -153,4 +163,64 @@ export const importServices = async(file) => {
 
 export const editService = async(_id, params) => {
     return await axios.put(`services/edit/${_id}`, params);
+}
+
+//TimeSlots route controller
+
+export const getTimeSlotsCollection = async() => {
+    return await axios.get('timeslots/fetch');
+}
+
+export const getTimeSlotById = async(_id) => {
+    return await axios.get(`timeslots/${_id}/getbyid`);
+}
+
+export const createTimeSlot = async(params) => {
+    return await axios.post('timeslots/create', params);
+}
+
+export const editTimeSlot = async(_id, params) => {
+    return await axios.put(`timeslots/${_id}/edit`, params);
+}
+
+export const destroyTimeSlot = async(_id) => {
+    return await axios.delete(`timeslots/${_id}/destroy`);
+}
+
+// /**
+//  * Get Timeslot by Doctor method | timeslots/getbydoctor POST
+//  * @param {"doctor_id"} params 
+//  * @returns 
+//  */
+// export const getTimeSlotsByDoctor = async(params) => {
+//     return await axios.post(`timeslots/getbydoctor`, params);
+// }
+
+// /**
+//  * Get Timeslot By Service method | timeslots/getbyservice
+//  * @param {"service_id"} params
+//  * @method POST
+//  * @returns 
+//  */
+// export const getTimeSlotsByService = async(params) => {
+//     return await axios.post(`timeslots/getbyservice`, params);
+// }
+
+/**
+ * Get Timeslot by specific date method | timeslots/getbydate POST doctor_id/service_id optional
+ * @param {"date", "doctor_id", "service_id"} params 
+ * @returns 
+ */
+
+export const getTimeSlotsByFilter = async(params) => {
+    return await axios.post(`timeslots/getbydate`, params);
+}
+
+/**
+ * Bulk generation of timeslots
+ * @param {"doctor_id", "service_id", "start_time", "end_time", "price"} params 
+ * @returns 
+ */
+export const generateTimeSlots = async(params) => {
+    return await axios.post(`timeslots/generate`, params);
 }

@@ -9,7 +9,8 @@ import Form from "react-bootstrap/Form";
 import SearchStyles from '../../components/ContentWeb/Search.module.scss';
 import ReviewCard from "../../components/ReviewCard";
 // import { fetchHospital } from '../../redux/slices/hospitalSlice';
-import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors } from '../../api/httpApiClient';
+import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitalServices } from '../../api/httpApiClient';
+import { LinkContainer } from 'react-router-bootstrap';
 
 export default function HospitalInfo() {
     const [departments, setDepartments] = useState([]);
@@ -25,19 +26,28 @@ export default function HospitalInfo() {
     const [isDoctorLoaded, setDoctorLoaded] = useState(false);
     const [hospitalContent, setHospitalContent] = useState(null);
 
-    useEffect(() => {
-        fetchHospital(id).then((data) => {
-            setHospitalContent(data.data);
-            setIsLoaded(true);
-        })
-            .catch((err) => setIsLoaded(false));
-    }, [id]);
+    const [isServiceLoaded, setServiceLoaded] = useState(false);
+    const [serviceCollection, setServiceCollection] = useState([]);
 
-    const services = [
-        { id: 1, name: 'Service 1', price: '123' },
-        { id: 2, name: 'Service 2', price: '123' },
-        { id: 3, name: 'Service 3', price: '123' },
-    ];
+    useEffect(() => {
+        fetchHospital(id)
+            .then((data) => {
+                setHospitalContent(data.data);
+                setIsLoaded(true);
+            })
+            .catch((err) => setIsLoaded(false));
+        fetchHospitalServices({
+            hospital_id: id
+        })
+            .then((resp) => {
+                setServiceLoaded(true);
+                setServiceCollection(resp.data.services)
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+
+    }, [id]);
 
     const fetchReviews = async () => {
         const data = [
@@ -90,7 +100,10 @@ export default function HospitalInfo() {
         e.preventDefault();
         if (selectedDepartment) {
 
-            fetchHospitalDoctors(id, selectedDepartment)
+            fetchHospitalDoctors({
+                hospital_id: id,
+                dep_alias: selectedDepartment
+            })
                 .then((resp) => {
                     setDoctorsCollections(resp.data.doctors);
                     setDoctorLoaded(true);
@@ -146,7 +159,7 @@ export default function HospitalInfo() {
                                         <Col lg={6} md={6} xs={6}>
                                             <DoctorCard title={item.name + ' ' + item.surname}
                                                 email={item.email}
-                                                active={item.hidden === 0} specialization={item.specialization} />
+                                                active={item.hidden === 0} specialization={item.specialization} hospital_id={id} doctor_id={item.id} />
                                         </Col>
                                     )) : (
                                         <>
@@ -164,18 +177,19 @@ export default function HospitalInfo() {
                                     <tr>
                                         <th>#</th>
                                         <th>Service</th>
-                                        <th>Price</th>
+                                        <th>Department</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {services.map((service) => (
+                                    {isServiceLoaded && serviceCollection.map((service) => (
                                         <tr key={service.id}>
                                             <td>{service.id}</td>
-                                            <td>{service.name}</td>
-                                            <td>{service.price}</td>
+                                            <td>{service.service_name}</td>
+                                            <td>{service.department}</td>
                                             <td>
-                                                <button className={"btn btn-secondary"}><i
-                                                    className="fa-solid fa-cart-plus"></i></button>
+                                                <LinkContainer to={`/hospital/service/${service.id}/timeslots`}>
+                                                    <button className={"btn btn-secondary"}><i className="fa-solid fa-circle-plus"></i></button>
+                                                </LinkContainer>
                                             </td>
                                         </tr>
                                     ))}

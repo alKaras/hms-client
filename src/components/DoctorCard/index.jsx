@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import DoctorCardStyles from './DoctorCard.module.scss';
 import { LinkContainer } from "react-router-bootstrap";
 import { Button, Modal, ProgressBar } from "react-bootstrap";
-import DatePicker from "react-date-picker";
 
 export default function DoctorCard({
     title,
     email,
     specialization,
     active,
+    hospital_id,
+    doctor_id,
 }) {
 
     const [step, setStep] = useState(1);
@@ -47,10 +48,10 @@ export default function DoctorCard({
                         <div className={DoctorCardStyles.chips}>
                             {specialization}
                         </div>
-                        {/*<LinkContainer>*/}
-                        <Button className={DoctorCardStyles.btnWidget}>Записатися до
-                            лікаря</Button>
-                        {/*</LinkContainer>*/}
+                        <LinkContainer to={`/hospital/doctor/${doctor_id}/timeslots`}>
+                            <Button className={DoctorCardStyles.btnWidget}>Записатися до
+                                лікаря</Button>
+                        </LinkContainer>
                     </div>
                 </div>
             </div>
