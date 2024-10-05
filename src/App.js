@@ -10,7 +10,6 @@ import ServicesPage from "./pages/Adminpanel/ServicesPage";
 import UsersPage from "./pages/Adminpanel/UsersPage";
 import Reports from "./pages/Adminpanel/Reports";
 import HospitalPage from "./pages/Adminpanel/Settings/HospitalPage";
-import Departments from "./pages/Adminpanel/Settings/Departments";
 import OrderHistory from "./pages/Adminpanel/Settings/OrderHistory";
 import UserProfile from "./pages/User/Profile";
 import {useDispatch, useSelector} from "react-redux";
