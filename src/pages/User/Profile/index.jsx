@@ -91,7 +91,7 @@ export default function UserProfile() {
             <Header />
             {isLogged && user?.data && status !== 'loading' ? (
                 <div className={UserProfileStyles.root}>
-                    <Row>
+                    <Row style={mainRole !== 'user' ? { display: 'flex', justifyContent: 'center' } : {}}>
                         <Col lg={6} md={6} xs={6} className={UserProfileStyles.leftSide}>
                             <div className={UserProfileStyles.nestedContent}>
                                 <div className={UserProfileStyles.userFrstContent}>
@@ -172,7 +172,7 @@ export default function UserProfile() {
                             )}
 
                         </Col>
-                        <Col lg={6} md={6} xs={6} className={UserProfileStyles.rightSide}>
+                        {mainRole === 'user' && (<Col lg={6} md={6} xs={6} className={UserProfileStyles.rightSide}>
                             <div className={UserProfileStyles.servicesBlock}>
                                 <div className={UserProfileStyles.servicesContent}>
                                     <div className={UserProfileStyles.rsTitle}>Мої послуги</div>
@@ -215,7 +215,7 @@ export default function UserProfile() {
                                     <Button className='btn btn-primary'>Переглянути детальніше</Button>
                                 </LinkContainer>
                             </div>
-                        </Col >
+                        </Col >)}
                     </Row >
                 </div >
             ) : (

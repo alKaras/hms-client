@@ -24,6 +24,7 @@ import { ActionDoctors } from "./pages/Adminpanel/Settings/HospitalPage/ActionDo
 import { ActionServices } from "./pages/Adminpanel/Settings/HospitalPage/ActionServices";
 import { TimeSlotPicker } from "./pages/TimeslotPicker";
 import { ActionSlot } from "./pages/Adminpanel/Settings/HospitalPage/ActionSlot";
+import { ShoppingCart } from "./pages/ShoppingCart";
 
 function App() {
     const dispatch = useDispatch();
@@ -36,13 +37,13 @@ function App() {
         dispatch(getMe());
     }, [dispatch]);
 
-    useEffect(() => {
-        if (isUnAuthorized && !isAlertShown) {
-            alert("Your session has expired. Please log in again.");
-            setIsAlertShown(true);  // Mark the alert as shown
-            navigate('/sign-in');  // Redirect to login page
-        }
-    }, [isUnAuthorized, isAlertShown, navigate]);
+    // useEffect(() => {
+    //     if (isUnAuthorized && !isAlertShown) {
+    //         alert("Your session has expired. Please log in again.");
+    //         setIsAlertShown(true);  // Mark the alert as shown
+    //         navigate('/sign-in');  // Redirect to login page
+    //     }
+    // }, [isUnAuthorized, isAlertShown, navigate]);
 
     return (
         <div className={"_container"}>
@@ -50,6 +51,7 @@ function App() {
                 <Route path="/" element={<Home />}/>
                 <Route path={"/sign-in"} element={<Login />} />
                 <Route path={"/sign-up"} element={<Register />} />
+                <Route path={"/shoppingcart"} element={<ShoppingCart />} />
                 {/* UserProfile routes */}
                 <Route path='/user/profile' element={<UserProfile />} />
                 <Route path='user/referrals' element={<Referrals />} />
