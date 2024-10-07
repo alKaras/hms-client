@@ -104,4 +104,28 @@
 
     margin-right: 10px;
   }
+
+  .cartContent {
+    margin-left: 35px;
+  }
+
+  .cart {
+    height: 100%;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    background: white;
+    border-radius: 15px;
+    border: 1px solid dodgerblue;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      background: dodgerblue;
+      color: white;
+      transition: all .5s ease-in-out;
+    }
+  }
+
 }

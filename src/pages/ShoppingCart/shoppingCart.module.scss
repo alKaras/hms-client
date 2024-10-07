@@ -1,0 +1,66 @@
+.root {
+    margin: 120px auto 0;
+    max-width: 1280px;
+
+    .cartContent {
+        padding: 15px 25px;
+    }
+
+    .itemsList {
+        & > *:not(:last-child){
+            margin-bottom: 15px;
+        }
+        margin-top: 25px;
+    }
+
+    .scrollContainer {
+        // width: 300px;
+        height: 500px;   
+        overflow-y: scroll; 
+        overflow-x: hidden; 
+        padding: 10px;
+    }
+
+    .itemContent {
+        border-radius: 15px;
+        padding: 25px 15px;
+        box-shadow: 0 2px 4px rgba($color: #000000, $alpha: 0.5);
+        & > *:not(:last-child){
+            margin-bottom: 15px;
+        }
+
+        button {
+            background: none;
+            color: gray;
+            transition: all .3s ease-out;
+
+            &:hover {
+                color: red;
+                transition: all .3s ease-in-out;
+            }
+        }
+    }
+
+    .checkoutCard {
+        margin-top: 13px;
+        padding: 25px;
+    }
+
+    .checkoutCardContent {
+        padding: 15px;
+        background: rgba($color: #000000, $alpha: 0.1);
+        border-radius: 15px;
+    }
+    .cartFirstEl {
+        font-size: 14px;
+
+        &::after {
+            position: relative;
+            top: 0;
+            left: 9px;
+            content: "----------------------------------";
+            width: 1000px;
+            height: 100px;
+        }
+    }
+}

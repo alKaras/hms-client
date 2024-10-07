@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, Nav, Navbar } from "react-bootstrap";
+import { Badge, Button, Dropdown, Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
 import headerStyles from './Header.module.scss';
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -33,8 +33,8 @@ export default function Header() {
     // }, [isAdmin, isDoctor, isManager, navigate]);
 
     return (
-        <Navbar expand="md" className={`${headerStyles.root} d-flex justify-content-between fixed-top`}>
-            <LinkContainer to={'/'}>
+        <Navbar expand="md" className={`${headerStyles.root} d-flex align-content-center justify-content-between fixed-top`}>
+            <LinkContainer to={isUser ? '/' : '/adminpanel'}>
                 <Navbar.Brand className='d-flex align-items-center'>
                     <img
                         src="/assets/logo/logo.svg"
@@ -87,7 +87,7 @@ export default function Header() {
                                             </div>
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
-                                            <LinkContainer to={isUser ? '/profile' : '/adminpanel'}>
+                                            <LinkContainer to={'/user/profile'}>
                                                 <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
                                             </LinkContainer>
                                             <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
@@ -120,7 +120,7 @@ export default function Header() {
                                         </div>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
-                                        <LinkContainer to={isUser ? '/profile' : '/adminpanel'}>
+                                        <LinkContainer to={'/user/profile'}>
                                             <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
                                         </LinkContainer>
                                         <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
@@ -151,7 +151,7 @@ export default function Header() {
                                         </div>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
-                                        <LinkContainer to={isUser ? '/profile' : '/adminpanel'}>
+                                        <LinkContainer to={'/user/profile'}>
                                             <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
                                         </LinkContainer>
                                         <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
@@ -172,7 +172,7 @@ export default function Header() {
                                     </LinkContainer>
                                 </div>
                                 <div>
-                                    <Dropdown align="end">
+                                    <Dropdown>
                                         <Dropdown.Toggle className={` ${headerStyles.profileBadge} shadow-sm rounded d-flex align-items-center justify-content-center`}>
                                             <div
                                                 className={headerStyles.title}>{user.data.name} {user.data.surname}</div>
@@ -181,17 +181,19 @@ export default function Header() {
                                             </div>
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu className='mt-3 p-3'>
-                                            <LinkContainer to='/user/profile'>
+                                            <LinkContainer to='/user/profile' style={{ color: 'white' }}>
                                                 <Dropdown.Item className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
                                             </LinkContainer>
                                             <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
-                                    {/*<LinkContainer to={'/user/profile'}>*/}
-                                    {/*    <Button className={headerStyles.profileBadge}>*/}
-
-                                    {/*    </Button>*/}
-                                    {/*</LinkContainer>*/}
+                                </div>
+                                <div className={headerStyles.cartContent}>
+                                    <LinkContainer to={'/shoppingcart'} >
+                                        <Button className={headerStyles.cart}>
+                                            <i class="fa-solid fa-cart-shopping"></i>
+                                        </Button>
+                                    </LinkContainer>
                                 </div>
                             </>
                         ) : (<></>)
