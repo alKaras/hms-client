@@ -181,7 +181,7 @@ export default function Header() {
                                             </div>
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu className='mt-3 p-3'>
-                                            <LinkContainer to='/user/profile' style={{ color: 'white' }}>
+                                            <LinkContainer to='/user/profile' style={{ color: 'black' }}>
                                                 <Dropdown.Item className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
                                             </LinkContainer>
                                             <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>

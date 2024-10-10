@@ -224,3 +224,58 @@ export const getTimeSlotsByFilter = async(params) => {
 export const generateTimeSlots = async(params) => {
     return await axios.post(`timeslots/generate`, params);
 }
+
+//Shopping Cart route controller
+
+/**
+ * Get shopping cart
+ * shoppingcart/get
+ */
+
+export const getShoppingCart = async() => {
+    return await axios.get(`shoppingcart/items/get`);
+}
+
+/**
+ * Add item shopping cart
+ */
+export const setItemToCart = async(params) => {
+    return await axios.post(`shoppingcart/item/add`, params);
+}
+
+/**
+ * Checkout shoppingcart/checkout
+ */
+export const checkout = async() => {
+    return await axios.post(`shoppingcart/checkout`);
+}
+
+/**
+ * Checkout cancel
+ */
+export const cancelCheckout = async (params) => {
+    return await axios.post(`checkout/cancel`, params);
+}
+
+/**
+ * Reset shopping cart
+ */
+export const resetShoppingCart = async (id) => {
+    return await axios.delete(`shoppingcart/${id}/reset`);
+}
+
+/**
+ * Remove specific item from shopping cart
+ */
+export const removeItemFromCart = async(id) => {
+    return await axios.delete(`shoppingcart/item/${id}/remove`);
+}
+
+/**
+ * Get Order by sessionId / orderId
+ */
+export const getOrderByFilter = async(params) => {
+    return await axios.post(`order/get`, params);
+}
+
+

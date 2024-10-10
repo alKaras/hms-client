@@ -6,7 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TextField } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { useParams } from 'react-router-dom';
-import { getTimeSlotsByFilter } from '../../api/httpApiClient';
+import { getTimeSlotsByFilter, setItemToCart } from '../../api/httpApiClient';
 import { Button } from 'react-bootstrap';
 import format from 'date-fns/format';
 import Moment from 'react-moment';
@@ -20,6 +20,22 @@ export const TimeSlotPicker = ({
     const [infoSlotCollection, setinfoSlotCollection] = useState([]);
 
     const { _id } = useParams();
+
+    const pickTimeSlot = async (e, id) => {
+        e.preventDefault();
+
+        const params = { time_slot_id: id }
+
+        setItemToCart(params)
+            .then((resp) => {
+                console.log(resp.data);
+                alert("Послугу додано в кошик");
+            })
+            .catch((err) => {
+                // console.error(err);
+                alert(err.response.data.message);
+            })
+    }
 
 
 
@@ -42,6 +58,7 @@ export const TimeSlotPicker = ({
                 let resultData = res.data.data;
                 if (isDoctorPage) {
                     let doctorsRes = resultData.filter((res) => res.service.name === 'consulting')
+                    // let doctorsRes = resultData.filter((res) => res.service.name.includes('Консультація'));
                     setinfoSlotCollection(doctorsRes);
                 } else {
                     setinfoSlotCollection(resultData);
@@ -89,7 +106,7 @@ export const TimeSlotPicker = ({
                             infoSlotCollection.map((slot) => (
                                 <>
                                     <li>
-                                        <Button className={TimeSlotStyles.slotBtn}>
+                                        <Button onClick={(e) => pickTimeSlot(e, slot.id)} className={TimeSlotStyles.slotBtn}>
                                             <div className={TimeSlotStyles.slotContent}>
                                                 {slot.service.name}
                                             </div>

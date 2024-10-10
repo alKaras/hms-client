@@ -25,6 +25,8 @@ import { ActionServices } from "./pages/Adminpanel/Settings/HospitalPage/ActionS
 import { TimeSlotPicker } from "./pages/TimeslotPicker";
 import { ActionSlot } from "./pages/Adminpanel/Settings/HospitalPage/ActionSlot";
 import { ShoppingCart } from "./pages/ShoppingCart";
+import { CancelPage } from "./pages/ShoppingCart/CancelPage";
+import { SuccessPage } from "./pages/ShoppingCart/SuccessPage";
 
 function App() {
     const dispatch = useDispatch();
@@ -52,6 +54,8 @@ function App() {
                 <Route path={"/sign-in"} element={<Login />} />
                 <Route path={"/sign-up"} element={<Register />} />
                 <Route path={"/shoppingcart"} element={<ShoppingCart />} />
+                <Route path={"/checkout/payment/cancel"} element={<CancelPage />} />
+                <Route path={"/checkout/payment/success"} element={<SuccessPage />} />
                 {/* UserProfile routes */}
                 <Route path='/user/profile' element={<UserProfile />} />
                 <Route path='user/referrals' element={<Referrals />} />
