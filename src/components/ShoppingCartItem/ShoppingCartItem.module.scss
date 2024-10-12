@@ -1,0 +1,19 @@
+.root {
+    border-radius: 15px;
+    padding: 25px 15px;
+    box-shadow: 0 2px 4px rgba($color: #000000, $alpha: 0.5);
+    & > *:not(:last-child){
+        margin-bottom: 15px;
+    }
+
+    button {
+        background: none;
+        color: gray;
+        transition: all .3s ease-out;
+
+        &:hover {
+            color: red;
+            transition: all .3s ease-in-out;
+        }
+    }
+}
