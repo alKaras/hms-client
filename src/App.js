@@ -25,8 +25,8 @@ import { ActionServices } from "./pages/Adminpanel/Settings/HospitalPage/ActionS
 import { TimeSlotPicker } from "./pages/TimeslotPicker";
 import { ActionSlot } from "./pages/Adminpanel/Settings/HospitalPage/ActionSlot";
 import { ShoppingCart } from "./pages/ShoppingCart";
-import { CancelPage } from "./pages/ShoppingCart/CancelPage";
-import { SuccessPage } from "./pages/ShoppingCart/SuccessPage";
+import { CancelPage } from "./pages/Checkout/CancelPage";
+import { SuccessPage } from "./pages/Checkout/SuccessPage";
 
 function App() {
     const dispatch = useDispatch();
@@ -34,6 +34,7 @@ function App() {
 
     const [isAlertShown, setIsAlertShown] = useState(false);
     const isUnAuthorized = useSelector(selectIsUnauthorized);
+    const isCheckoutPages = window.location.pathname === '/checkout/payment/success' || window.location.pathname === '/checkout/payment/cancel'
 
     useEffect(() => {
         dispatch(getMe());
@@ -48,7 +49,7 @@ function App() {
     // }, [isUnAuthorized, isAlertShown, navigate]);
 
     return (
-        <div className={"_container"}>
+        <div style={isCheckoutPages ? {background: 'dodgerblue'} : {}} className={"_container"}>
             <Routes>
                 <Route path="/" element={<Home />}/>
                 <Route path={"/sign-in"} element={<Login />} />
