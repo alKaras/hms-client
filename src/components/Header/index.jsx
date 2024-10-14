@@ -95,7 +95,7 @@ export default function Header() {
                                     </Dropdown>
                                 </div>
                             </>
-                        ) : isAdminPanel && isDoctor ? (
+                        ) : isDoctor ? (
                             <>
                                 <div className={headerStyles['menu-header']}>
                                     <LinkContainer to={'/adminpanel/services'}>

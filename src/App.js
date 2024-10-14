@@ -14,7 +14,7 @@ import OrderHistory from "./pages/Adminpanel/Settings/OrderHistory";
 import UserProfile from "./pages/User/Profile";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import {getMe, selectIsUnauthorized} from "./redux/slices/authSlice";
+import {getMe, infoAboutUser, selectIsLogged, selectIsUnauthorized} from "./redux/slices/authSlice";
 import CreateUser from "./pages/Adminpanel/UsersPage/CreateUser";
 import EditUser from "./pages/Adminpanel/UsersPage/EditUser";
 import Referrals from "./pages/User/Referrals";
@@ -27,6 +27,7 @@ import { ActionSlot } from "./pages/Adminpanel/Settings/HospitalPage/ActionSlot"
 import { ShoppingCart } from "./pages/ShoppingCart";
 import { CancelPage } from "./pages/Checkout/CancelPage";
 import { SuccessPage } from "./pages/Checkout/SuccessPage";
+import { CreateReferrals } from "./pages/User/Referrals/CreateReferrals";
 
 function App() {
     const dispatch = useDispatch();
@@ -35,6 +36,10 @@ function App() {
     const [isAlertShown, setIsAlertShown] = useState(false);
     const isUnAuthorized = useSelector(selectIsUnauthorized);
     const isCheckoutPages = window.location.pathname === '/checkout/payment/success' || window.location.pathname === '/checkout/payment/cancel'
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+    const userRole = isLogged && user.roles;
+    const isDoctor = userRole === "doctor";
 
     useEffect(() => {
         dispatch(getMe());
@@ -66,9 +71,10 @@ function App() {
                 <Route path='/adminpanel/doctors' element={<DoctorsPage />} />
                 <Route path='/adminpanel/services' element={<ServicesPage />} />
                 {/* Users routes */}
-                <Route path='/adminpanel/users' element={<UsersPage />} />
+                <Route path='/adminpanel/users' element={<UsersPage isDoctor={isDoctor} />} />
                 <Route path='/adminpanel/user/create' element={<CreateUser />} />
                 <Route path='/adminpanel/user/:_id/edit/' element={<EditUser /> } />
+                <Route path='/adminpanel/user/:_id/referral' element={<CreateReferrals />} />
 
                  {/* Hospital routes  */}
                 <Route path='/adminpanel/settings/:_id/hospital' element={<HospitalPage specific={true} />} />
