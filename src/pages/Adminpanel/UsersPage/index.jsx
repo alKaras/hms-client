@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header';
-import { useDispatch, useSelector } from 'react-redux';
 import { Button, Spinner, Table } from 'react-bootstrap';
 import usersPageStyles from './PatientsPage.module.scss';
 // import { getUsers } from '../../../redux/slices/userSlice';
@@ -8,8 +7,9 @@ import { getUsers } from '../../../api/httpApiClient';
 import Pagination from '../../../components/Pagination';
 import { LinkContainer } from 'react-router-bootstrap';
 
-export default function UsersPage() {
-    const dispatch = useDispatch();
+export default function UsersPage({
+    isDoctor
+}) {
     const [users, setUsers] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -38,9 +38,12 @@ export default function UsersPage() {
             {isLoading ? (
                 <>
                     <div className={usersPageStyles.root}>
-                        <div className={usersPageStyles.header}>
-                            <LinkContainer style={{ color: "white" }} to={'/adminpanel/user/create'}><Button className='btn btn-secondary'>Create User</Button></LinkContainer>
-                        </div>
+                        {!isDoctor && (
+                            <div className={usersPageStyles.header}>
+                                <LinkContainer style={{ color: "white" }} to={'/adminpanel/user/create'}><Button className='btn btn-secondary'>Create User</Button></LinkContainer>
+                            </div>
+                        )}
+
                         <Table bordered className={usersPageStyles.table}>
                             <thead>
                                 <th>ID</th>
@@ -66,11 +69,22 @@ export default function UsersPage() {
                                                 <>
                                                     <span className={usersPageStyles.roleBadge}>{role}</span>
                                                 </>
-                                            ))}</td>
+                                            ))}
+                                            </td>
                                             <td>
-                                                <LinkContainer style={{ color: 'black' }} to={`/adminpanel/user/${obj.id}/edit`}>
-                                                    <button className='btn btn-warning'><i className="fa-solid fa-pen"></i></button>
-                                                </LinkContainer>
+                                                {!isDoctor ? (
+                                                    <LinkContainer style={{ color: 'black' }} to={`/adminpanel/user/${obj.id}/edit`}>
+                                                        <button className='btn btn-warning'><i className="fa-solid fa-pen"></i></button>
+                                                    </LinkContainer>
+                                                ) : (
+                                                    <>
+                                                        {!obj.roles.includes('doctor', 'manager', 'admin') && (
+                                                            <LinkContainer to={`/adminpanel/user/${obj.id}/referral`}>
+                                                                <button className='btn btn-primary'><i class="fa-solid fa-file-contract"></i></button>
+                                                            </LinkContainer>
+                                                        )}
+                                                    </>
+                                                )}
                                             </td>
                                         </tr >
                                     </>
