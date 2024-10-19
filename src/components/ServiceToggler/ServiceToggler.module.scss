@@ -1,0 +1,23 @@
+.root {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+    .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 15px;
+
+    }
+
+    .btn-toggler {
+        background: none;
+        padding: 10px;
+        color: black;
+        margin-left: auto;
+
+    }
+}

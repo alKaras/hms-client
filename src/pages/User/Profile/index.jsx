@@ -6,7 +6,8 @@ import { useSelector } from "react-redux";
 import { infoAboutUser, selectIsLogged, selectStatus } from "../../../redux/slices/authSlice";
 import Moment from "react-moment";
 import { LinkContainer } from 'react-router-bootstrap';
-import { editUser, fetchFirstThreeReferrals } from '../../../api/httpApiClient';
+import { editUser, fetchFirstThreeReferrals, getOrderByFilter } from '../../../api/httpApiClient';
+import { OrderFiltersEnum } from '../../../utils/enums/OrderFiltersEnum';
 
 
 export default function UserProfile() {
@@ -15,6 +16,8 @@ export default function UserProfile() {
     const status = useSelector(selectStatus);
     const mainRole = isLogged && user.roles;
     const userEmail = isLogged && user.data.email;
+
+    const userId = isLogged && user.id;
     const isVerified = isLogged && user.data.email_verified_at !== null;
     const [isButtonDisabled, setIsDisabled] = useState(false);
 
@@ -26,6 +29,9 @@ export default function UserProfile() {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [password, setPassword] = useState('');
+
+    const [firstThreeOrders, setFirstThreeOrders] = useState([]);
+    const [ordersLoaded, setOrdersLoaded] = useState(false);
 
     useEffect(() => {
         if (isLogged && user.data) {
@@ -43,7 +49,21 @@ export default function UserProfile() {
             .catch((err) => {
                 console.log(err);
             });
-    }, [])
+
+        getOrderByFilter({
+            filter: OrderFiltersEnum.ORDERS_BY_USER,
+            limit: 3,
+            user_id: userId
+        })
+            .then((resp) => {
+                console.log(resp.data);
+                setOrdersLoaded(true);
+                setFirstThreeOrders(resp.data.data);
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+    }, [userId])
 
 
     const handleSubmit = async (e) => {
@@ -177,12 +197,22 @@ export default function UserProfile() {
                                 <div className={UserProfileStyles.servicesContent}>
                                     <div className={UserProfileStyles.rsTitle}>Мої послуги</div>
                                     <ul className={UserProfileStyles.rsList}>
-                                        {[...Array(3)].map((obj, index) => (
-                                            <li className={UserProfileStyles.rsItem}>1</li>
-                                        ))}
+                                        {ordersLoaded ? firstThreeOrders.map((item) => (
+                                            <li className={`${UserProfileStyles.rsItem} d-flex justify-content-between align-items-center`}>
+                                                <div>
+                                                    <p>Замовлення:</p>
+                                                    {item.order.id}
+                                                </div>
+                                                <div>К-сть послуг: {item.services.length}</div>
+                                            </li>
+                                        )) : (
+                                            <div className={"d-flex justify-content-center align-items-center"}>
+                                                <Spinner animation="border" variant="primary" />
+                                            </div>
+                                        )}
                                     </ul>
                                 </div>
-                                <LinkContainer style={{ color: 'white' }} to={'/user/services'}>
+                                <LinkContainer style={{ color: 'white' }} to={`/user/${isLogged ? userId : 0}/services`}>
                                     <Button className='btn btn-primary'>Переглянути детальніше</Button>
                                 </LinkContainer>
                             </div>

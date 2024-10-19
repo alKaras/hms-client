@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../../../redux/slices/authSlice';
 import { getOrderByFilter } from '../../../../api/httpApiClient';
 import Moment from 'react-moment';
+import { OrderFiltersEnum } from '../../../../utils/enums/OrderFiltersEnum';
 
 export default function OrderHistory() {
     const isLogged = useSelector(selectIsLogged);
@@ -16,7 +17,7 @@ export default function OrderHistory() {
     const [orderHistory, setOrderHistory] = useState([]);
 
     useEffect(() => {
-        getOrderByFilter({ doctor_id: Number(doctorId) })
+        getOrderByFilter({ filter: OrderFiltersEnum.ORDERS_BY_DOCTOR, doctor_id: Number(doctorId) })
             .then((resp) => {
                 setLoaded(true);
                 setOrderHistory(resp.data.data);
