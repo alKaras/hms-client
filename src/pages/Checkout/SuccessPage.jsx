@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import SuccessPageStyles from './Checkout.module.scss';
 import { LinkContainer } from 'react-router-bootstrap';
 import { ShoppingCartItem } from '../../components/ShoppingCartItem';
+import { OrderFiltersEnum } from '../../utils/enums/OrderFiltersEnum';
 
 export const SuccessPage = () => {
     const location = useLocation();
@@ -17,8 +18,14 @@ export const SuccessPage = () => {
     const [isDataLoaded, setDataLoaded] = useState(false);
     useEffect(() => {
         let params = {};
-        if (sessionId) params.session_id = sessionId
-        if (orderId) params.order_id = orderId
+        if (sessionId) {
+            params.session_id = sessionId;
+            params.filter = OrderFiltersEnum.ORDERS_BY_SESSION
+        }
+        if (orderId) {
+            params.order_id = orderId;
+            params.filter = OrderFiltersEnum.ORDERS_BY_ID
+        }
         getOrderByFilter(params)
             .then((resp) => {
                 console.log(resp.data);

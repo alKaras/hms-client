@@ -28,6 +28,7 @@ import { ShoppingCart } from "./pages/ShoppingCart";
 import { CancelPage } from "./pages/Checkout/CancelPage";
 import { SuccessPage } from "./pages/Checkout/SuccessPage";
 import { CreateReferrals } from "./pages/User/Referrals/CreateReferrals";
+import { UserServices } from "./pages/User/Services";
 
 function App() {
     const dispatch = useDispatch();
@@ -75,6 +76,7 @@ function App() {
                 <Route path='/adminpanel/user/create' element={<CreateUser />} />
                 <Route path='/adminpanel/user/:_id/edit/' element={<EditUser /> } />
                 <Route path='/adminpanel/user/:_id/referral' element={<CreateReferrals />} />
+                <Route path='/user/:_id/services' element={<UserServices />} />
 
                  {/* Hospital routes  */}
                 <Route path='/adminpanel/settings/:_id/hospital' element={<HospitalPage specific={true} />} />
