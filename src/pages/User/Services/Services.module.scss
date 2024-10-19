@@ -4,6 +4,24 @@
     max-width: 1280px;
  
     .canceled {
-        color: gray;
+        color: gray !important;
+    }
+
+    .content {
+        & > *:not(:last-child) {
+            margin-bottom: 25px;
+        }
+    }
+
+    .cardsContent {
+        & > *:not(:last-child){
+            margin-bottom: 15px;
+        }
+    }
+
+    .cardService {
+        border: 1px solid gray;
+        border-radius: 15px;
+        padding: 20px;
     }
 }
