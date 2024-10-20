@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import CartItemStyles from './ShoppingCartItem.module.scss';
 import Moment from 'react-moment';
-import { getShoppingCart, removeItemFromCart } from '../../api/httpApiClient';
+import { downloadPdfTimeslot, getShoppingCart, removeItemFromCart } from '../../api/httpApiClient';
 
 export const ShoppingCartItem = ({
     service_id,
@@ -10,7 +10,9 @@ export const ShoppingCartItem = ({
     department,
     price,
     key,
-    canRemove
+    id,
+    canRemove,
+    canDownload
 }) => {
     const [removed, setRemoved] = useState(false);
     const removeItem = async (e, id) => {
@@ -26,6 +28,29 @@ export const ShoppingCartItem = ({
             })
     }
 
+    const downloadItem = async (e, id) => {
+        e.preventDefault();
+        downloadPdfTimeslot(id)
+            .then((resp) => {
+                const file = new Blob([resp.data], {
+                    type: 'application/pdf',
+                });
+
+                const link = document.createElement('a');
+
+                link.href = window.URL.createObjectURL(file);
+
+                link.download = `timeslot-${id}.pdf`;
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+            })
+            .catch((err) => console.error(err.response));
+
+    }
+
     return (
         <>
             <li className={CartItemStyles.root}>
@@ -37,6 +62,7 @@ export const ShoppingCartItem = ({
                     <div style={{ fontSize: '15px' }}>{department}</div>
                     <div style={{ fontWeight: '600', fontSize: '15px' }}>{price} UAH</div>
                 </div>
+                {canDownload ? (<button onClick={(e) => downloadItem(e, id)}><i class="fa-solid fa-download"></i></button>) : (<></>)}
                 {canRemove ? (<button onClick={(e) => removeItem(e, key)}>Видалити</button>) : (<></>)}
             </li>
         </>

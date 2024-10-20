@@ -75,7 +75,7 @@ export const SuccessPage = () => {
                         <div className={SuccessPageStyles.orderContent}>
                             <div style={{ fontSize: '16px' }}>
                                 <p><strong>Замовлення</strong>: {orderData.id}</p>
-                                <p><strong>Статус оплати</strong>: {orderData.status === 'SOLD' ? 'Оплачено' : (orderData.status === 'PENDING' ? 'В очікуванні оплати' : 'Скасовано')}</p>
+                                <p><strong>Статус оплати</strong>: {orderData.status === 2 ? 'Оплачено' : (orderData.status === 1 ? 'В очікуванні оплати' : 'Скасовано')}</p>
 
                             </div>
                             <div className={SuccessPageStyles.orderServiceContent}>
@@ -89,7 +89,9 @@ export const SuccessPage = () => {
                                                 department={data.timeslot.department.title}
                                                 price={data.timeslot.price}
                                                 key={data.id}
+                                                id={data.timeslot.id}
                                                 canRemove={false}
+                                                canDownload={true}
 
                                             />
 

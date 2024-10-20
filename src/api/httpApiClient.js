@@ -287,4 +287,12 @@ export const getOrderByFilter = async(params) => {
     return await axios.post(`order/get`, params);
 }
 
+/**
+ * Download pdf files for timeslot
+*/
 
+export const downloadPdfTimeslot = async(id) => {
+    return await axios.get(`timeslot/${id}/download-timeslot`, {
+        responseType: 'blob',
+    });
+}

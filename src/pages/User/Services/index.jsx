@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../../components/Header'
 import UserServiceStyle from './Services.module.scss';
 import { useParams } from 'react-router-dom';
-import { getOrderByFilter } from '../../../api/httpApiClient';
+import { downloadPdfTimeslot, getOrderByFilter } from '../../../api/httpApiClient';
 import { OrderFiltersEnum } from '../../../utils/enums/OrderFiltersEnum';
 import { Accordion, Button, Card } from 'react-bootstrap';
 import { ServiceToggler } from '../../../components/ServiceToggler';
@@ -28,6 +28,29 @@ export const UserServices = () => {
                 console.error(err.response);
             })
     }, [])
+
+    const downloadItem = async (e, id) => {
+        e.preventDefault();
+        downloadPdfTimeslot(id)
+            .then((resp) => {
+                const file = new Blob([resp.data], {
+                    type: 'application/pdf',
+                });
+
+                const link = document.createElement('a');
+
+                link.href = window.URL.createObjectURL(file);
+
+                link.download = `timeslot-${id}.pdf`;
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+            })
+            .catch((err) => console.error(err.response));
+
+    }
 
     return (
         <>
@@ -67,7 +90,7 @@ export const UserServices = () => {
                                                         <div>Ціна: {serviceData.timeslot.price}</div>
                                                     </div>
                                                     {serviceData.is_canceled === 0 ? (
-                                                        <Button className='btn btn-secondary' style={{ color: 'white', marginLeft: '15px' }}><i class="fa-solid fa-download"></i></Button>
+                                                        <Button onClick={(e) => downloadItem(e, serviceData.timeslot.id)} className='btn btn-secondary' style={{ color: 'white', marginLeft: '15px' }}><i class="fa-solid fa-download"></i></Button>
                                                     ) : (
                                                         <></>
                                                     )}
