@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { infoAboutUser, selectIsLogged, selectStatus } from "../../../redux/slices/authSlice";
 import Moment from "react-moment";
 import { LinkContainer } from 'react-router-bootstrap';
-import { editUser, fetchFirstThreeReferrals, getOrderByFilter } from '../../../api/httpApiClient';
+import { editUser, fetchFirstThreeReferrals, getOrderByFilter, resendVerification } from '../../../api/httpApiClient';
 import { OrderFiltersEnum } from '../../../utils/enums/OrderFiltersEnum';
 
 
@@ -90,9 +90,9 @@ export default function UserProfile() {
             });
     }
 
-    const resendVerification = () => {
+    const resendMailVerification = async () => {
         setIsDisabled(true);
-        resendVerification({ email: userEmail })
+        resendVerification(userEmail)
             .then((response) => {
                 alert(response.data.message || 'Лист підтвердження надіслано');
 
@@ -101,7 +101,7 @@ export default function UserProfile() {
                 }, 60000);
             })
             .catch((error) => {
-                alert(error.data.message || 'Сталася помилка');
+                alert('Сталася помилка');
                 setIsDisabled(false);
             })
     }
@@ -182,7 +182,7 @@ export default function UserProfile() {
                                             підтвердити пошту. Ми надіслали вам лист на пошту (перевірте папку спам)
                                             Якщо листа все-таки немає - надішлемо його знову
                                         </p>
-                                        <Button disabled={isButtonDisabled} onClick={resendVerification}>Надіслати</Button>
+                                        <Button disabled={isButtonDisabled} onClick={resendMailVerification}>Надіслати</Button>
 
                                     </div>
                                 </>
