@@ -9,8 +9,10 @@ export const editUser = async(_id, params) => {
     return await axios.put(`/user/edit/${_id}`, params)
 }
 
-export const getUsers = async () => {
-    return await axios.get('/user/fetch');
+export const getUsers = async ({page = 1, perPage = 10}) => {
+    return await axios.get(`/user/fetch`, {
+        params: {page, per_page: perPage}
+    });
 }
 
 export const getUser = async (_id) => {

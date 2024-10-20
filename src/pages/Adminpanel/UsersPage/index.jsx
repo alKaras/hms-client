@@ -13,24 +13,37 @@ export default function UsersPage({
     const [users, setUsers] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1000);
+    const [totalPages, setTotalPages] = useState(10);
     console.log(users);
     console.log(isLoading);
     useEffect(() => {
         // dispatch(getUsers({ page: currentPage, perPage: 10 }));
-        getUsers({ page: currentPage, perPage: 10 })
+        fetchUsers(currentPage)
+    }, [currentPage]);
+
+    const fetchUsers = async (page) => {
+        setLoading(false);
+        getUsers({ page, perPage: 10 })
             .then((resp) => {
-                console.log(resp.data);
                 setLoading(true);
                 setCurrentPage(resp.data.meta.current_page);
                 setTotalPages(resp.data.meta.last_page);
                 setUsers(resp.data.data);
-            });
-    }, []);
+            })
+            .catch((err) => {
+                console.error(err);
+                setLoading(false);
+            })
+
+    }
 
     const handlePageChange = (page) => {
         // dispatch(getUsers({ page, perPage: 10 }));
-        getUsers({ page: currentPage, perPage: 10 });
+        if (page !== currentPage) {
+            setCurrentPage(page);
+            console.log("CurrentPage: " + currentPage);
+        }
+        // getUsers({ page: page, perPage: 10 });
     }
     return (
         <>
