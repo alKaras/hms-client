@@ -8,24 +8,37 @@ import { getOrderByFilter } from '../../../../api/httpApiClient';
 import Moment from 'react-moment';
 import { OrderFiltersEnum } from '../../../../utils/enums/OrderFiltersEnum';
 
-export default function OrderHistory() {
+export default function OrderHistory({ byDoctor, byHospital }) {
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
-    const doctorId = isLogged && user.data.doctor.id;
+    const doctorId = isLogged && byDoctor && user.data.doctor.id;
+    const hospitalId = isLogged && byHospital && user.hospitalId;
 
     const [isLoaded, setLoaded] = useState(false);
     const [orderHistory, setOrderHistory] = useState([]);
 
     useEffect(() => {
-        getOrderByFilter({ filter: OrderFiltersEnum.ORDERS_BY_DOCTOR, doctor_id: Number(doctorId) })
-            .then((resp) => {
-                setLoaded(true);
-                setOrderHistory(resp.data.data);
-            })
-            .catch((err) => {
-                console.error(err);
-            })
-    }, [doctorId])
+        if (doctorId) {
+            getOrderByFilter({ filter: OrderFiltersEnum.ORDERS_BY_DOCTOR, doctor_id: Number(doctorId) })
+                .then((resp) => {
+                    setLoaded(true);
+                    setOrderHistory(resp.data.data);
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
+        } else if (hospitalId) {
+            getOrderByFilter({ filter: OrderFiltersEnum.ORDERS_BY_HOSPITAL, hospital_id: Number(hospitalId) })
+                .then((resp) => {
+                    setLoaded(true);
+                    setOrderHistory(resp.data.data);
+                })
+                .catch((err) => {
+                    console.error(err.response.message);
+                })
+        }
+
+    }, [doctorId, hospitalId])
     return (
         <>
             <Header />
@@ -44,16 +57,16 @@ export default function OrderHistory() {
                         <tbody>
                             {orderHistory.map((item) => (
                                 <tr>
-                                    <td>{item.id}</td>
-                                    <td>{item.paid_status === 'paid' ? 'Оплачено' : ''}</td>
-                                    <td>{item.payment_id}</td>
-                                    <td className='d-flex align-items-center justity-content-between gap-2 flex-wrap'>
+                                    <td width={50}>{item.id}</td>
+                                    <td width={150}>{item.paid_status === 'paid' ? 'Оплачено' : ''}</td>
+                                    <td width={250}>{item.payment_id}</td>
+                                    <td className='d-flex align-items-center flex-wrap gap-1'>
                                         {item.serviceData.map((service) => (
-                                            <>
+                                            <div className='d-flex align-items-center justity-content-between gap-3' style={{ border: '1px solid black', padding: '5px', borderRadius: '5px', width: '300px', marginBottom: '5px' }}>
                                                 <div>{service.serviceName}</div>
                                                 <div>{service.departmentTitle}</div>
                                                 <div><Moment format='DD.MM.YYYY HH:mm'>{service.startTime}</Moment></div>
-                                            </>
+                                            </div>
                                         ))}
                                     </td>
                                 </tr>
@@ -62,10 +75,10 @@ export default function OrderHistory() {
                     </Table>
                 ) : (
                     <>
-                        Для цього лікаря ще немає оплачених замовлень
+                        Для {byDoctor ? 'лікаря' : 'лікарні'} ще немає оплачених замовлень
                     </>
                 )}
-            </div>
+            </div >
         </>
     );
 }

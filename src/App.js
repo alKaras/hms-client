@@ -41,6 +41,7 @@ function App() {
     const user = useSelector(infoAboutUser);
     const userRole = isLogged && user.roles;
     const isDoctor = userRole === "doctor";
+    const isManager = userRole === "manager";
 
     useEffect(() => {
         dispatch(getMe());
@@ -70,7 +71,7 @@ function App() {
 
                 <Route path='/adminpanel' element={<AdminHome />} />
                 <Route path='/adminpanel/doctors' element={<DoctorsPage />} />
-                <Route path='/adminpanel/services' element={<ServicesPage />} />
+                <Route path='/adminpanel/services' element={<ServicesPage byDoctor={isDoctor} byHospital={isManager} />} />
                 {/* Users routes */}
                 <Route path='/adminpanel/users' element={<UsersPage isDoctor={isDoctor} />} />
                 <Route path='/adminpanel/user/create' element={<CreateUser />} />
@@ -104,7 +105,7 @@ function App() {
                 <Route path='/adminpanel/hospital/service/:_id/slots' element={<ActionSlot />} />
 
                 {/* <Route path='/adminpanel/settings/departments' element={<Departments />} /> */}
-                <Route path="/adminpanel/order-history" element={<OrderHistory />} />
+                <Route path={`/adminpanel/${isDoctor ? 'doctor' : 'hospital'}/order-history`} element={<OrderHistory byDoctor={isDoctor} byHospital={isManager} />} />
              </Routes>
         </div>
     );

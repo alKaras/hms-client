@@ -269,9 +269,9 @@ export default function HospitalPage({
                                         <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex align-items-center justify-content-between'>
                                             <h2>Відділи</h2>
                                             <div>
-                                                <button className='btn' onClick={(e) => refreshDepartments(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                <button className='btn' onClick={(e) => refreshDepartments(e)}><i className="fa-solid fa-arrows-rotate"></i></button>
                                                 <input type="file" id="fileDepInput" accept='.xlsx' onChange={handleImportDepSubmit} style={{ display: 'none' }} />
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDepImportCtrl}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDepImportCtrl}>Import <i className="fa-solid fa-file-arrow-down"></i></button>
                                                 <LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
                                                     pathname: `/adminpanel/hospital/department/create`,
                                                     search: `?hospital=${_id}`
@@ -302,7 +302,7 @@ export default function HospitalPage({
                                                                 <td>
                                                                     <LinkContainer to={`/adminpanel/hospital/department/${dep.id}/edit`}>
                                                                         <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
-                                                                            <i class="fa-solid fa-pen"></i>
+                                                                            <i className="fa-solid fa-pen"></i>
                                                                         </Button>
                                                                     </LinkContainer>
                                                                 </td>
@@ -322,9 +322,9 @@ export default function HospitalPage({
                                         <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex justify-content-between align-items-center'>
                                             <h2>Лікарі</h2>
                                             <div>
-                                                <button className='btn' onClick={(e) => refreshDoctorsCollection(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                <button className='btn' onClick={(e) => refreshDoctorsCollection(e)}><i className="fa-solid fa-arrows-rotate"></i></button>
                                                 <input type="file" id="fileDoctInput" accept='.xlsx' onChange={handleImportDoctorSubmit} style={{ display: 'none' }} />
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDoctImportCtrl}>Import <i class="fa-solid fa-file-arrow-down"></i></button>
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDoctImportCtrl}>Import <i className="fa-solid fa-file-arrow-down"></i></button>
                                                 <LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
                                                     pathname: `/adminpanel/hospital/doctor/create`,
                                                     search: `?hospital=${_id}`
@@ -392,7 +392,7 @@ export default function HospitalPage({
                                                                         search: `?hospital=${_id}`
                                                                     }}>
                                                                         <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
-                                                                            <i class="fa-solid fa-pen"></i>
+                                                                            <i className="fa-solid fa-pen"></i>
                                                                         </Button>
                                                                     </LinkContainer>
                                                                 </td>
@@ -412,9 +412,9 @@ export default function HospitalPage({
                                         <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex justify-content-between align-items-center'>
                                             <h2>Послуги</h2>
                                             <div>
-                                                <button className='btn' onClick={(e) => refreshServices(e)}><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                <button className='btn' onClick={(e) => refreshServices(e)}><i className="fa-solid fa-arrows-rotate"></i></button>
                                                 <input type="file" id="fileServInput" accept='.xlsx' onChange={handleImportServiceSubmit} style={{ display: 'none' }} />
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnServiceImportCtrl}>Import <i class="fa-solid fa-file-arrow-down"></i></button><LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnServiceImportCtrl}>Import <i className="fa-solid fa-file-arrow-down"></i></button><LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
                                                     pathname: `/adminpanel/hospital/service/create`,
                                                     search: `?hospital=${_id}`
                                                 }}>
@@ -463,12 +463,12 @@ export default function HospitalPage({
                                                                             search: `?hospital=${_id}`
                                                                         }}>
                                                                             <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
-                                                                                <i class="fa-solid fa-pen"></i>
+                                                                                <i className="fa-solid fa-pen"></i>
                                                                             </Button>
                                                                         </LinkContainer>
                                                                         <LinkContainer style={{ color: 'white', marginLeft: '15px' }} to={`/adminpanel/hospital/service/${obj.id}/slots`}>
                                                                             <Button style={{ textAlign: 'center' }} className='btn btn-secondary'>
-                                                                                <i class="fa-solid fa-clock"></i>
+                                                                                <i className="fa-solid fa-clock"></i>
                                                                             </Button>
 
                                                                         </LinkContainer>
@@ -524,8 +524,8 @@ export default function HospitalPage({
                                                 <td>{hospital.hospital_phone ?? ""}</td>
                                                 <td>{hospital.hospital_email ?? ""}</td>
                                                 <td>
-                                                    <LinkContainer style={{ marginRight: '15px' }} to={`/adminpanel/hospital/${hospital.id}/edit`}><Button className='btn btn-warning'><i class="fa-solid fa-pen"></i></Button></LinkContainer>
-                                                    <LinkContainer to={`/adminpanel/settings/${hospital.id}/hospital`}><Button className='btn btn-primary'><i style={{ color: 'white' }} class="fa-solid fa-up-right-from-square"></i></Button></LinkContainer>
+                                                    <LinkContainer style={{ marginRight: '15px' }} to={`/adminpanel/hospital/${hospital.id}/edit`}><Button className='btn btn-warning'><i className="fa-solid fa-pen"></i></Button></LinkContainer>
+                                                    <LinkContainer to={`/adminpanel/settings/${hospital.id}/hospital`}><Button className='btn btn-primary'><i style={{ color: 'white' }} className="fa-solid fa-up-right-from-square"></i></Button></LinkContainer>
                                                 </td>
                                             </tr>
                                         ))}
