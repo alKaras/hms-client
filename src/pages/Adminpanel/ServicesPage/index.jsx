@@ -1,33 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../../components/Header';
 import ServicesPageStyles from './ServicesPage.module.scss';
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
-import { fetchServicesByDoctorId } from '../../../api/httpApiClient';
+import { fetchHospitalServices, fetchServicesByDoctorId } from '../../../api/httpApiClient';
 import { LinkContainer } from 'react-router-bootstrap';
 
 const ServicesPage = ({ byDoctor, byHospital }) => {
 
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
-    const doctorId = isLogged && user.data.doctor.id;
+    const doctorId = isLogged && byDoctor && user.data.doctor.id;
+    const hospitalId = isLogged && byHospital && user.hospitalId;
 
     const [isLoaded, setLoaded] = useState(false);
     const [serviceCollection, setServiceCollection] = useState([]);
 
     useEffect(() => {
-        fetchServicesByDoctorId({
-            doctor_id: doctorId,
-        })
-            .then((resp) => {
-                setServiceCollection(resp.data.data);
-                setLoaded(true);
+        if (byDoctor) {
+            fetchServicesByDoctorId({
+                doctor_id: doctorId,
             })
-            .catch((err) => {
-                console.error(err);
+                .then((resp) => {
+                    setServiceCollection(resp.data.data);
+                    setLoaded(true);
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
+        } else if (byHospital) {
+            fetchHospitalServices({
+                hospital_id: hospitalId,
             })
-    }, [doctorId]);
+                .then((resp) => {
+                    // console.log();
+                    setServiceCollection(resp.data.services);
+                    setLoaded(true);
+                })
+                .catch((err) => {
+                    console.error(err.response.message);
+                })
+        }
+
+    }, [doctorId, byDoctor, byHospital, hospitalId]);
 
     return (
         <>
@@ -48,10 +64,10 @@ const ServicesPage = ({ byDoctor, byHospital }) => {
                         {isLoaded && serviceCollection.map((item) => (
                             <tr>
                                 <td>{item.id}</td>
-                                <td>{item.name}</td>
-                                <td>{item.department.title}</td>
+                                <td>{item.service_name}</td>
+                                <td>{item.department}</td>
                                 <td style={{ width: '100px', textAlign: 'center' }}>
-                                    <LinkContainer to={`/hospital/service/${item.id}/timeslots`}>
+                                    <LinkContainer to={byDoctor ? `/hospital/service/${item.id}/timeslots` : `/adminpanel/hospital/service/${item.id}/slots`}>
                                         <button className='btn btn-secondary'><i class="fa-solid fa-clock"></i></button>
                                     </LinkContainer>
                                 </td>
@@ -59,7 +75,7 @@ const ServicesPage = ({ byDoctor, byHospital }) => {
                         ))}
                     </tbody>
                 </Table>
-            </div>
+            </div >
         </>
     )
 }

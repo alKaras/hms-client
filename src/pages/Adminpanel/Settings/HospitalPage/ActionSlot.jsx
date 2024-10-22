@@ -138,24 +138,21 @@ export const ActionSlot = () => {
                 <h1 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 'bold' }}>Створити талони</h1>
                 <form className={`d-flex gap-4 align-items-center`} onSubmit={handleSubmit}>
                     <div className="d-flex flex-column">
-                        <>
-                            {isDoctorsLoaded && (
-                                <>
-                                    <label style={{ marginBottom: '5px' }}>Лікарі</label>
-                                    <select className={ActionSlotStyles['select-service']} value={doctorId || ""} onChange={handleDoctorChange} required>
-                                        <option value="" disabled>Оберіть лікаря</option>
-                                        {serviceDoctorList.map(doc => (
-                                            <option key={doc.id} value={doc.id}>
-                                                <div>
-                                                    {doc.id} {doc.name + " " + doc.surname} {doc.email}
-                                                </div
-                                                >
-                                            </option>
-                                        ))}
-                                    </select>
-                                </>
-                            )}
-                        </>
+                        {isDoctorsLoaded && (
+                            <>
+                                <label style={{ marginBottom: '5px' }}>Лікарі</label>
+                                <select className={ActionSlotStyles['select-service']} value={doctorId || ""} onChange={handleDoctorChange} required>
+                                    <option value="" disabled>Оберіть лікаря</option>
+                                    {serviceDoctorList.map(doc => (
+                                        <option key={doc.id} value={doc.id}>
+                                            <div>
+                                                {doc.id} {doc.name + " " + doc.surname} {doc.email}
+                                            </div>
+                                        </option>
+                                    ))}
+                                </select>
+                            </>
+                        )}
                     </div>
                     <div className="d-flex flex-column">
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
