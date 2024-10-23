@@ -9,14 +9,14 @@ import Form from "react-bootstrap/Form";
 import SearchStyles from '../../components/ContentWeb/Search.module.scss';
 import ReviewCard from "../../components/ReviewCard";
 // import { fetchHospital } from '../../redux/slices/hospitalSlice';
-import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitalServices } from '../../api/httpApiClient';
+import { createHospitalReviews, fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitalServices, getCountOfHospitalReviews, getHospitalReviews } from '../../api/httpApiClient';
 import { LinkContainer } from 'react-router-bootstrap';
 
 export default function HospitalInfo() {
     const [departments, setDepartments] = useState([]);
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const [doctorsCollections, setDoctorsCollections] = useState(null);
-    const [reviews, setReviews] = useState([]);
+
     const [rating, setRating] = useState(0);
     const [reviewBody, setReviewBody] = useState("");
 
@@ -28,6 +28,12 @@ export default function HospitalInfo() {
 
     const [isServiceLoaded, setServiceLoaded] = useState(false);
     const [serviceCollection, setServiceCollection] = useState([]);
+
+    const [isReviewsLoaded, setReviewsLoaded] = useState(false);
+    const [ReviewsCollection, setReviewCollection] = useState([]);
+    // const [reviewsCounter, setReviewsCounter] = useState(0);
+    const [isCreated, setIsCreated] = useState(false);
+    const [isDisabled, setDisabled] = useState(false);
 
     useEffect(() => {
         fetchHospital(id)
@@ -47,36 +53,22 @@ export default function HospitalInfo() {
                 console.error(err);
             })
 
+        fetchReviews(id);
+
     }, [id]);
 
-    const fetchReviews = async () => {
-        const data = [
-            {
-                author: 'Author of review',
-                content: "Some content for review",
-                createdAt: "2024-08-09 13:00:00",
-                rating: 4
-            },
-            {
-                author: 'Author of review',
-                content: "Some content for review",
-                createdAt: "2024-08-09 13:00:00",
-                rating: 4
-            },
-            {
-                author: 'Author of review',
-                content: "Some content for review",
-                createdAt: "2024-08-09 13:00:00",
-                rating: 4
-            },
-            {
-                author: 'Author of review',
-                content: "Some content for review",
-                createdAt: "2024-08-09 13:00:00",
-                rating: 4
-            },
-        ];
-        setReviews(data);
+    const fetchReviews = async (id) => {
+        getHospitalReviews({
+            hospital_id: id,
+            limit: 6,
+        })
+            .then((resp) => {
+                setReviewsLoaded(true);
+                setReviewCollection(resp.data.data);
+            })
+            .catch((err) => {
+                console.error(err.response.message);
+            })
     }
 
 
@@ -88,7 +80,6 @@ export default function HospitalInfo() {
             .catch((err) => {
                 console.log(err);
             })
-        fetchReviews();
     }, [id]);
 
     const handleDepartmentChange = (event) => {
@@ -117,6 +108,28 @@ export default function HospitalInfo() {
 
     const handleSubmit = (e) => {
         fetchDoctorsBySelectedDep(e);
+    }
+
+    const handleSubmitReviews = (e) => {
+        e.preventDefault();
+        let params = { hospital_id: id, body: reviewBody };
+        if (rating !== 0) params.rating = rating;
+        setDisabled(true);
+
+        createHospitalReviews(params)
+            .then((resp) => {
+                console.log(resp.data);
+                setIsCreated(true);
+                fetchReviews(id);
+                setRating(0);
+                setReviewBody('');
+                setTimeout(() => setDisabled(false), 5000);
+            })
+            .catch((err) => {
+                console.error(err.response.message);
+                setIsCreated(false);
+                setDisabled(false);
+            })
     }
 
     return (
@@ -197,14 +210,14 @@ export default function HospitalInfo() {
                             </Table>
                         </Tab>
                         <Tab eventKey={'reviews'} title={'Відгуки'} className={HospitalInfoStyles.reviews}>
-                            <p className={HospitalInfoStyles.reviewsBadge}>"count(*)" review for hospital "name"</p>
+                            {/* <p className={HospitalInfoStyles.reviewsBadge}></p> */}
                             <Row className={HospitalInfoStyles.reviewList}>
                                 <Col lg={6} md={6} xs={6}>
                                     <div className={HospitalInfoStyles.reviewCollection}>
-                                        {reviews.map((obj, index) => (
+                                        {ReviewsCollection.map((obj, index) => (
                                             <>
-                                                <ReviewCard author={obj.author} content={obj.content} rating={obj.rating}
-                                                    createdAt={obj.createdAt} />
+                                                <ReviewCard author={obj.user.firstname + " " + obj.user.surname} content={obj.body} rating={obj.rating}
+                                                    createdAt={obj.created_at} />
                                             </>
                                         ))}
                                     </div>
@@ -212,7 +225,7 @@ export default function HospitalInfo() {
                                 </Col>
                                 <Col lg={6} md={6} xs={6} className={HospitalInfoStyles.addReview}>
                                     <p style={{ fontWeight: 'bold', fontSize: "16px" }}>Напишіть власний відгук</p>
-                                    <Form>
+                                    <Form onSubmit={(e) => handleSubmitReviews(e)}>
                                         <Form.Group controlId="formRating">
                                             <Form.Label>Rating (1-5)</Form.Label>
                                             <Form.Control
@@ -235,8 +248,8 @@ export default function HospitalInfo() {
                                             />
                                         </Form.Group>
 
-                                        <Button variant="primary" type="submit">
-                                            Submit
+                                        <Button disabled={isDisabled} variant="primary" type="submit">
+                                            {isCreated && isDisabled ? (<i class="fa-solid fa-check"></i>) : ("Відправити")}
                                         </Button>
                                     </Form>
                                 </Col>
