@@ -1,6 +1,11 @@
 .root {
   max-width: 1280px;
-  margin: 75px auto 0;
+  margin: 0 auto;
+  // margin: 150px auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
   padding: 0 20px;
 }
 

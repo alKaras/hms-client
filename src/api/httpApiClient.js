@@ -298,3 +298,42 @@ export const downloadPdfTimeslot = async(id) => {
         responseType: 'blob',
     });
 }
+
+/**
+ * Hospital reviews routes
+ */
+
+/**
+ * Get all hospital reviews
+ */
+export const getHospitalReviews = async(params) => {
+    return await axios.post(`hospital/reviews/get`, params);
+}
+
+/**
+ * Create new hospital review
+ */
+export const createHospitalReviews = async(params) => {
+    return await axios.post(`hospital/reviews/create`, params);
+}
+
+/**
+ * Get count of hospital reviews
+ */
+export const getCountOfHospitalReviews = async(params) => {
+    return await axios.post(`hospital/reviews/getcount`, params);
+}
+
+/**
+ * Remove hospital review
+ */
+export const removeHospitalReview = async(id) => {
+    return await axios.delete(`hospital/review/item/${id}/remove`);
+}
+
+/**
+ * Get average rating for hospital
+ */
+export const getAverageRatingForHospital = async(params) => {
+    return await axios.post(`hospital/rating`, params);
+}

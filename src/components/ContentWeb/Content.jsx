@@ -28,7 +28,7 @@ export default function Content(props) {
                 <img src="/assets/blur-hospital.jpg" className={`${ContentStyles.image}`} alt="back" />
             </div>
             {/* Search */}
-            <div className={`${SearchStyle.root} shadow-lg mb-5 bg-white`}>
+            {/* <div className={`${SearchStyle.root} shadow-lg mb-5 bg-white`}>
                 <div className={`${SearchStyle.search}`}>
                     <Form inline>
                         <Form.Control
@@ -36,10 +36,9 @@ export default function Content(props) {
                             placeholder="Пошук"
                         />
                     </Form>
-                    {/*<Button style={{background: 'none'}}><i className="fa-solid fa-x"></i></Button>*/}
                     <Button className={`${SearchStyle['search-btn']}`}>Знайти</Button>
                 </div>
-            </div>
+            </div> */}
             <div className={ContentStyles.root}>
                 {isLoaded ? (
                     <Row>
