@@ -5,8 +5,11 @@ import headerStyles from './Header.module.scss';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { infoAboutUser, logout, selectIsLogged, selectStatus } from "../../redux/slices/authSlice";
+import { useTranslation } from 'react-i18next';
+import { LangSwitcher } from '../LangSwitcher';
 
 export default function Header() {
+    const { t } = useTranslation();
     const location = useLocation();
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
@@ -163,7 +166,7 @@ export default function Header() {
                                     <LinkContainer to={'/'}>
                                         <Button className={headerStyles['btn-header']}>Головна</Button>
                                     </LinkContainer>
-                                    <LinkContainer to={'/user/services'}>
+                                    <LinkContainer to={`/user/${user.id}/services`}>
                                         <Button className={headerStyles['btn-header']}>Мої послуги</Button>
                                     </LinkContainer>
                                     <LinkContainer to={'/user/referrals'}>
@@ -187,23 +190,27 @@ export default function Header() {
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </div>
-                                <div className={headerStyles.cartContent}>
-                                    <LinkContainer to={'/shoppingcart'} >
-                                        <Button className={headerStyles.cart}>
-                                            <i class="fa-solid fa-cart-shopping"></i>
-                                        </Button>
-                                    </LinkContainer>
-                                </div>
+                                {user.data.email_verified_at && (
+                                    <div className={headerStyles.cartContent}>
+                                        <LinkContainer to={'/shoppingcart'} >
+                                            <Button className={headerStyles.cart}>
+                                                <i class="fa-solid fa-cart-shopping"></i>
+                                            </Button>
+                                        </LinkContainer>
+                                    </div>
+                                )}
+                                <LangSwitcher />
                             </>
                         ) : (<></>)
                         }
                     </>
                 ) : (
-                    <>
+                    <div style={{ display: "flex" }}>
                         <LinkContainer to={'/sign-in'}>
-                            <Button className={headerStyles['btn-join']}>Увійти</Button>
+                            <Button className={headerStyles['btn-join']}>{t('login')}</Button>
                         </LinkContainer>
-                    </>
+                        <LangSwitcher />
+                    </div>
                 )}
             </Nav>
         </Navbar>
