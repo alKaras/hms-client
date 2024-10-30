@@ -11,8 +11,8 @@
 }
 
 .image {
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   background: black;
   flex-shrink: 0;
 }
@@ -29,12 +29,22 @@
     font-size: 18px;
     font-weight: 700;
   }
-
-  .status {
-    color: gray;
-    margin-left: auto;
-  }
 }
+
+.additional {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  align-content: space-between;
+  justify-content: space-between;
+  margin-left: auto;
+  gap: 40px;
+}
+
+.status {
+  align-self: flex-end;
+}
+
 .shortDesc {
   font-size: 14px;
   color: gray;

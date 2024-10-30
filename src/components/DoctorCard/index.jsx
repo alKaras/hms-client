@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import DoctorCardStyles from './DoctorCard.module.scss';
 import { LinkContainer } from "react-router-bootstrap";
 import { Button, Modal, ProgressBar } from "react-bootstrap";
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../redux/slices/authSlice';
 
 export default function DoctorCard({
     title,
@@ -19,6 +21,9 @@ export default function DoctorCard({
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [selectedServices, setSelectedServices] = useState([]);
 
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+
     return (
         <>
             <div className={DoctorCardStyles.root}>
@@ -30,15 +35,6 @@ export default function DoctorCard({
                         <div className={DoctorCardStyles.heading}>
                             {title}
                         </div>
-                        <div className={DoctorCardStyles.status}>
-                            {active ? (
-                                <> Active</>
-                            ) : (
-                                <>
-                                    Non active
-                                </>
-                            )}
-                        </div>
                     </div>
 
                     <div className={DoctorCardStyles.shortDesc}>
@@ -48,12 +44,21 @@ export default function DoctorCard({
                         <div className={DoctorCardStyles.chips}>
                             {specialization}
                         </div>
-                        <LinkContainer to={`/hospital/doctor/${doctor_id}/timeslots`}>
-                            <Button className={DoctorCardStyles.btnWidget}>Записатися до
-                                лікаря</Button>
-                        </LinkContainer>
                     </div>
                 </div>
+                <div className={DoctorCardStyles.additional}>
+                    <div className={DoctorCardStyles.status}>
+                        {active ? (
+                            <span style={{ color: 'green' }}><i className="fa-solid fa-circle"></i></span>
+                        ) : (
+                            <span style={{ color: 'red' }}><i className="fa-solid fa-circle"></i></span>
+                        )}
+                    </div>
+                    {isLogged && user.data.email_verified_at && (<LinkContainer to={`/hospital/doctor/${doctor_id}/timeslots`}>
+                        <Button className={DoctorCardStyles.btnWidget}>Записатися</Button>
+                    </LinkContainer>)}
+                </div>
+
             </div>
         </>
     );

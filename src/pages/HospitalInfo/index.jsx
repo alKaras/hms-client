@@ -11,6 +11,8 @@ import ReviewCard from "../../components/ReviewCard";
 // import { fetchHospital } from '../../redux/slices/hospitalSlice';
 import { createHospitalReviews, fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitalServices, getCountOfHospitalReviews, getHospitalReviews } from '../../api/httpApiClient';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../redux/slices/authSlice';
 
 export default function HospitalInfo() {
     const [departments, setDepartments] = useState([]);
@@ -19,6 +21,8 @@ export default function HospitalInfo() {
 
     const [rating, setRating] = useState(0);
     const [reviewBody, setReviewBody] = useState("");
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
 
     const { id } = useParams();
 
@@ -199,11 +203,11 @@ export default function HospitalInfo() {
                                             <td>{service.id}</td>
                                             <td>{service.service_name}</td>
                                             <td>{service.department}</td>
-                                            <td>
+                                            {isLogged && user.data.email_verified_at && (<td>
                                                 <LinkContainer to={`/hospital/service/${service.id}/timeslots`}>
                                                     <button className={"btn btn-secondary"}><i className="fa-solid fa-circle-plus"></i></button>
                                                 </LinkContainer>
-                                            </td>
+                                            </td>)}
                                         </tr>
                                     ))}
                                 </tbody>
@@ -224,34 +228,39 @@ export default function HospitalInfo() {
 
                                 </Col>
                                 <Col lg={6} md={6} xs={6} className={HospitalInfoStyles.addReview}>
-                                    <p style={{ fontWeight: 'bold', fontSize: "16px" }}>Напишіть власний відгук</p>
-                                    <Form onSubmit={(e) => handleSubmitReviews(e)}>
-                                        <Form.Group controlId="formRating">
-                                            <Form.Label>Rating (1-5)</Form.Label>
-                                            <Form.Control
-                                                type="number"
-                                                min="1"
-                                                max="5"
-                                                placeholder="Enter your rating"
-                                                value={rating}
-                                                onChange={(e) => setRating(e.target.value)}
-                                            />
-                                        </Form.Group>
+                                    {isLogged && user.data.email_verified_at && (
+                                        <>
+                                            <p style={{ fontWeight: 'bold', fontSize: "16px" }}>Напишіть власний відгук</p>
+                                            <Form onSubmit={(e) => handleSubmitReviews(e)}>
+                                                <Form.Group controlId="formRating">
+                                                    <Form.Label>Rating (1-5)</Form.Label>
+                                                    <Form.Control
+                                                        type="number"
+                                                        min="1"
+                                                        max="5"
+                                                        placeholder="Enter your rating"
+                                                        value={rating}
+                                                        onChange={(e) => setRating(e.target.value)}
+                                                    />
+                                                </Form.Group>
 
-                                        <Form.Group controlId="formReviewBody">
-                                            <Form.Label>Review</Form.Label>
-                                            <Form.Control
-                                                as="textarea"
-                                                placeholder="Write your review here"
-                                                value={reviewBody}
-                                                onChange={(e) => setReviewBody(e.target.value)}
-                                            />
-                                        </Form.Group>
+                                                <Form.Group controlId="formReviewBody">
+                                                    <Form.Label>Review</Form.Label>
+                                                    <Form.Control
+                                                        as="textarea"
+                                                        placeholder="Write your review here"
+                                                        value={reviewBody}
+                                                        onChange={(e) => setReviewBody(e.target.value)}
+                                                    />
+                                                </Form.Group>
 
-                                        <Button disabled={isDisabled} variant="primary" type="submit">
-                                            {isCreated && isDisabled ? (<i class="fa-solid fa-check"></i>) : ("Відправити")}
-                                        </Button>
-                                    </Form>
+                                                <Button disabled={isDisabled} variant="primary" type="submit">
+                                                    {isCreated && isDisabled ? (<i class="fa-solid fa-check"></i>) : ("Відправити")}
+                                                </Button>
+                                            </Form>
+                                        </>
+                                    )}
+
                                 </Col>
                             </Row>
                         </Tab>
