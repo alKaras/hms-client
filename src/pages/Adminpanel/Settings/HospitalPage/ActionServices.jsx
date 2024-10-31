@@ -3,6 +3,7 @@ import Header from '../../../../components/Header'
 import ActionServicesStyles from './HospitalPage.module.scss';
 import { useLocation, useParams } from 'react-router-dom';
 import { createService, fetchHospitalDepartments, fetchHospitalDoctors } from '../../../../api/httpApiClient';
+import { useTranslation } from 'react-i18next';
 
 export const ActionServices = () => {
     const [hospitalDoctorsCollection, setHospDoctors] = useState([]);
@@ -87,6 +88,8 @@ export const ActionServices = () => {
 
     }
 
+    const { t } = useTranslation();
+
 
     return (
         <>
@@ -95,20 +98,20 @@ export const ActionServices = () => {
                 <form className={`${ActionServicesStyles['login-form']}`} onSubmit={handleSubmit}>
                     <div className={`${ActionServicesStyles['auth-form-content']}`}>
                         <h3 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px', textAlign: 'center' }}>
-                            Інтегрувати послугу
+                            {t('addService')}
                         </h3>
                         <div className="d-flex flex-column">
-                            <label>Назва</label>
+                            <label>{t('name')}</label>
                             <input
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder='Введіть назву послуги'
+                                placeholder={t('nameServicePlaceHolder')}
                                 required
                             />
                         </div>
                         <div className="d-flex flex-column">
-                            <label>Опис</label>
+                            <label>{t('description')}</label>
                             <input
                                 style={{ padding: '10px', border: '1px solid dodgerblue', resize: 'none' }}
                                 type="text"
@@ -120,9 +123,9 @@ export const ActionServices = () => {
                             <>
                                 {hospitalDepLoaded ? (
                                     <>
-                                        <label>Відділення</label>
+                                        <label>{t('departments')}</label>
                                         <select className={ActionServicesStyles['select-service']} value={departmentAlias} onChange={handleDepartmentChange} required>
-                                            <option value="" disabled>Оберіть відділення</option>
+                                            <option value="" disabled>{t('chdep')}</option>
                                             {hospitalDepCollection.map(dep => (
                                                 <option key={dep.id} value={dep.alias}>
                                                     {dep.content.title}
@@ -136,9 +139,9 @@ export const ActionServices = () => {
                             </>
                         </div>
                         <div className="d-flex flex-column">
-                            <label>Лікар</label>
+                            <label>{t('doctor')}</label>
                             <select className={ActionServicesStyles['select-service']} value={doctorId} onChange={(e) => setDoctorId(e.target.value)} required>
-                                <option value="" disabled>Оберіть лікаря</option>
+                                <option value="" disabled>{t('chdoc')}</option>
                                 {hospitalDoctorsCollection.map(doctor => (
                                     <option key={doctor.id} value={doctor.id}>
                                         {doctor.name} {doctor.email}
@@ -147,7 +150,7 @@ export const ActionServices = () => {
                             </select>
                         </div>
 
-                        <button type="submit" className={`btn ${ActionServicesStyles['btn']}`}>Створити</button>
+                        <button type="submit" className={`btn ${ActionServicesStyles['btn']}`}>{t('create')}</button>
                     </div>
                 </form >
             </div >

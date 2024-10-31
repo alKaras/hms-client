@@ -3,6 +3,7 @@ import ActionHospitalStyles from './HospitalPage.module.scss';
 import Header from '../../../../components/Header';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createHospital, editHospital, fetchHospital } from '../../../../api/httpApiClient';
+import { useTranslation } from 'react-i18next';
 
 export default function ActionHospital({ isEdit }) {
     const [title, setTitle] = useState(null);
@@ -86,6 +87,7 @@ export default function ActionHospital({ isEdit }) {
                 })
         }
     }
+    const { t } = useTranslation();
 
     return (
         <>
@@ -94,15 +96,15 @@ export default function ActionHospital({ isEdit }) {
                 <form className={`${ActionHospitalStyles['login-form']}`} onSubmit={handleSubmit}>
                     <div className={`${ActionHospitalStyles['auth-form-content']}`}>
                         <h3 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px', textAlign: 'center' }}>
-                            {isEdit ? "Відредагувати лікарню" : "Інтегрувати лікарню"}
+                            {isEdit ? t('editHosp') : t('addHospital')}
                         </h3>
                         <div className="d-flex flex-column">
-                            <label>Назва</label>
+                            <label>{t('name')}</label>
                             <input
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder='Введіть назву лікарні'
+                                placeholder={t('nameOfHospitalPlaceHolder')}
                             />
                         </div>
 
@@ -115,7 +117,7 @@ export default function ActionHospital({ isEdit }) {
                                     type="text"
                                     value={alias}
                                     onChange={(e) => setAlias(e.target.value)}
-                                    placeholder='Введіть слаг (test-hospital)'
+                                    placeholder={t('aliasPlaceholder')}
                                 />
                             </div>
                         )}
@@ -125,14 +127,14 @@ export default function ActionHospital({ isEdit }) {
                                 type="text"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
-                                placeholder='Введіть адресу'
+                                placeholder={t('address')}
                             />
                         </div>
                         <div className="d-flex flex-column">
                             <label>Пошта лікарні</label>
                             <input
                                 type="email"
-                                placeholder='Введіть пошту'
+                                placeholder={t('email')}
                                 value={hospitalEmail}
                                 onChange={(e) => setHospitalEmail(e.target.value)}
                             />
@@ -142,7 +144,7 @@ export default function ActionHospital({ isEdit }) {
                             <input
                                 type="text"
                                 value={hospitalPhone}
-                                placeholder={'+380 (50) 000 0000'}
+                                placeholder={`${t('phone')} +380(00)000 00 00`}
                                 onChange={(e) => setHospitalPhone(e.target.value)}
                             />
                         </div>
@@ -155,7 +157,7 @@ export default function ActionHospital({ isEdit }) {
                                 onChange={(e) => setHospDescr(e.target.value)}
                             />
                         </div>
-                        <button type="submit" className={`btn ${ActionHospitalStyles['btn']}`}>{isEdit ? "Зберегти" : "Створити"}</button>
+                        <button type="submit" className={`btn ${ActionHospitalStyles['btn']}`}>{isEdit ? t('save') : t('create')}</button>
                     </div>
                 </form>
             </div>

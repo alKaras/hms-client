@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 // import { createUser } from '../../../redux/slices/userSlice';
 import { createUser } from '../../../api/httpApiClient';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 export default function CreateUser(props) {
     const navigate = useNavigate();
@@ -46,30 +47,33 @@ export default function CreateUser(props) {
             navigate('/adminpanel/users');
         }
     })
+
+    const { t } = useTranslation();
+
     return (
         <>
             <Header />
             <div className={`${createUserStyle.formCreate}`}>
                 <form className={`${createUserStyle['login-form']}`} onSubmit={handleSubmit(onSubmit)}>
                     <div className={`${createUserStyle['auth-form-content']}`}>
-                        <h3 className={`${createUserStyle['auth-form-title']}`}>Створити користувача</h3>
+                        <h3 className={`${createUserStyle['auth-form-title']}`}>{t('addUser')}</h3>
                         <div className="d-flex flex-column">
-                            <label>Ім'я</label>
+                            <label>{t('firstname')}</label>
                             <input
                                 type="text"
                                 className={`${errors.email ? createUserStyle['error-input'] : ''}`}
-                                placeholder='Введіть ім`я'
-                                {...register('name', { required: `Обов'язкове поле` })}
+                                placeholder={t('firstname')}
+                                {...register('name', { required: `${t('required')}` })}
                             />
                         </div>
                         {errors.name && <div className={`${createUserStyle['error-style']}`}>{errors.name.message}</div>}
                         <div className="d-flex flex-column">
-                            <label>Прізвище</label>
+                            <label>{t('lastname')}</label>
                             <input
                                 type="text"
                                 className={`${errors.email ? createUserStyle['error-input'] : ''}`}
-                                placeholder='Введіть прізвище'
-                                {...register('surname', { required: `Обов'язкове поле` })}
+                                placeholder={t('lastname')}
+                                {...register('surname', { required: `${t('required')}` })}
 
                             />
                         </div>
@@ -77,16 +81,16 @@ export default function CreateUser(props) {
                             <div className={`${createUserStyle['error-style']}`}>{errors.surname.message}</div>}
 
                         <div className="d-flex flex-column">
-                            <label>Пошта</label>
+                            <label>{t('email')}</label>
                             <input
                                 type="text"
                                 className={`${errors.email ? createUserStyle['error-input'] : ''}`}
-                                placeholder='Введіть пошту'
+                                placeholder={t('email')}
                                 {...register('email', {
-                                    required: `Обов'язкове поле`,
+                                    required: `${t('required')}`,
                                     pattern: {
                                         value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-                                        message: "Некоректний формат пошти"
+                                        message: `${t('incorrectFormat')}`
                                     }
                                 })}
 
@@ -94,15 +98,15 @@ export default function CreateUser(props) {
                         </div>
                         {errors.email && <div className={`${createUserStyle['error-style']}`}>{errors.email.message}</div>}
                         <div className="d-flex flex-column">
-                            <label>Телефон</label>
+                            <label>{t('phone')}</label>
                             <input
                                 type="text"
                                 placeholder={'+380 (50) 000 0000'}
                                 {...register('phone', {
-                                    required: 'Обов\'язкове поле',
+                                    required: `${t('required')}`,
                                     pattern: {
                                         value: "/^\\+380\\d{9}$/",
-                                        message: "Некоректний формат телефону"
+                                        message: `${t('incorrectFormat')}`
                                     }
                                 })}
                             />
@@ -110,23 +114,23 @@ export default function CreateUser(props) {
                         {errors.phone && <div className={`${createUserStyle['error-style']}`}>{errors.phone.message}</div>}
 
                         <div style={{ marginTop: '10px' }} className="d-flex flex-column">
-                            <label>Пароль</label>
+                            <label>{t('password')}</label>
                             <input
                                 type={"password"}
                                 className={`${errors.password ? createUserStyle['error-input'] : ''}`}
-                                placeholder='Введіть пароль'
+                                placeholder={t('password')}
                                 {...register('password', {
-                                    required: `Пароль є обов'язковим полем`,
+                                    required: `${t('required')}`,
                                     pattern: {
                                         value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>\/?]).{8,}$/,
-                                        message: "Пароль повинен містити не менше 8 символів, 1 букву, 1 цифру та 1 спеціальний символ"
+                                        message: `${t('msgPassword')}`
                                     }
                                 })}
                             />
                             {errors.password && <div className={`${createUserStyle['error-style']}`}>{errors.password.message}</div>}
                         </div>
-                        <button type="submit" className={`btn ${createUserStyle['btn']}`}>Створити</button>
-                        <Link to={'/adminpanel/users'} style={{ color: 'dodgerblue' }}>Повернутись назад</Link>
+                        <button type="submit" className={`btn ${createUserStyle['btn']}`}>{t('create')}</button>
+                        <Link to={'/adminpanel/users'} style={{ color: 'dodgerblue' }}>{t('back')}</Link>
 
                         {error && <div className={`${createUserStyle.error}`}>{error}</div>}
                     </div>

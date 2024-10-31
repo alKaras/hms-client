@@ -12,7 +12,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
                 <i style={currentPage === 1 ? { color: 'gray' } : { color: 'black' }} class="fa-solid fa-chevron-left"></i>
             </Button>
 
-            <span style={{ margin: '0 15px' }} >Page {currentPage} of {totalPages}</span>
+            <span style={{ margin: '0 15px' }} >{currentPage} / {totalPages}</span>
 
             <Button className={PaginationStyles.button}
                 onClick={() => onPageChange(currentPage + 1)}

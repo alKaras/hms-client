@@ -5,6 +5,7 @@ import { Badge, Button, Col, Row, Spinner, Table } from 'react-bootstrap';
 import Moment from 'react-moment';
 import { checkout, getShoppingCart, removeItemFromCart, resetShoppingCart } from '../../api/httpApiClient';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const ShoppingCart = () => {
     const [cartData, setCartData] = useState([]);
@@ -83,16 +84,18 @@ export const ShoppingCart = () => {
             });
     }
 
+    const { t } = useTranslation();
+
     return (
         <>
             <Header />
             <div className={CartStyles.root}>
                 <h1 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '25px' }}>
-                    Ваш кошик <Badge style={{ marginLeft: '10px' }} bg="secondary">{isCartItemsLoaded ? (cartData.length > 0 ? cartData.length : 0) : 0}</Badge>
+                    {t('cart')} <Badge style={{ marginLeft: '10px' }} bg="secondary">{isCartItemsLoaded ? (cartData.length > 0 ? cartData.length : 0) : 0}</Badge>
                 </h1>
                 <Row>
                     <Col className={CartStyles.cartContent} lg={8} md={8} xs={8}>
-                        <h2 style={{ fontSize: '16px', fontWeight: '500' }}>Вміст кошика</h2>
+                        <h2 style={{ fontSize: '16px', fontWeight: '500' }}>{t('contents')}</h2>
                         <div className={CartStyles.scrollContainer}>
                             <ul className={CartStyles.itemsList}>
                                 {isCartItemsLoaded ? cartData.map((item) => (
@@ -104,9 +107,9 @@ export const ShoppingCart = () => {
                                             </div>
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <div style={{ fontSize: '15px' }}>{item.service.department}</div>
-                                                <div style={{ fontWeight: '600', fontSize: '15px' }}>{item.price} UAH</div>
+                                                <div style={{ fontWeight: '600', fontSize: '15px' }}>{item.price} {t('uah')}</div>
                                             </div>
-                                            <button onClick={(e) => removeItem(e, item.id)}>Видалити</button>
+                                            <button onClick={(e) => removeItem(e, item.id)}>{t('delete')}</button>
                                         </li>
                                     </>
                                 )) : (
@@ -119,7 +122,7 @@ export const ShoppingCart = () => {
                     {isCartItemsLoaded && (
                         <Col className={CartStyles.checkoutCard} lg={4} md={4} xs={4}>
                             <div className={CartStyles.checkoutCardContent} >
-                                <div style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center', marginBottom: '15px' }}>Підсумки замовлення</div>
+                                <div style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center', marginBottom: '15px' }}>{t('userOrder')}</div>
                                 <hr />
                                 {isCartItemsLoaded && cartData.map((item) => (
                                     <>
@@ -131,20 +134,20 @@ export const ShoppingCart = () => {
                                 ))}
                                 <hr />
                                 <div style={{ marginTop: '15px' }} className='d-flex align-content-center justify-content-between'>
-                                    <div className={CartStyles.cartFirstEl}>Сервісний збір</div>
+                                    <div className={CartStyles.cartFirstEl}>{t('serviceFee')}</div>
                                     <div>15%</div>
                                 </div>
                                 <hr />
                                 <div className='d-flex align-content-center justify-content-between'>
-                                    <div style={{ fontWeight: 'bold', fontSize: '15px' }}>ВСЬОГО</div>
-                                    <div style={{ fontWeight: 'bold' }} >{totalPrice + totalPrice * 0.1} UAH</div>
+                                    <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{t('total')}</div>
+                                    <div style={{ fontWeight: 'bold' }} >{totalPrice + totalPrice * 0.1} {t('uah')}</div>
                                 </div>
                             </div>
 
                             <div style={{ marginTop: '10px' }} className='d-flex align-content-center justify-content-center gap-3' >
 
-                                <Button className='btn btn-danger' onClick={(e) => cancelShopCart(e, shoppingCartId)}>Скасувати</Button>
-                                <Button className='btn btn-success' onClick={(e) => confirmCart(e)} >Підтвердити</Button>
+                                <Button className='btn btn-danger' onClick={(e) => cancelShopCart(e, shoppingCartId)}>{t('cancelAct')}</Button>
+                                <Button className='btn btn-success' onClick={(e) => confirmCart(e)} >{t('confirmAct')}</Button>
                             </div>
 
                         </Col>

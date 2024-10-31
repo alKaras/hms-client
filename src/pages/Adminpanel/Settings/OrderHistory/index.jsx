@@ -7,6 +7,7 @@ import { infoAboutUser, selectIsLogged } from '../../../../redux/slices/authSlic
 import { getOrderByFilter } from '../../../../api/httpApiClient';
 import Moment from 'react-moment';
 import { OrderFiltersEnum } from '../../../../utils/enums/OrderFiltersEnum';
+import { useTranslation } from 'react-i18next';
 
 export default function OrderHistory({ byDoctor, byHospital }) {
     const isLogged = useSelector(selectIsLogged);
@@ -39,19 +40,22 @@ export default function OrderHistory({ byDoctor, byHospital }) {
         }
 
     }, [doctorId, hospitalId])
+
+    const { t } = useTranslation();
+
     return (
         <>
             <Header />
             <div className={OrderHistoryStyles.root}>
-                <h2 style={{ fontSize: '24px' }}>Замовлення</h2>
+                <h2 style={{ fontSize: '24px' }}>{t('orderHistory')}</h2>
                 {isLoaded && orderHistory.length > 0 ? (
                     <Table bordered>
                         <thead>
                             <tr>
-                                <th>#Замовлення</th>
-                                <th>Статус оплати</th>
-                                <th>Айді оплати</th>
-                                <th>Послуги</th>
+                                <th>#{t('order')}</th>
+                                <th>{t('paymentStatus')}</th>
+                                <th>{t('paymentId')}</th>
+                                <th>{t('services')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,7 +79,7 @@ export default function OrderHistory({ byDoctor, byHospital }) {
                     </Table>
                 ) : (
                     <>
-                        Для {byDoctor ? 'лікаря' : 'лікарні'} ще немає оплачених замовлень
+                        {byDoctor ? t('doctor') : t('hospitals')} {t('emptyOrders')}
                     </>
                 )}
             </div >

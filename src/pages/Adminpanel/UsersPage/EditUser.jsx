@@ -4,6 +4,7 @@ import editUserStyles from './PatientsPage.module.scss';
 import { Button, Col, Row, Spinner, Table } from 'react-bootstrap';
 import { fetchRoles, getUser, attachRole, detachRole, editUser } from '../../../api/httpApiClient';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function EditUser() {
     const { _id } = useParams();
@@ -92,6 +93,7 @@ export default function EditUser() {
             });
     }
 
+    const { t } = useTranslation();
     return (
         <>
 
@@ -102,9 +104,9 @@ export default function EditUser() {
                         <Col lg={6} md={6} sm={6} className={editUserStyles.left}>
                             <form onSubmit={handleSubmit}>
                                 <div className={editUserStyles.content}>
-                                    <h1 style={{ fontSize: '18px', marginBottom: '25px' }}> Змінити інформацію про користувача</h1>
+                                    <h1 style={{ fontSize: '18px', marginBottom: '25px' }}> {t('editUser')}</h1>
                                     <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                        <label>Ім'я</label>
+                                        <label>{t('firstname')}</label>
                                         <input
                                             type="text"
                                             value={name}
@@ -113,36 +115,36 @@ export default function EditUser() {
                                         />
                                     </div>
                                     <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                        <label>Прізвище</label>
+                                        <label>{t('lastname')}</label>
                                         <input type="text" value={surname}
                                             onChange={(e) => setSurname(e.target.value)} />
                                     </div>
                                     <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                        <label>Пошта</label>
+                                        <label>{t('email')}</label>
                                         <input type="text" disabled={true} value={email} />
                                     </div>
                                     <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                        <label>Телефон</label>
+                                        <label>{t('phone')}</label>
                                         <input type="text" disabled={true} value={phone} />
                                     </div>
                                 </div>
                                 <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                    <label>Пароль</label>
+                                    <label>{t('password')}</label>
                                     <input className={editUserStyles.pwdInp} type="text" value={password}
                                         onChange={(e) => setPassword(e.target.value)} />
                                 </div>
-                                <button className={'btn btn-primary'} type="submit">Зберегти</button>
+                                <button className={'btn btn-primary'} type="submit">{t('save')}</button>
                             </form>
                         </Col>
                         <Col className={editUserStyles.right}>
-                            <h2 style={{ fontSize: '18px', marginBottom: '25px' }}>Edit User Roles</h2>
+                            <h2 style={{ fontSize: '18px', marginBottom: '25px' }}>{t('editRoles')}</h2>
                             <div className={editUserStyles.rightUserRoles}>
-                                <div style={{ marginBottom: '25px', fontSize: '16px' }}>User Roles</div>
+                                <div style={{ marginBottom: '25px', fontSize: '16px' }}>{t('roles')}</div>
                                 <Table style={{ marginBottom: '25px' }} bordered>
                                     <thead>
                                         <tr>
-                                            <th>title</th>
-                                            <th>Actions</th>
+                                            <th>{t('name')}</th>
+                                            <th>{t('actions')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -161,12 +163,12 @@ export default function EditUser() {
                                 </Table>
                             </div>
                             <div>
-                                <div style={{ marginBottom: '25px', fontSize: '16px' }}>Suggested Roles</div>
+                                <div style={{ marginBottom: '25px', fontSize: '16px' }}>{t('suggestedRoles')}</div>
                                 <Table style={{ marginBottom: '25px' }} bordered>
                                     <thead>
                                         <tr>
-                                            <th>title</th>
-                                            <th>Actions</th>
+                                            <th>{t('name')}</th>
+                                            <th>{t('actions')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

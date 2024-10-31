@@ -4,6 +4,8 @@ import { cancelCheckout } from '../../api/httpApiClient'
 import { Link, useLocation } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import CancelPageStyles from './Checkout.module.scss';
+import { useTranslation } from 'react-i18next'
+
 export const CancelPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -20,18 +22,19 @@ export const CancelPage = () => {
                 console.error(err);
             })
     }, []);
+    const { t } = useTranslation();
     return (
         <>
             <div className={CancelPageStyles.root}>
                 <div className={CancelPageStyles.contentBlock}>
                     <div style={{ fontSize: '20px', textTransform: 'uppercase', fontWeight: '600' }}>
-                        Оплата скасована <i class="fa-regular fa-face-frown"></i>
+                        {t('canceled')} <i class="fa-regular fa-face-frown"></i>
                     </div>
                     <div>
-                        <p style={{ lineHeight: '150%', marginBottom: '10px' }}>На жаль, вашу оплату не вдалося завершити. Будь ласка, перевірте дані платіжної картки або спробуйте ще раз пізніше.</p>
-                        <p>Якщо проблема не вирішується, зверніться до нашої служби підтримки, і ми допоможемо вам з вирішенням питання.</p>
-                        <p>Ваше здоров'я для нас важливе, і ми сподіваємось, що ви зможете швидко завершити бронювання.</p>
-                        <p>Дякуємо за розуміння. Ми завжди готові допомогти вам!</p>
+                        <p style={{ lineHeight: '150%', marginBottom: '10px' }}>{t('msg1')}</p>
+                        <p>{t('msg2')}</p>
+                        <p>{t('msg3')}</p>
+                        <p>{t('msg4')}</p>
                     </div>
                     <div className='d-flex justify-content-between align-items-center'>
                         <div>

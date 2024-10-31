@@ -4,6 +4,7 @@ import AuthStyles from '../Auth.module.scss';
 import { useDispatch, useSelector } from "react-redux";
 import { infoAboutUser, loginUser, selectIsLogged, selectIsRegged, selectRoles } from "../../../redux/slices/authSlice";
 import { useForm } from "react-hook-form";
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
     const [isShowed, setIsShowed] = useState(false);
@@ -55,6 +56,7 @@ export default function Login() {
         }
     }
 
+    const { t } = useTranslation();
     return (
         <>
             <div className={`${AuthStyles.root}`}>
@@ -65,18 +67,18 @@ export default function Login() {
                                 <img src="/assets/logo/logo.svg" alt="Logo" />
                             </Link>
                         </div>
-                        <h3 className={`${AuthStyles['auth-form-title']}`}>Вхід</h3>
+                        <h3 className={`${AuthStyles['auth-form-title']}`}>{t('auth')}</h3>
                         <div className="d-flex flex-column">
-                            <label>Пошта</label>
+                            <label>{t('email')}</label>
                             <input
                                 type="text"
                                 className={`${errors.email ? AuthStyles['error-input'] : ''}`}
-                                placeholder='Введіть свою пошту'
+                                placeholder={t('email')}
                                 {...register('email', {
-                                    required: `Пошта є обов'язковим полем`,
+                                    required: `${t('required')}`,
                                     pattern: {
                                         value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-                                        message: "Некоректний формат пошти"
+                                        message: `${t('incorrectFormat')}`
                                     }
                                 })}
                             />
@@ -84,16 +86,16 @@ export default function Login() {
                         {errors.email && <div className={`${AuthStyles['error-style']}`}>{errors.email.message}</div>}
 
                         <div style={{ position: 'relative' }} className="d-flex flex-column">
-                            <label>Пароль</label>
+                            <label>{t('password')}</label>
                             <input
                                 type={passType}
                                 className={`${errors.password ? AuthStyles['error-input'] : ''}`}
-                                placeholder='Введіть свій пароль'
+                                placeholder={t('password')}
                                 {...register('password', {
-                                    required: `Пароль є обов'язковим полем`,
+                                    required: `${t('required')}`,
                                     pattern: {
                                         value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>\/?]).{8,}$/,
-                                        message: "Пароль повинен містити не менше 8 символів, 1 букву, 1 цифру та 1 спеціальний символ"
+                                        message: `${t('msgPassword')}`
                                     }
                                 })}
                             />
@@ -106,9 +108,8 @@ export default function Login() {
 
                         </div>
                         {errors.password && <div className={`${AuthStyles['error-style']}`}>{errors.password.message}</div>}
-                        <button type="submit" className={`btn ${AuthStyles['btn']}`}>Увійти</button>
-                        <p className={AuthStyles.linkReg}><Link to={"/sign-up"}>Досі ще не з нами?
-                            Зареєструватись</Link></p>
+                        <button type="submit" className={`btn ${AuthStyles['btn']}`}>{t('login')}</button>
+                        <p className={AuthStyles.linkReg}><Link to={"/sign-up"}>{t('registerLink')}</Link></p>
                     </div>
                 </form>
             </div>
