@@ -4,6 +4,7 @@ import ActionHospitalStyles from './HospitalPage.module.scss';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { createDoctor, editDoctor, fetchHospitalDepartments, fetchSingleDoctor } from '../../../../api/httpApiClient';
 import { Button, Form, FormControl, Spinner } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 export const ActionDoctors = ({ isEdit }) => {
     const [currentDoctor, setDoctor] = useState(null);
@@ -113,6 +114,7 @@ export const ActionDoctors = ({ isEdit }) => {
         }
 
     }
+    const { t } = useTranslation();
     return (
         <>
             <Header />
@@ -120,23 +122,23 @@ export const ActionDoctors = ({ isEdit }) => {
                 <Form className={`${ActionHospitalStyles['login-form']}`} onSubmit={handleSubmit}>
                     <div className={`${ActionHospitalStyles['auth-form-content']}`}>
                         <h3 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px', textAlign: 'center' }}>
-                            {isEdit ? "Відредагувати лікаря" : "Додати лікаря"}
+                            {isEdit ? t('editDoc') : t('addDoc')}
                         </h3>
                         <Form.Group className="d-flex flex-column">
-                            <Form.Label>Спеціалізація</Form.Label>
+                            <Form.Label>{t('specialization')}</Form.Label>
                             <Form.Control
                                 type="text"
                                 name='specialization'
                                 value={formData.specialization}
                                 onChange={(e) => handleChange(e)}
-                                placeholder='Введіть спеціалізацію'
+                                placeholder={t('specialization')}
                             />
                         </Form.Group>
                         <Form.Group className="d-flex flex-column">
-                            <Form.Label>Ім'я</Form.Label>
+                            <Form.Label>{t('firstname')}</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Введіть ім'я"
+                                placeholder={t('firstname')}
                                 name='name'
                                 value={formData.name}
                                 onChange={(e) => handleChange(e)}
@@ -144,23 +146,23 @@ export const ActionDoctors = ({ isEdit }) => {
                             />
                         </Form.Group>
                         <Form.Group className="d-flex flex-column">
-                            <Form.Label>Прізвище</Form.Label>
+                            <Form.Label>{t('lastname')}</Form.Label>
                             <Form.Control
                                 type="text"
                                 name='surname'
-                                placeholder="Введіть прізвище"
+                                placeholder={t('lastname')}
                                 value={formData.surname}
                                 onChange={(e) => handleChange(e)}
                                 disabled={isEdit}
                             />
                         </Form.Group>
                         <Form.Group className="d-flex flex-column">
-                            <Form.Label>Пошта лікаря</Form.Label>
+                            <Form.Label>{t('email')}</Form.Label>
                             <Form.Control
                                 type="email"
                                 name='email'
                                 value={formData.email}
-                                placeholder={"Введіть пошту лікаря"}
+                                placeholder={t('email')}
                                 onChange={(e) => handleChange(e)}
                                 disabled={isEdit}
                             />
@@ -168,12 +170,12 @@ export const ActionDoctors = ({ isEdit }) => {
                         {!isEdit ? (
                             <>
                                 <Form.Group className="d-flex flex-column">
-                                    <Form.Label>Телефон лікаря</Form.Label>
+                                    <Form.Label>{t('phone')}</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name='phone'
                                         value={formData.phone}
-                                        placeholder={"Введіть телефон лікаря"}
+                                        placeholder={t('phone')}
                                         onChange={(e) => handleChange(e)}
                                     />
                                 </Form.Group>
@@ -181,7 +183,7 @@ export const ActionDoctors = ({ isEdit }) => {
                         ) : (<></>)}
 
                         <Form.Group className="d-flex flex-column">
-                            <Form.Label>Відділи</Form.Label>
+                            <Form.Label>{t('departments')}</Form.Label>
                             {isDepLoaded && departments.map((department) => (
                                 <Form.Check
                                     type='checkbox'
@@ -201,7 +203,7 @@ export const ActionDoctors = ({ isEdit }) => {
                             </Button>
                         ) : (
                             <Button variant="primary" type="submit">
-                                {isEdit ? 'Оновити інформацію' : 'Додати лікаря'}
+                                {isEdit ? t('save') : ('addDoc')}
                             </Button>
                         )}
                     </div>

@@ -6,6 +6,7 @@ import usersPageStyles from './PatientsPage.module.scss';
 import { getUsers } from '../../../api/httpApiClient';
 import Pagination from '../../../components/Pagination';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 export default function UsersPage({
     isDoctor
@@ -45,6 +46,7 @@ export default function UsersPage({
         }
         // getUsers({ page: page, perPage: 10 });
     }
+    const { t } = useTranslation();
     return (
         <>
             <Header />
@@ -60,13 +62,13 @@ export default function UsersPage({
                         <Table bordered className={usersPageStyles.table}>
                             <thead>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Surname</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Verified</th>
-                                <th>Roles</th>
-                                <th>Actions</th>
+                                <th>{t('firstname')}</th>
+                                <th>{t('lastname')}</th>
+                                <th>{t('email')}</th>
+                                <th>{t('phone')}</th>
+                                <th>{t('verifiedStatus')}</th>
+                                <th>{t('roles')}</th>
+                                <th>{t('actions')}</th>
                             </thead>
                             <tbody>
                                 {users.map((obj, index) => (

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import DoctorCardStyles from './DoctorCard.module.scss';
 import { LinkContainer } from "react-router-bootstrap";
 import { Button, Modal, ProgressBar } from "react-bootstrap";
 import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../redux/slices/authSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function DoctorCard({
     title,
@@ -13,6 +14,7 @@ export default function DoctorCard({
     hospital_id,
     doctor_id,
 }) {
+    const { t } = useTranslation();
 
     const [step, setStep] = useState(1);
     const [slots, setSlots] = useState([]);
@@ -55,7 +57,7 @@ export default function DoctorCard({
                         )}
                     </div>
                     {isLogged && user.data.email_verified_at && (<LinkContainer to={`/hospital/doctor/${doctor_id}/timeslots`}>
-                        <Button className={DoctorCardStyles.btnWidget}>Записатися</Button>
+                        <Button className={DoctorCardStyles.btnWidget}>{t('appointment')}</Button>
                     </LinkContainer>)}
                 </div>
 

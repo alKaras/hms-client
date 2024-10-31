@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import CartItemStyles from './ShoppingCartItem.module.scss';
 import Moment from 'react-moment';
 import { downloadPdfTimeslot, getShoppingCart, removeItemFromCart } from '../../api/httpApiClient';
+import { useTranslation } from 'react-i18next';
 
 export const ShoppingCartItem = ({
     service_id,
@@ -51,6 +52,8 @@ export const ShoppingCartItem = ({
 
     }
 
+    const { t } = useTranslation();
+
     return (
         <>
             <li className={CartItemStyles.root}>
@@ -63,7 +66,7 @@ export const ShoppingCartItem = ({
                     <div style={{ fontWeight: '600', fontSize: '15px' }}>{price} UAH</div>
                 </div>
                 {canDownload ? (<button onClick={(e) => downloadItem(e, id)}><i class="fa-solid fa-download"></i></button>) : (<></>)}
-                {canRemove ? (<button onClick={(e) => removeItem(e, key)}>Видалити</button>) : (<></>)}
+                {canRemove ? (<button onClick={(e) => removeItem(e, key)}>{t('delete')}</button>) : (<></>)}
             </li>
         </>
     )

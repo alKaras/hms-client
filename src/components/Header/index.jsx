@@ -63,7 +63,7 @@ export default function Header() {
                                         <Button className={headerStyles['btn-header']}>Послуги</Button>
                                     </LinkContainer> */}
                                     <LinkContainer to={'/adminpanel/users'}>
-                                        <Button className={headerStyles['btn-header']}>Пацієнти</Button>
+                                        <Button className={headerStyles['btn-header']}>{t('patients')}</Button>
                                     </LinkContainer>
                                     {/* <LinkContainer to={'/adminpanel/reports'}>
                                         <Button className={headerStyles['btn-header']}>Звіти</Button>
@@ -71,13 +71,12 @@ export default function Header() {
                                     <Dropdown>
                                         <Dropdown.Toggle className={headerStyles.btnDrop} variant="success"
                                             id="dropdown-basic">
-                                            Налаштування
+                                            {t('settings')}
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
-                                            <Dropdown.Item href={`/adminpanel/settings/${hospitalId}/hospital`}>Лікарня</Dropdown.Item>
-                                            <Dropdown.Item href="/adminpanel/hospital/order-history">Історія
-                                                замовлень</Dropdown.Item>
+                                            <Dropdown.Item href={`/adminpanel/settings/${hospitalId}/hospital`}>{t('hospital')}</Dropdown.Item>
+                                            <Dropdown.Item href="/adminpanel/hospital/order-history">{t('orderHistory')}</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     <Dropdown align="end">
@@ -90,27 +89,28 @@ export default function Header() {
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
                                             <LinkContainer to={'/user/profile'}>
-                                                <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
+                                                <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>{t('profile')}</Dropdown.Item>
                                             </LinkContainer>
-                                            <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
+                                            <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>{t('exit')}</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </div>
+                                <LangSwitcher />
                             </>
                         ) : isDoctor ? (
                             <>
                                 <div className={headerStyles['menu-header']}>
                                     <LinkContainer to={'/adminpanel/services'}>
-                                        <Button className={headerStyles['btn-header']}>Послуги</Button>
+                                        <Button className={headerStyles['btn-header']}>{t('services')}</Button>
                                     </LinkContainer>
                                     <LinkContainer to={'/adminpanel/users'}>
-                                        <Button className={headerStyles['btn-header']}>Пацієнти</Button>
+                                        <Button className={headerStyles['btn-header']}>{t('patients')}</Button>
                                     </LinkContainer>
-                                    <LinkContainer to={'/adminpanel/reports'}>
+                                    {/* <LinkContainer to={'/adminpanel/reports'}>
                                         <Button className={headerStyles['btn-header']}>Звіти</Button>
-                                    </LinkContainer>
+                                    </LinkContainer> */}
                                     <LinkContainer to={'/adminpanel/order-history'}>
-                                        <Button className={headerStyles['btn-header']}>Історія замовлень</Button>
+                                        <Button className={headerStyles['btn-header']}>{t('orderHistory')}</Button>
                                     </LinkContainer>
                                 </div>
                                 <Dropdown align="end">
@@ -123,25 +123,26 @@ export default function Header() {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
                                         <LinkContainer to={'/user/profile'}>
-                                            <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
+                                            <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>{t('profile')}</Dropdown.Item>
                                         </LinkContainer>
-                                        <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
+                                        <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>{t('exit')}</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
+                                <LangSwitcher />
                             </>
                         ) : isAdminPanel || isAdmin ? (
                             <>
                                 <div className={headerStyles['menu-header']}>
                                     <LinkContainer to={'/adminpanel/hospitals'}>
-                                        <Button className={headerStyles['btn-header']}>Лікарні</Button>
+                                        <Button className={headerStyles['btn-header']}>{t('hospitals')}</Button>
                                     </LinkContainer>
                                     <LinkContainer to={'/adminpanel/users'}>
                                         <Button className={`${headerStyles['btn-header']} ${location.pathname === '/adminpanel/users' ? headerStyles['visited'] : ''}`}>
-                                            Пацієнти
+                                            {t('patients')}
                                         </Button>
                                     </LinkContainer>
                                     <LinkContainer to={'/adminpanel/order-history'}>
-                                        <Button className={headerStyles['btn-header']}>Історія замовлень</Button>
+                                        <Button className={headerStyles['btn-header']}>{t('orderHistory')}</Button>
                                     </LinkContainer>
                                 </div>
                                 <Dropdown align="end">
@@ -154,23 +155,24 @@ export default function Header() {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
                                         <LinkContainer to={'/user/profile'}>
-                                            <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
+                                            <Dropdown.Item id={'headerDropItem'} className={`${headerStyles['drop-link']}`}>{t('profile')}</Dropdown.Item>
                                         </LinkContainer>
-                                        <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
+                                        <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>{t('exit')}</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
+                                <LangSwitcher />
                             </>
                         ) : !isAdminPanel && isUser ? (
                             <>
                                 <div className={headerStyles['menu-header']}>
                                     <LinkContainer to={'/'}>
-                                        <Button className={headerStyles['btn-header']}>Головна</Button>
+                                        <Button className={headerStyles['btn-header']}>{t('home')}</Button>
                                     </LinkContainer>
                                     <LinkContainer to={`/user/${user.id}/services`}>
-                                        <Button className={headerStyles['btn-header']}>Мої послуги</Button>
+                                        <Button className={headerStyles['btn-header']}>{t('userServices')}</Button>
                                     </LinkContainer>
                                     <LinkContainer to={'/user/referrals'}>
-                                        <Button className={headerStyles['btn-header']}>Мої направлення</Button>
+                                        <Button className={headerStyles['btn-header']}>{t('userReferrals')}</Button>
                                     </LinkContainer>
                                 </div>
                                 <div>
@@ -184,9 +186,9 @@ export default function Header() {
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu className='mt-3 p-3'>
                                             <LinkContainer to='/user/profile' style={{ color: 'black' }}>
-                                                <Dropdown.Item className={`${headerStyles['drop-link']}`}>Профіль</Dropdown.Item>
+                                                <Dropdown.Item className={`${headerStyles['drop-link']}`}>{t('profile')}</Dropdown.Item>
                                             </LinkContainer>
-                                            <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>Вийти</Dropdown.Item>
+                                            <Dropdown.Item onClick={logOutHandler} className={`${headerStyles['drop-link']}`}>{t('exit')}</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </div>

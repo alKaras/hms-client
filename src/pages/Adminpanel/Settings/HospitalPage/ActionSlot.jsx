@@ -9,6 +9,7 @@ import { TextField } from '@mui/material';
 import { Button, Spinner, Table } from 'react-bootstrap';
 import { differenceInHours, format } from 'date-fns';
 import Moment from 'react-moment';
+import { useTranslation } from 'react-i18next';
 
 export const ActionSlot = () => {
     const { _id } = useParams();
@@ -130,19 +131,21 @@ export const ActionSlot = () => {
             })
     }
 
+    const { t } = useTranslation();
+
     return (
         <>
             <Header />
             <div className={`${ActionSlotStyles.root}`}>
                 {/* <div className={ActionSlotStyles.actionRoot}> */}
-                <h1 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 'bold' }}>Створити талони</h1>
+                <h1 style={{ marginBottom: '15px', fontSize: '18px', fontWeight: 'bold' }}>{t('addTimeSlot')}</h1>
                 <form className={`d-flex gap-4 align-items-center`} onSubmit={handleSubmit}>
                     <div className="d-flex flex-column">
                         {isDoctorsLoaded && (
                             <>
-                                <label style={{ marginBottom: '5px' }}>Лікарі</label>
+                                <label style={{ marginBottom: '5px' }}>{t('doctors')}</label>
                                 <select className={ActionSlotStyles['select-service']} value={doctorId || ""} onChange={handleDoctorChange} required>
-                                    <option value="" disabled>Оберіть лікаря</option>
+                                    <option value="" disabled>{t('chdoc')}</option>
                                     {serviceDoctorList.map(doc => (
                                         <option key={doc.id} value={doc.id}>
                                             <div>
@@ -157,7 +160,7 @@ export const ActionSlot = () => {
                     <div className="d-flex flex-column">
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DateTimePicker
-                                label="Select start slottime"
+                                label={t('chStartTime')}
                                 value={startTime}
                                 onChange={(newStartTime) => {
                                     if (newStartTime) {
@@ -174,7 +177,7 @@ export const ActionSlot = () => {
                     <div className="d-flex flex-column">
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DateTimePicker
-                                label="Select end slottime"
+                                label={t('chEndTime')}
                                 value={endTime}
                                 onChange={(newEndTime) => {
                                     if (newEndTime) {
@@ -199,15 +202,15 @@ export const ActionSlot = () => {
                         />
                     </div>
                     <Button disabled={isDisabled} type='submit' className='btn btn-secondary'>
-                        {isDisabled ? "Please wait..." : "Створити"}
+                        {isDisabled ? "Please wait..." : t('create')}
                     </Button>
                 </form>
                 <div className={ActionSlotStyles.slotList}>
-                    <h2 style={{ marginBottom: '15px', marginTop: '50px', fontSize: '18px', fontWeight: 'bold' }}>Налаштувати талони</h2>
+                    <h2 style={{ marginBottom: '15px', marginTop: '50px', fontSize: '18px', fontWeight: 'bold' }}>{t('cfgTimeSlots')}</h2>
                     <div style={{ marginBottom: '25px' }}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
-                                label="Select Date"
+                                label={t('chdate')}
                                 value={selectedDate}
                                 onChange={(newDate) => {
                                     if (newDate) {
@@ -227,12 +230,12 @@ export const ActionSlot = () => {
                             <thead>
                                 <tr>
                                     <th>Id#</th>
-                                    <th>ServiceName</th>
-                                    <th>Doctor</th>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
+                                    <th>{t('name')}</th>
+                                    <th>{t('doctor')}</th>
+                                    <th>{t('startTime')}</th>
+                                    <th>{t('endTime')}</th>
+                                    <th>{t('price')}</th>
+                                    <th>{t('actions')}</th>
                                 </tr>
                             </thead>
                             <tbody>

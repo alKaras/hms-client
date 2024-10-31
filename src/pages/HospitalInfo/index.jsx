@@ -13,6 +13,7 @@ import { createHospitalReviews, fetchHospital, fetchHospitalDepartments, fetchHo
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../redux/slices/authSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function HospitalInfo() {
     const [departments, setDepartments] = useState([]);
@@ -136,6 +137,8 @@ export default function HospitalInfo() {
             })
     }
 
+    const { t } = useTranslation();
+
     return (
         <>
             <Header />
@@ -149,17 +152,17 @@ export default function HospitalInfo() {
                     <div>{hospitalContent.content.description}
                     </div>
                     <div style={{ margin: '15px' }} className={"d-flex justify-content-between align-items-center"}>
-                        <div>Адреса: {hospitalContent.content.address}</div>
-                        <div>Пошта: {hospitalContent.hospital_email}</div>
-                        <div>Телефон: {hospitalContent.hospital_phone}</div>
+                        <div>{t('address')}: {hospitalContent.content.address}</div>
+                        <div>{t('email')}: {hospitalContent.hospital_email}</div>
+                        <div>{t('phone')}: {hospitalContent.hospital_phone}</div>
                     </div>
                     <Tabs defaultActiveKey={"doctors"} id={"uncontrolled-tab"} className={`${HospitalInfoStyles.root}`}>
-                        <Tab eventKey={'doctors'} title={"Лікарі"} className={`${HospitalInfoStyles.doctors}`}>
+                        <Tab eventKey={'doctors'} title={`${t('doctors')}`} className={`${HospitalInfoStyles.doctors}`}>
                             <div style={{ marginBottom: '25px' }}>
                                 <Form className={'d-flex align-content-center justify-content-between'} onSubmit={(e) => handleSubmit(e)}>
                                     <Form.Group controlId="departmentSelect">
                                         <Form.Control style={{ maxWidth: "600px" }} as="select" onChange={handleDepartmentChange} value={"" || selectedDepartment}>
-                                            <option value="" disabled>Виберіть відділення</option>
+                                            <option value="" disabled>{t('chdep')}</option>
                                             {departments.map((department, index) => (
                                                 <option key={department.id} value={department.alias}>
                                                     <span>{department.id}</span> <span>{department.content.title}</span>
@@ -167,7 +170,7 @@ export default function HospitalInfo() {
                                             ))}
                                         </Form.Control>
                                     </Form.Group>
-                                    <button className={`${SearchStyles.searchBtn} btn btn-primary`} style={{ marginLeft: 'auto' }} type={"submit"}>Знайти</button>
+                                    <button className={`${SearchStyles.searchBtn} btn btn-primary`} style={{ marginLeft: 'auto' }} type={"submit"}>{t('search')}</button>
                                 </Form>
                             </div>
                             <div>
@@ -188,13 +191,13 @@ export default function HospitalInfo() {
 
 
                         </Tab>
-                        <Tab eventKey={'services'} title={'Послуги'}>
+                        <Tab eventKey={'services'} title={`${t('service')}`}>
                             <Table striped bordered hover style={{ marginTop: '25px' }}>
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Service</th>
-                                        <th>Department</th>
+                                        <th>{t('service')}</th>
+                                        <th>{t('department')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -213,7 +216,7 @@ export default function HospitalInfo() {
                                 </tbody>
                             </Table>
                         </Tab>
-                        <Tab eventKey={'reviews'} title={'Відгуки'} className={HospitalInfoStyles.reviews}>
+                        <Tab eventKey={'reviews'} title={`${t('reviews')}`} className={HospitalInfoStyles.reviews}>
                             {/* <p className={HospitalInfoStyles.reviewsBadge}></p> */}
                             <Row className={HospitalInfoStyles.reviewList}>
                                 <Col lg={6} md={6} xs={6}>
@@ -230,32 +233,32 @@ export default function HospitalInfo() {
                                 <Col lg={6} md={6} xs={6} className={HospitalInfoStyles.addReview}>
                                     {isLogged && user.data.email_verified_at && (
                                         <>
-                                            <p style={{ fontWeight: 'bold', fontSize: "16px" }}>Напишіть власний відгук</p>
+                                            <p style={{ fontWeight: 'bold', fontSize: "16px" }}>{t('addReviews')}</p>
                                             <Form onSubmit={(e) => handleSubmitReviews(e)}>
                                                 <Form.Group controlId="formRating">
-                                                    <Form.Label>Rating (1-5)</Form.Label>
+                                                    <Form.Label>{t('rating')} (1-5)</Form.Label>
                                                     <Form.Control
                                                         type="number"
                                                         min="1"
                                                         max="5"
-                                                        placeholder="Enter your rating"
+                                                        placeholder={t('rating')}
                                                         value={rating}
                                                         onChange={(e) => setRating(e.target.value)}
                                                     />
                                                 </Form.Group>
 
                                                 <Form.Group controlId="formReviewBody">
-                                                    <Form.Label>Review</Form.Label>
+                                                    <Form.Label>{t('review')}</Form.Label>
                                                     <Form.Control
                                                         as="textarea"
-                                                        placeholder="Write your review here"
+                                                        placeholder={t('addReviews')}
                                                         value={reviewBody}
                                                         onChange={(e) => setReviewBody(e.target.value)}
                                                     />
                                                 </Form.Group>
 
                                                 <Button disabled={isDisabled} variant="primary" type="submit">
-                                                    {isCreated && isDisabled ? (<i class="fa-solid fa-check"></i>) : ("Відправити")}
+                                                    {isCreated && isDisabled ? (<i class="fa-solid fa-check"></i>) : (`${t('sendSth')}`)}
                                                 </Button>
                                             </Form>
                                         </>

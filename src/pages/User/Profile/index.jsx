@@ -8,7 +8,7 @@ import Moment from "react-moment";
 import { LinkContainer } from 'react-router-bootstrap';
 import { editUser, fetchFirstThreeReferrals, getOrderByFilter, resendVerification } from '../../../api/httpApiClient';
 import { OrderFiltersEnum } from '../../../utils/enums/OrderFiltersEnum';
-
+import { useTranslation } from 'react-i18next'
 
 export default function UserProfile() {
     const isLogged = useSelector(selectIsLogged);
@@ -32,6 +32,8 @@ export default function UserProfile() {
 
     const [firstThreeOrders, setFirstThreeOrders] = useState([]);
     const [ordersLoaded, setOrdersLoaded] = useState(false);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (isLogged && user.data) {
@@ -94,14 +96,14 @@ export default function UserProfile() {
         setIsDisabled(true);
         resendVerification(userEmail)
             .then((response) => {
-                alert(response.data.message || 'Лист підтвердження надіслано');
+                alert(response.data.message || `${t('verificationEmail')}`);
 
                 setTimeout(() => {
                     setIsDisabled(false);
                 }, 60000);
             })
             .catch((error) => {
-                alert('Сталася помилка');
+                alert(`${t('error')}`);
                 setIsDisabled(false);
             })
     }
@@ -132,14 +134,14 @@ export default function UserProfile() {
 
                                     </div>
                                     <div className={UserProfileStyles.verificationStatus}>
-                                        {user.data.email_verified_at === null ? "Unverified" : (<> Verified at  <Moment format="DD/MM/YYYY HH:mm:ss">{user.data.email_verified_at}</Moment> </>)}
+                                        {user.data.email_verified_at === null ? "Unverified" : (<> {t('verifiedAt')} <Moment format="DD/MM/YYYY HH:mm:ss">{user.data.email_verified_at}</Moment> </>)}
                                     </div>
                                 </div>
                                 <form onSubmit={handleSubmit}>
                                     <div className={UserProfileStyles.userSndContent}>
                                         <div className={"d-flex justify-content-between align-items-center"}>
                                             <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                                <label>Ім'я</label>
+                                                <label>{t('firstname')}</label>
                                                 <input
                                                     type="text"
                                                     value={name}
@@ -148,28 +150,28 @@ export default function UserProfile() {
                                                 />
                                             </div>
                                             <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                                <label>Прізвище</label>
+                                                <label>{t('lastname')}</label>
                                                 <input type="text" value={surname}
                                                     onChange={(e) => setSurname(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className={"d-flex justify-content-between align-items-center"}>
                                             <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                                <label>Пошта</label>
+                                                <label>{t('email')}</label>
                                                 <input type="text" disabled={true} value={user.data.email} />
                                             </div>
                                             <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                                <label>Телефон</label>
+                                                <label>{t('phone')}</label>
                                                 <input type="text" disabled={true} value={user.data.phone} />
                                             </div>
                                         </div>
                                     </div>
                                     <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                                        <label>Пароль</label>
+                                        <label>{t('password')}</label>
                                         <input className={UserProfileStyles.pwdInp} type="text" value={password}
                                             onChange={(e) => setPassword(e.target.value)} />
                                     </div>
-                                    <button className={'btn btn-primary'} type="submit">Зберегти</button>
+                                    <button className={'btn btn-primary'} type="submit">{t('save')}</button>
                                 </form>
                             </div>
 
@@ -178,11 +180,8 @@ export default function UserProfile() {
                                     <hr />
                                     <div className={UserProfileStyles.verificationBlock}>
                                         <div className={UserProfileStyles.vTitle}>Верифікація</div>
-                                        <p>Для підтвердження акаунту та доступу до всіх можливостей сайту потрібно
-                                            підтвердити пошту. Ми надіслали вам лист на пошту (перевірте папку спам)
-                                            Якщо листа все-таки немає - надішлемо його знову
-                                        </p>
-                                        <Button disabled={isButtonDisabled} onClick={resendMailVerification}>Надіслати</Button>
+                                        <p>{t('sendVerificationMsg')}</p>
+                                        <Button disabled={isButtonDisabled} onClick={resendMailVerification}>{t('sendSth')}</Button>
 
                                     </div>
                                 </>
@@ -195,15 +194,15 @@ export default function UserProfile() {
                         {mainRole === 'user' && (<Col lg={6} md={6} xs={6} className={UserProfileStyles.rightSide}>
                             <div className={UserProfileStyles.servicesBlock}>
                                 <div className={UserProfileStyles.servicesContent}>
-                                    <div className={UserProfileStyles.rsTitle}>Мої послуги</div>
+                                    <div className={UserProfileStyles.rsTitle}>{t('userServices')}</div>
                                     <ul className={UserProfileStyles.rsList}>
                                         {ordersLoaded ? firstThreeOrders.map((item) => (
                                             <li className={`${UserProfileStyles.rsItem} d-flex justify-content-between align-items-center`}>
                                                 <div>
-                                                    <p>Замовлення:</p>
+                                                    <p>{t('order')}:</p>
                                                     {item.order.id}
                                                 </div>
-                                                <div>К-сть послуг: {item.services.length}</div>
+                                                <div>{t('numofservices')}: {item.services.length}</div>
                                             </li>
                                         )) : (
                                             <div className={"d-flex justify-content-center align-items-center"}>
@@ -213,12 +212,12 @@ export default function UserProfile() {
                                     </ul>
                                 </div>
                                 <LinkContainer style={{ color: 'white' }} to={`/user/${isLogged ? userId : 0}/services`}>
-                                    <Button className='btn btn-primary'>Переглянути детальніше</Button>
+                                    <Button className='btn btn-primary'>{t('seeMore')}</Button>
                                 </LinkContainer>
                             </div>
                             <div className={UserProfileStyles.referralsBlock}>
                                 <div className={UserProfileStyles.referralsContent}>
-                                    <div className={UserProfileStyles.rsTitle}>Мої направлення</div>
+                                    <div className={UserProfileStyles.rsTitle}>{t('userReferrals')}</div>
                                     <ul className={UserProfileStyles.rsList}>
                                         {isLoaded ? (
                                             <>
@@ -242,7 +241,7 @@ export default function UserProfile() {
                                     </ul>
                                 </div>
                                 <LinkContainer style={{ color: 'white' }} to={'/user/referrals'}>
-                                    <Button className='btn btn-primary'>Переглянути детальніше</Button>
+                                    <Button className='btn btn-primary'>{t('seeMore')}</Button>
                                 </LinkContainer>
                             </div>
                         </Col >)}

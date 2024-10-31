@@ -10,6 +10,7 @@ import { getTimeSlotsByFilter, setItemToCart } from '../../api/httpApiClient';
 import { Button } from 'react-bootstrap';
 import format from 'date-fns/format';
 import Moment from 'react-moment';
+import { useTranslation } from 'react-i18next';
 
 export const TimeSlotPicker = ({
     isDoctorPage,
@@ -71,18 +72,19 @@ export const TimeSlotPicker = ({
     }, [selectedDate])
 
     console.log(infoSlotCollection);
+    const { t } = useTranslation();
 
     return (
         <>
             <Header />
             <div className={TimeSlotStyles.root}>
 
-                <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px' }} >Select timeslot</h2>
+                <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px' }} >{t('timeslots')}</h2>
 
                 <div style={{ marginBottom: '25px' }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
-                            label="Select Date"
+                            label={t('chdate')}
                             value={selectedDate}
                             onChange={(newDate) => {
                                 if (newDate) {
@@ -98,7 +100,7 @@ export const TimeSlotPicker = ({
                 </div>
 
                 <div style={{ marginBottom: '25px' }}>
-                    <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px' }} >Choose timeslot</h2>
+                    <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px' }} >{t('selectTimeslot')}</h2>
 
                     <ul className={TimeSlotStyles.slotmenu}>
                         {isSlotLoaded &&
@@ -119,13 +121,13 @@ export const TimeSlotPicker = ({
                                                 </Moment>
                                             </div>
 
-                                            <div className={TimeSlotStyles.slotPrice}>{slot.price} UAH</div>
+                                            <div className={TimeSlotStyles.slotPrice}>{slot.price} {t('uah')}</div>
                                         </Button >
                                     </li>
                                 </>
                             )) : (
                                 <>
-                                    Відсутні талони на цей час
+                                    {t('emptyTimeslots')}
                                 </>
                             )}
                     </ul>

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { fetchReferralById, fetchUserReferrals } from '../../../redux/slices/userReferrals';
 import Moment from 'react-moment';
 import { fetchReferralById, fetchUserReferrals } from '../../../api/httpApiClient';
+import { useTranslation } from 'react-i18next';
 
 export default function Referrals() {
     const dispatch = useDispatch();
@@ -55,6 +56,7 @@ export default function Referrals() {
         setShow(true);
     };
     const referralData = referralId && referral ? referral : null;
+    const { t } = useTranslation();
     return (
         <>
             <Header />
@@ -63,9 +65,9 @@ export default function Referrals() {
                     <Table bordered style={{ verticalAlign: 'middle' }}>
                         <thead>
                             <tr>
-                                <th>Referral code</th>
-                                <th>Expiration date</th>
-                                <th>Action</th>
+                                <th>{t('referralNum')}</th>
+                                <th>{t('expdate')}</th>
+                                <th>{t('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,7 +76,7 @@ export default function Referrals() {
                                     <td>{referral.referral_code}</td>
                                     <td><Moment format="DD/MM/YYYY HH:mm:ss">{referral.expired_at}</Moment></td>
                                     <td>
-                                        <Button className='btn btn-primary' onClick={() => handleShow(referral.referral_id)}>Show Details</Button>
+                                        <Button className='btn btn-primary' onClick={() => handleShow(referral.referral_id)}>{t('seeMore')}</Button>
                                     </td>
                                 </tr>
                             ))}
@@ -97,7 +99,7 @@ export default function Referrals() {
                     <Modal.Body>
                         {isRefLoaded && referralData ? (
                             <>
-                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>Послуги:</div>
+                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{t('services')}:</div>
                                 {(referralData.decoded_data.services).map((obj, index) => (
                                     <div style={{ fontSize: '14px', padding: '5px', marginBottom: '5px' }} key={index}>
                                         {obj.name} [{obj.department}]
@@ -105,8 +107,8 @@ export default function Referrals() {
                                 ))}
 
                                 {/* <div>Направлення призначене {referralData.decoded_data.user.name} {referralData.decoded_data.user.surname}</div> */}
-                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>Призначено: <span style={{ fontWeight: 'normal' }}>{referralData.decoded_data.user.name} {referralData.decoded_data.user.surname}</span></div>
-                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>Срок придатності: <span style={{ fontWeight: 'normal' }}><Moment format="DD/MM/YYYY HH:mm:ss">{referral.expired_at}</Moment></span></div>
+                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>{t('assignedTo')}: <span style={{ fontWeight: 'normal' }}>{referralData.decoded_data.user.name} {referralData.decoded_data.user.surname}</span></div>
+                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{t('expdate')}: <span style={{ fontWeight: 'normal' }}><Moment format="DD/MM/YYYY HH:mm:ss">{referral.expired_at}</Moment></span></div>
                             </>
                         ) : (
                             <Spinner animation="border" variant="primary" />

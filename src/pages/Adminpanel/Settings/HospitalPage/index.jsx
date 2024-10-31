@@ -5,6 +5,7 @@ import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals, fetchHospitalServices, importDepartment, importDoctors, importServices } from '../../../../api/httpApiClient';
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function HospitalPage({
     specific
@@ -246,6 +247,8 @@ export default function HospitalPage({
         }
     }
 
+    const { t } = useTranslation();
+
     return (
         <>
             <Header />
@@ -256,27 +259,27 @@ export default function HospitalPage({
                             <>
                                 <div className={HospitalPageStyles.contentSingle}>
                                     <div className={HospitalPageStyles.mainInfo}>
-                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Основна інформація</div>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>{t('information')}</div>
                                         <div className={HospitalPageStyles.innerContent}>
-                                            <div><span>Назва: </span>{hospital.content.title} [id: {hospital.id}]</div>
-                                            <div><span>Адреса: </span>{hospital.content.address}</div>
-                                            <div><p>Опис:</p>{hospital.content.description}</div>
-                                            <div><span>Телефон: </span>{hospital.hospital_phone}</div>
-                                            <div><span>Пошта: </span>{hospital.hospital_email}</div>
+                                            <div><span>{t('name')}: </span>{hospital.content.title} [id: {hospital.id}]</div>
+                                            <div><span>{t('address')}: </span>{hospital.content.address}</div>
+                                            <div><p>{t('description')}:</p>{hospital.content.description}</div>
+                                            <div><span>{t('phone')}: </span>{hospital.hospital_phone}</div>
+                                            <div><span>{t('email')}: </span>{hospital.hospital_email}</div>
                                         </div>
                                     </div>
                                     <div>
                                         <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex align-items-center justify-content-between'>
-                                            <h2>Відділи</h2>
+                                            <h2>{t('departments')}</h2>
                                             <div>
                                                 <button className='btn' onClick={(e) => refreshDepartments(e)}><i className="fa-solid fa-arrows-rotate"></i></button>
                                                 <input type="file" id="fileDepInput" accept='.xlsx' onChange={handleImportDepSubmit} style={{ display: 'none' }} />
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDepImportCtrl}>Import <i className="fa-solid fa-file-arrow-down"></i></button>
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDepImportCtrl}>{t('importbtn')} <i className="fa-solid fa-file-arrow-down"></i></button>
                                                 <LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
                                                     pathname: `/adminpanel/hospital/department/create`,
                                                     search: `?hospital=${_id}`
                                                 }}>
-                                                    <Button className='btn btn-secondary' >Create new</Button>
+                                                    <Button className='btn btn-secondary' >{t('create')}</Button>
                                                 </LinkContainer>
                                             </div>
                                         </div>
@@ -286,10 +289,10 @@ export default function HospitalPage({
                                                     <thead>
                                                         <tr>
                                                             <th>#ID</th>
-                                                            <th>Назва</th>
-                                                            <th>Пошта</th>
-                                                            <th>Публічний телефон</th>
-                                                            <th>Дії</th>
+                                                            <th>{t('name')}</th>
+                                                            <th>{t('email')}</th>
+                                                            <th>{t('phone')}</th>
+                                                            <th>{t('actions')}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -324,19 +327,19 @@ export default function HospitalPage({
                                             <div>
                                                 <button className='btn' onClick={(e) => refreshDoctorsCollection(e)}><i className="fa-solid fa-arrows-rotate"></i></button>
                                                 <input type="file" id="fileDoctInput" accept='.xlsx' onChange={handleImportDoctorSubmit} style={{ display: 'none' }} />
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDoctImportCtrl}>Import <i className="fa-solid fa-file-arrow-down"></i></button>
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnDoctImportCtrl}>{t('importbtn')} <i className="fa-solid fa-file-arrow-down"></i></button>
                                                 <LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
                                                     pathname: `/adminpanel/hospital/doctor/create`,
                                                     search: `?hospital=${_id}`
                                                 }}>
-                                                    <Button className='btn btn-secondary' >Create new</Button>
+                                                    <Button className='btn btn-secondary' >{t('create')}</Button>
                                                 </LinkContainer>
                                             </div>
                                         </div>
                                         <Form style={{ marginTop: '15px' }} className={'d-flex align-content-center justify-content-between'} onSubmit={(e) => handleSubmit(e)}>
                                             <Form.Group controlId="departmentSelect">
                                                 <Form.Control style={{ maxWidth: "600px" }} as="select" onChange={handleDepartmentChange} value={"" || selectedDepartment}>
-                                                    <option value="" disabled>Виберіть відділення</option>
+                                                    <option value="" disabled>{t('chdep')}</option>
                                                     {hospitalDeps.map((department, index) => (
                                                         <option key={department.id} value={department.alias}>
                                                             <span>{department.id}</span> <span>{department.content.title}</span>
@@ -344,7 +347,7 @@ export default function HospitalPage({
                                                     ))}
                                                 </Form.Control>
                                             </Form.Group>
-                                            <button className={`btn btn-primary`} style={{ marginLeft: 'auto' }} type={"submit"}>Знайти</button>
+                                            <button className={`btn btn-primary`} style={{ marginLeft: 'auto' }} type={"submit"}>{t('search')}</button>
                                         </Form>
                                         {isDoctorsLoaded ? (
                                             <>
@@ -352,18 +355,18 @@ export default function HospitalPage({
                                                     <thead>
                                                         <tr>
                                                             <th>#ID</th>
-                                                            <th>Ім'я</th>
-                                                            <th>Прізвище</th>
-                                                            <th>Спеціалізація</th>
-                                                            <th>Пошта</th>
-                                                            <th>Робочий статус</th>
+                                                            <th>{t('firstname')}</th>
+                                                            <th>{t('lastname')}</th>
+                                                            <th>{t('specialization')}</th>
+                                                            <th>{t('email')}</th>
+                                                            <th>{t('status')}</th>
                                                             {!isDepChosen ? (
                                                                 <>
-                                                                    <th>Відділи</th>
-                                                                    <th>Сервіси</th>
+                                                                    <th>{t('departments')}</th>
+                                                                    <th>{t('services')}</th>
                                                                 </>
                                                             ) : <></>}
-                                                            <th>Дії</th>
+                                                            <th>{t('actions')}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -410,15 +413,15 @@ export default function HospitalPage({
                                     </div>
                                     <div style={{ marginTop: '50px' }}>
                                         <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex justify-content-between align-items-center'>
-                                            <h2>Послуги</h2>
+                                            <h2>{t('services')}</h2>
                                             <div>
                                                 <button className='btn' onClick={(e) => refreshServices(e)}><i className="fa-solid fa-arrows-rotate"></i></button>
                                                 <input type="file" id="fileServInput" accept='.xlsx' onChange={handleImportServiceSubmit} style={{ display: 'none' }} />
-                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnServiceImportCtrl}>Import <i className="fa-solid fa-file-arrow-down"></i></button><LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
+                                                <button className='btn btn-secondary' style={{ marginLeft: '15px' }} onClick={handleBtnServiceImportCtrl}>{t('importbtn')} <i className="fa-solid fa-file-arrow-down"></i></button><LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
                                                     pathname: `/adminpanel/hospital/service/create`,
                                                     search: `?hospital=${_id}`
                                                 }}>
-                                                    <Button className='btn btn-secondary' >Create new</Button>
+                                                    <Button className='btn btn-secondary' >{t('create')}</Button>
                                                 </LinkContainer>
                                             </div>
                                         </div>
@@ -428,10 +431,10 @@ export default function HospitalPage({
                                                     <thead>
                                                         <tr>
                                                             <th>#ID</th>
-                                                            <th>Послуга</th>
-                                                            <th>Відділення</th>
-                                                            <th>Лікарі</th>
-                                                            <th>Дії</th>
+                                                            <th>{t('name')}</th>
+                                                            <th>{t('departments')}</th>
+                                                            <th>{t('doctors')}</th>
+                                                            <th>{t('actions')}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -499,19 +502,19 @@ export default function HospitalPage({
                             <div className={HospitalPageStyles.contentMany}>
                                 <div className='d-flex align-items-center justify-content-end'>
                                     <LinkContainer style={{ color: 'white' }} to={'/adminpanel/hospital/create'}>
-                                        <Button className='btn btn-secondary'>Add new hospital</Button>
+                                        <Button className='btn btn-secondary'>{t('addHospital')}</Button>
                                     </LinkContainer>
                                 </div>
                                 <Table style={{ marginTop: '15px' }} bordered>
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Alias</th>
-                                            <th>Title</th>
-                                            <th>Address</th>
-                                            <th>Hospital Phone</th>
-                                            <th>Hospital Email</th>
-                                            <th>Action</th>
+                                            <th>{t('alias')}</th>
+                                            <th>{t('name')}</th>
+                                            <th>{t('address')}</th>
+                                            <th>{t('phone')}</th>
+                                            <th>{t('email')}</th>
+                                            <th>{t('actions')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

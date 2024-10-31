@@ -3,6 +3,7 @@ import Header from '../../../../components/Header'
 import ActionHospitalStyles from './HospitalPage.module.scss';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { createDepartment, editDepartment, fetchDepartment } from '../../../../api/httpApiClient';
+import { useTranslation } from 'react-i18next';
 
 export const ActionDepartment = ({ isEdit }) => {
     const [currentDep, setCurrentDep] = useState(null);
@@ -89,7 +90,7 @@ export const ActionDepartment = ({ isEdit }) => {
                 })
         }
     }
-
+    const { t } = useTranslation();
     return (
         <>
             <Header />
@@ -97,15 +98,15 @@ export const ActionDepartment = ({ isEdit }) => {
                 <form className={`${ActionHospitalStyles['login-form']}`} onSubmit={handleSubmit}>
                     <div className={`${ActionHospitalStyles['auth-form-content']}`}>
                         <h3 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px', textAlign: 'center' }}>
-                            {isEdit ? "Відредагувати відділення" : "Додати відділення"}
+                            {isEdit ? t('editDep') : t('addDep')}
                         </h3>
                         <div className="d-flex flex-column">
-                            <label>Назва</label>
+                            <label>{t('name')}</label>
                             <input
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder='Введіть назву відділення'
+                                placeholder={t('name')}
                             />
                         </div>
 
@@ -113,35 +114,35 @@ export const ActionDepartment = ({ isEdit }) => {
                             <></>
                         ) : (
                             <div className="d-flex flex-column">
-                                <label>Слаг</label>
+                                <label>{t('alias')}</label>
                                 <input
                                     type="text"
                                     value={alias}
                                     onChange={(e) => setAlias(e.target.value)}
-                                    placeholder='Введіть слаг (endo-dep)'
+                                    placeholder={`${t('alias')} (endo-dep)`}
                                 />
                             </div>
                         )}
                         <div className="d-flex flex-column">
-                            <label>Пошта відділення</label>
+                            <label>{t('email')}</label>
                             <input
                                 type="email"
-                                placeholder='Введіть пошту'
+                                placeholder={t('email')}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <div className="d-flex flex-column">
-                            <label>Телефон лікарні</label>
+                            <label>{t('phone')}</label>
                             <input
                                 type="text"
                                 value={phone}
-                                placeholder={'+380 (50) 000 0000'}
+                                placeholder={`${t('phone')} +380(00)000 00 00`}
                                 onChange={(e) => setPhone(e.target.value)}
                             />
                         </div>
                         <div className="d-flex flex-column">
-                            <label>Опис</label>
+                            <label>{t('description')}</label>
                             <input
                                 style={{ padding: '10px', border: '1px solid dodgerblue', resize: 'none' }}
                                 type="text"
@@ -149,7 +150,7 @@ export const ActionDepartment = ({ isEdit }) => {
                                 onChange={(e) => setDesc(e.target.value)}
                             />
                         </div>
-                        <button type="submit" className={`btn ${ActionHospitalStyles['btn']}`}>{isEdit ? "Зберегти" : "Створити"}</button>
+                        <button type="submit" className={`btn ${ActionHospitalStyles['btn']}`}>{isEdit ? t('save') : t('create')}</button>
                     </div>
                 </form>
             </div>

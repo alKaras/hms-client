@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
 import { createReferralForUser, fetchHospitalServices } from '../../../api/httpApiClient';
 import { CardCheckbox } from '../../../components/CardCheckbox';
+import { useTranslation } from 'react-i18next';
 
 export const CreateReferrals = () => {
     const { _id } = useParams();
@@ -29,6 +30,8 @@ export const CreateReferrals = () => {
             })
     }, [hospitalId]);
 
+    const { t } = useTranslation();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -39,7 +42,7 @@ export const CreateReferrals = () => {
 
         createReferralForUser(params)
             .then((resp) => {
-                alert(`Направлення для клієнта #${_id} створено. Номер направлення - ${resp.data.data.referral_code}`);
+                alert(`${t('createdRefMsg')} - ${resp.data.data.referral_code}`);
                 setSelectedServiceIds([]);
             })
             .catch((err) => {
@@ -62,7 +65,7 @@ export const CreateReferrals = () => {
             <div className={createReferralStyle.createRoot}>
                 <div>
                     <div className={"d-flex flex-column justify-content-between align-items-start"}>
-                        <h2 style={{ fontSize: '20px' }}>Виберіть сервіси</h2>
+                        <h2 style={{ fontSize: '20px' }}>{t('selectServices')}</h2>
                         <div className={createReferralStyle.contentServices}>
                             {servicesLoaded && serviceCollection.map((service) => (
 
@@ -76,7 +79,7 @@ export const CreateReferrals = () => {
                             ))}
                         </div>
                     </div>
-                    <button className='btn btn-secondary' style={{ marginTop: '35px' }} onClick={handleSubmit}>Виписати</button>
+                    <button className='btn btn-secondary' style={{ marginTop: '35px' }} onClick={handleSubmit}>{t('sendSth')}</button>
                 </div>
             </div>
         </>
