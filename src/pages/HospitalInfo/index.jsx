@@ -191,7 +191,7 @@ export default function HospitalInfo() {
 
 
                         </Tab>
-                        <Tab eventKey={'services'} title={`${t('service')}`}>
+                        <Tab eventKey={'services'} title={`${t('services')}`}>
                             <Table striped bordered hover style={{ marginTop: '25px' }}>
                                 <thead>
                                     <tr>

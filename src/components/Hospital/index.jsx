@@ -2,6 +2,7 @@ import React from 'react';
 import { Spinner } from "react-bootstrap";
 import HospitalStyles from './Hospital.module.scss';
 import { Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 export default function Hospital({
     _id,
@@ -13,6 +14,7 @@ export default function Hospital({
     isFullContent,
     isLoading
 }) {
+    const { t } = useTranslation();
     return (
         <>
             {isLoading ?
@@ -28,7 +30,7 @@ export default function Hospital({
                             <>
                                 <div className={`breadcr`}>
                                     <Link to={'/'}>
-                                        Головна
+                                        {t('home')}
                                     </Link>
                                     <span> / </span><span > {title}</span>
                                 </div>

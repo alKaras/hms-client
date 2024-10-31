@@ -203,7 +203,7 @@ export const ActionDoctors = ({ isEdit }) => {
                             </Button>
                         ) : (
                             <Button variant="primary" type="submit">
-                                {isEdit ? t('save') : ('addDoc')}
+                                {isEdit ? t('save') : t('addDoc')}
                             </Button>
                         )}
                     </div>

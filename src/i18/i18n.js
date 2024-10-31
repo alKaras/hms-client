@@ -133,6 +133,7 @@ i18n
 
                     //Profile
                     verificationEmail: "Verification email is sent",
+                    verification: "Verification",
                     error: "An error occurred",
                     verifiedAt: "Verified at",
                     sendVerificationMsg: "To confirm your account and access all the features of the site, you need to confirm your email. We have sent you an email (check your spam folder) If you still do not receive the letter, we will send it again",
@@ -143,7 +144,8 @@ i18n
                     selectServices: "Select services",
                     referralNum: "Referral code",
                     expdate: "Expiration date",
-                    assignedTo: "Assigned to"
+                    assignedTo: "Assigned to",
+                    unverified: "Unverified",
 
 
                 },
@@ -276,6 +278,8 @@ i18n
 
                     //Profile
                     verificationEmail: "Відправлено лист з підтвердженням",
+                    verification: "Верифікація",
+                    unverified: "Не верифікований",
                     error: "Сталася помилка",
                     verifiedAt: "Верифікований",
                     sendVerificationMsg: "Щоб підтвердити свій обліковий запис і отримати доступ до всіх функцій сайту, вам необхідно підтвердити свою електронну пошту. Ми надіслали вам листа (перевірте папку «Спам») Якщо ви все ще не отримали листа, ми надішлемо його ще раз",

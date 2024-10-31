@@ -31,10 +31,12 @@
 
   .roleBadge {
     margin-top: 20px;
-    padding: 10px 30px;
+    padding: 10px;
     border: 1px solid #ebebeb;
     box-shadow: 1px 0 1px #ebebeb;
     border-radius: 10px;
+    max-width: 100px;
+    text-align: center;
   }
 
   ul {
@@ -139,3 +141,11 @@
   }
 }
 
+
+.unverifiedBtn {
+  padding: 10px;
+  outline: 1px solid white;
+  border-radius: 25px;
+  color: black;
+  background: rgb(255, 64, 64);
+}

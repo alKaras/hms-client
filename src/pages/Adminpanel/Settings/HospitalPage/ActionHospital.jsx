@@ -112,7 +112,7 @@ export default function ActionHospital({ isEdit }) {
                             <></>
                         ) : (
                             <div className="d-flex flex-column">
-                                <label>Слаг</label>
+                                <label>{t('aliasPlaceholder')}</label>
                                 <input
                                     type="text"
                                     value={alias}
@@ -122,7 +122,7 @@ export default function ActionHospital({ isEdit }) {
                             </div>
                         )}
                         <div className="d-flex flex-column">
-                            <label>Адреса</label>
+                            <label>{t('address')}</label>
                             <input
                                 type="text"
                                 value={address}
@@ -131,7 +131,7 @@ export default function ActionHospital({ isEdit }) {
                             />
                         </div>
                         <div className="d-flex flex-column">
-                            <label>Пошта лікарні</label>
+                            <label>{t('email')}</label>
                             <input
                                 type="email"
                                 placeholder={t('email')}
@@ -140,7 +140,7 @@ export default function ActionHospital({ isEdit }) {
                             />
                         </div>
                         <div className="d-flex flex-column">
-                            <label>Телефон лікарні</label>
+                            <label>{t('phone')}</label>
                             <input
                                 type="text"
                                 value={hospitalPhone}
@@ -149,7 +149,7 @@ export default function ActionHospital({ isEdit }) {
                             />
                         </div>
                         <div className="d-flex flex-column">
-                            <label>Опис</label>
+                            <label>{t('description')}</label>
                             <input
                                 style={{ padding: '10px', border: '1px solid dodgerblue', resize: 'none' }}
                                 type="text"

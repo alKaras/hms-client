@@ -134,7 +134,14 @@ export default function UserProfile() {
 
                                     </div>
                                     <div className={UserProfileStyles.verificationStatus}>
-                                        {user.data.email_verified_at === null ? "Unverified" : (<> {t('verifiedAt')} <Moment format="DD/MM/YYYY HH:mm:ss">{user.data.email_verified_at}</Moment> </>)}
+                                        {user.data.email_verified_at === null ?
+                                            <>
+                                                <div className={UserProfileStyles.unverifiedBtn}>
+                                                    {t('unverified')}
+                                                </div>
+                                            </> :
+                                            (<> {t('verifiedAt')} <Moment format="DD/MM/YYYY HH:mm:ss">{user.data.email_verified_at}</Moment> </>)
+                                        }
                                     </div>
                                 </div>
                                 <form onSubmit={handleSubmit}>
@@ -179,7 +186,7 @@ export default function UserProfile() {
                                 <>
                                     <hr />
                                     <div className={UserProfileStyles.verificationBlock}>
-                                        <div className={UserProfileStyles.vTitle}>Верифікація</div>
+                                        <div className={UserProfileStyles.vTitle}>{t('verification')}</div>
                                         <p>{t('sendVerificationMsg')}</p>
                                         <Button disabled={isButtonDisabled} onClick={resendMailVerification}>{t('sendSth')}</Button>
 

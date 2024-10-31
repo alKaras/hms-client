@@ -192,7 +192,7 @@ export const ActionSlot = () => {
                         </LocalizationProvider>
                     </div>
                     <div className="d-flex flex-column">
-                        <label style={{ marginBottom: '5px' }}>Ціна (UAH)</label>
+                        <label style={{ marginBottom: '5px' }}>{t('price')} ({t('uah')})</label>
                         <input
                             type="number"
                             onWheel={(e) => e.target.blur()}

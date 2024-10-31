@@ -323,7 +323,7 @@ export default function HospitalPage({
                                     </div>
                                     <div>
                                         <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex justify-content-between align-items-center'>
-                                            <h2>Лікарі</h2>
+                                            <h2>{t('doctors')}</h2>
                                             <div>
                                                 <button className='btn' onClick={(e) => refreshDoctorsCollection(e)}><i className="fa-solid fa-arrows-rotate"></i></button>
                                                 <input type="file" id="fileDoctInput" accept='.xlsx' onChange={handleImportDoctorSubmit} style={{ display: 'none' }} />

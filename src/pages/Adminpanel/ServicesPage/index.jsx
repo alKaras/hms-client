@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
 import { fetchHospitalServices, fetchServicesByDoctorId } from '../../../api/httpApiClient';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const ServicesPage = ({ byDoctor, byHospital }) => {
 
@@ -44,19 +45,20 @@ const ServicesPage = ({ byDoctor, byHospital }) => {
         }
 
     }, [doctorId, byDoctor, byHospital, hospitalId]);
+    const { t } = useTranslation();
 
     return (
         <>
             <Header />
             <div className={ServicesPageStyles.root}>
-                <h2 style={{ fontSize: '24px', marginBottom: '20px' }}>Ваші послуги</h2>
+                <h2 style={{ fontSize: '24px', marginBottom: '20px' }}>{t('services')}</h2>
                 <Table bordered>
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Title</th>
-                            <th>Department</th>
-                            <th>TimeSlots</th>
+                            <th>{t('name')}</th>
+                            <th>{t('department')}</th>
+                            <th>{t('timeslots')}</th>
                         </tr>
                     </thead>
                     <tbody>

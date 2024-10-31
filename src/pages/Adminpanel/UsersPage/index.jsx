@@ -55,7 +55,7 @@ export default function UsersPage({
                     <div className={usersPageStyles.root}>
                         {!isDoctor && (
                             <div className={usersPageStyles.header}>
-                                <LinkContainer style={{ color: "white" }} to={'/adminpanel/user/create'}><Button className='btn btn-secondary'>Create User</Button></LinkContainer>
+                                <LinkContainer style={{ color: "white" }} to={'/adminpanel/user/create'}><Button className='btn btn-secondary'>{t('create')}</Button></LinkContainer>
                             </div>
                         )}
 
