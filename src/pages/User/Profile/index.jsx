@@ -4,11 +4,11 @@ import UserProfileStyles from './UserProfile.module.scss';
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { infoAboutUser, selectIsLogged, selectStatus } from "../../../redux/slices/authSlice";
-import Moment from "react-moment";
 import { LinkContainer } from 'react-router-bootstrap';
 import { editUser, fetchFirstThreeReferrals, getOrderByFilter, resendVerification } from '../../../api/httpApiClient';
 import { OrderFiltersEnum } from '../../../utils/enums/OrderFiltersEnum';
 import { useTranslation } from 'react-i18next'
+import { format } from 'date-fns';
 
 export default function UserProfile() {
     const isLogged = useSelector(selectIsLogged);
@@ -140,7 +140,7 @@ export default function UserProfile() {
                                                     {t('unverified')}
                                                 </div>
                                             </> :
-                                            (<> {t('verifiedAt')} <Moment format="DD/MM/YYYY HH:mm:ss">{user.data.email_verified_at}</Moment> </>)
+                                            (<> {t('verifiedAt')} {format(new Date(user.data.email_verified_at), "dd/MM/yyyy HH:mm:ss")} </>)
                                         }
                                     </div>
                                 </div>

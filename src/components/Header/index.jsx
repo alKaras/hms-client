@@ -65,6 +65,9 @@ export default function Header() {
                                     <LinkContainer to={'/adminpanel/users'}>
                                         <Button className={headerStyles['btn-header']}>{t('patients')}</Button>
                                     </LinkContainer>
+                                    <LinkContainer to={`/adminpanel/${hospitalId}/operations`}>
+                                        <Button className={headerStyles['btn-header']}>{t('operations')}</Button>
+                                    </LinkContainer>
                                     {/* <LinkContainer to={'/adminpanel/reports'}>
                                         <Button className={headerStyles['btn-header']}>Звіти</Button>
                                     </LinkContainer> */}
@@ -140,6 +143,9 @@ export default function Header() {
                                         <Button className={`${headerStyles['btn-header']} ${location.pathname === '/adminpanel/users' ? headerStyles['visited'] : ''}`}>
                                             {t('patients')}
                                         </Button>
+                                    </LinkContainer>
+                                    <LinkContainer to={'/adminpanel/operations'}>
+                                        <Button className={headerStyles['btn-header']}>{t('operations')}</Button>
                                     </LinkContainer>
                                     <LinkContainer to={'/adminpanel/order-history'}>
                                         <Button className={headerStyles['btn-header']}>{t('orderHistory')}</Button>

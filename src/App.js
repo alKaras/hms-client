@@ -29,6 +29,7 @@ import { CancelPage } from "./pages/Checkout/CancelPage";
 import { SuccessPage } from "./pages/Checkout/SuccessPage";
 import { CreateReferrals } from "./pages/User/Referrals/CreateReferrals";
 import { UserServices } from "./pages/User/Services";
+import { OrderOperations } from "./pages/Adminpanel/Settings/OrderOperations";
 
 function App() {
     const dispatch = useDispatch();
@@ -106,6 +107,7 @@ function App() {
 
                 {/* <Route path='/adminpanel/settings/departments' element={<Departments />} /> */}
                 <Route path={`/adminpanel/${isDoctor ? 'doctor' : 'hospital'}/order-history`} element={<OrderHistory byDoctor={isDoctor} byHospital={isManager} />} />
+                <Route path={`/adminpanel${isManager ? '/:_id' : ''}/operations`} element={<OrderOperations />} />
              </Routes>
         </div>
     );

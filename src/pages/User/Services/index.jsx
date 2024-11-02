@@ -6,29 +6,37 @@ import { downloadPdfTimeslot, getOrderByFilter } from '../../../api/httpApiClien
 import { OrderFiltersEnum } from '../../../utils/enums/OrderFiltersEnum';
 import { Accordion, Button, Card } from 'react-bootstrap';
 import { ServiceToggler } from '../../../components/ServiceToggler';
-import Moment from 'react-moment';
 import { useTranslation } from 'react-i18next';
+import Pagination from '../../../components/Pagination';
+import { format } from 'date-fns';
 
 export const UserServices = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [userServiceData, setUserServiceData] = useState([]);
     const { _id } = useParams();
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(10);
+
     useEffect(() => {
         getOrderByFilter({
             filter: OrderFiltersEnum.ORDERS_BY_USER,
-            user_id: _id
+            user_id: _id,
+            per_page: 10,
+            page: currentPage,
+            onlySold: 1
         })
             .then((resp) => {
                 setIsLoaded(true);
                 //Output only sold orders
-                let tempUserData = resp.data.data.filter((item) => item.order.status === 2);
-                setUserServiceData(tempUserData);
+                setUserServiceData(resp.data.data);
+                setTotalPages(resp.data.meta.last_page);
+                setCurrentPage(resp.data.meta.current_page);
             })
             .catch((err) => {
                 console.error(err.response);
             })
-    }, [])
+    }, [currentPage])
 
     const downloadItem = async (e, id) => {
         e.preventDefault();
@@ -54,6 +62,11 @@ export const UserServices = () => {
     }
 
     const { t } = useTranslation();
+    const handlePageChange = async (page) => {
+        if (page !== currentPage) {
+            setCurrentPage(page);
+        }
+    }
 
     return (
         <>
@@ -89,7 +102,8 @@ export const UserServices = () => {
                                                 </div>
                                                 <div className={`d-flex justify-content-between align-items-center`}>
                                                     <div>
-                                                        <div style={{ marginBottom: '10px' }}>{t('startTime')}: <Moment format='DD.MM.YYYY HH:mm:ss'>{serviceData.timeslot.start_time}</Moment></div>
+                                                        <div style={{ marginBottom: '10px' }}>{t('startTime')}:
+                                                            {format(new Date(serviceData.timeslot.start_time), 'dd.MM.yyyy HH:mm:ss')}</div>
                                                         <div>{t('price')}: {serviceData.timeslot.price}</div>
                                                     </div>
                                                     {serviceData.is_canceled === 0 ? (
@@ -105,6 +119,13 @@ export const UserServices = () => {
                             </Card>
                         </Accordion>
                     )) : (<></>)}
+                    <Pagination
+
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+
+                    />
                 </div>
 
 

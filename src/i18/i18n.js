@@ -105,6 +105,10 @@ i18n
                     pending: "Pending",
                     cancel: "Canceled",
 
+                    reserved: "RESERVED",
+                    free: "FREE",
+                    sold: "SOLD",
+
                     //Paid order page
                     successmsg1: "Thank you for your payment! Your booking has been confirmed",
                     successmsg2: "Your payment was successful, and we are pleased to inform you that the vouchers for the selected services have been successfully booked. Our specialists will be ready to see you at the appointed time. You can view the booking details in your personal account.",
@@ -147,13 +151,18 @@ i18n
                     assignedTo: "Assigned to",
                     unverified: "Unverified",
 
+                    operations: "Operations",
+                    totalSum: "Total",
+                    dateSold: "Sold date",
+                    reserveExp: "Reserve expired at",
+                    client: "Client name",
 
                 },
             },
             uk: {
                 translation: {
                     login: "Увійти",
-                    eng: "Англійська",
+                    eng: "English",
                     ua: "Українська",
                     patients: "Пацієнти",
                     settings: "Налаштування",
@@ -250,6 +259,10 @@ i18n
                     pending: "В очікуванні оплати",
                     cancel: "Скасовано",
 
+                    reserved: "В резерві",
+                    free: "Вільний",
+                    sold: "Проданий",
+
                     //Paid order page
                     successmsg1: "Дякуємо за оплату! Ваше бронювання підтверджено",
                     successmsg2: "Ваша оплата пройшла успішно, і ми раді повідомити вам, що ваучери на обрані послуги були успішно заброньовані. Наші фахівці будуть готові зустрітися з вами в призначений час. Деталі бронювання ви можете переглянути в особистому кабінеті.",
@@ -290,7 +303,14 @@ i18n
                     selectServices: "Виберіть послуги",
                     referralNum: "Направлення",
                     expdate: "Строк придатності",
-                    assignedTo: "Призначено"
+                    assignedTo: "Призначено",
+
+                    //Operations
+                    operations: "Операції",
+                    totalSum: "Загальна сума",
+                    dateSold: "Дата продажу",
+                    reserveExp: "Закінчення резерву",
+                    client: "Ім'я клієнта",
                 },
             },
         },

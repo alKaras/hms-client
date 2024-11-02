@@ -2,15 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header';
 import ReferralStyle from './Referrals.module.scss';
 import { Button, Modal, Spinner, Table } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-// import { fetchReferralById, fetchUserReferrals } from '../../../redux/slices/userReferrals';
-import Moment from 'react-moment';
 import { fetchReferralById, fetchUserReferrals } from '../../../api/httpApiClient';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 export default function Referrals() {
-    const dispatch = useDispatch();
 
     const [isLoaded, setLoaded] = useState(false);
     const [userReferrals, setReferrals] = useState([]);
@@ -29,10 +25,6 @@ export default function Referrals() {
                 console.log(err);
             });
     }, []);
-
-    // const fetchById = async (referral_id) => {
-    //     dispatch(fetchReferralById(referral_id));
-    // }
 
     useEffect(() => {
         if (referralId !== null) {
@@ -74,7 +66,7 @@ export default function Referrals() {
                             {userReferrals.map((referral) => (
                                 <tr>
                                     <td>{referral.referral_code}</td>
-                                    <td><Moment format="DD/MM/YYYY HH:mm:ss">{referral.expired_at}</Moment></td>
+                                    <td>{format(new Date(referral.expired_at), "dd/MM/yyyy HH:mm:ss")}</td>
                                     <td>
                                         <Button className='btn btn-primary' onClick={() => handleShow(referral.referral_id)}>{t('seeMore')}</Button>
                                     </td>
@@ -108,14 +100,14 @@ export default function Referrals() {
 
                                 {/* <div>Направлення призначене {referralData.decoded_data.user.name} {referralData.decoded_data.user.surname}</div> */}
                                 <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>{t('assignedTo')}: <span style={{ fontWeight: 'normal' }}>{referralData.decoded_data.user.name} {referralData.decoded_data.user.surname}</span></div>
-                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{t('expdate')}: <span style={{ fontWeight: 'normal' }}><Moment format="DD/MM/YYYY HH:mm:ss">{referral.expired_at}</Moment></span></div>
+                                <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '5px' }}>{t('expdate')}: <span style={{ fontWeight: 'normal' }}>{format(new Date(referral.expired_at), "dd/MM/yyyy HH:mm:ss")}</span></div>
                             </>
                         ) : (
                             <Spinner animation="border" variant="primary" />
                         )}
                     </Modal.Body>
                 </Modal>
-            </div>
+            </div >
         </>
     );
 }

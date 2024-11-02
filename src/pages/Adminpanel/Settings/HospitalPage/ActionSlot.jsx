@@ -8,7 +8,6 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TextField } from '@mui/material';
 import { Button, Spinner, Table } from 'react-bootstrap';
 import { differenceInHours, format } from 'date-fns';
-import Moment from 'react-moment';
 import { useTranslation } from 'react-i18next';
 
 export const ActionSlot = () => {
@@ -218,7 +217,7 @@ export const ActionSlot = () => {
                                         setSelectedDate(newDate)
                                     }
                                 }}
-                                minDate={new Date()}
+                                // minDate={new Date()}
                                 format='dd.MM.yyyy'
                                 renderInput={(params) => <TextField {...params} fullWidth margin='normal' />}
 
@@ -235,6 +234,7 @@ export const ActionSlot = () => {
                                     <th>{t('startTime')}</th>
                                     <th>{t('endTime')}</th>
                                     <th>{t('price')}</th>
+                                    <th>{t('status')}</th>
                                     <th>{t('actions')}</th>
                                 </tr>
                             </thead>
@@ -245,8 +245,8 @@ export const ActionSlot = () => {
                                             <td>{slot.id}</td>
                                             <td>{slot.service.name}</td>
                                             <td>{slot.doctor.name + " " + slot.doctor.surname} - {slot.doctor.email}</td>
-                                            <td><Moment format='DD.MM.YYYY HH:mm'>{slot.start_time}</Moment></td>
-                                            <td><Moment format='DD.MM.YYYY HH:mm'>{slot.end_time}</Moment></td>
+                                            <td>{format(new Date(slot.start_time), 'dd.MM.yyyy HH:mm')}</td>
+                                            <td>{format(new Date(slot.end_time), 'dd.MM.yyyy HH:mm')}</td>
                                             <td>
                                                 <input
                                                     type="number"
@@ -257,9 +257,14 @@ export const ActionSlot = () => {
                                                     disabled
                                                 />
                                             </td>
+                                            <td>{slot.state === 2 ? t('sold') : slot.state === 1 ? t('free') : t('reserved')}</td>
                                             <td>
-                                                <Button style={{ marginRight: '15px' }} className='btn btn-warning'><i className="fa-solid fa-pen-to-square"></i></Button>
-                                                <Button className='btn btn-danger' onClick={(e) => deleteSlotById(slot.id, e)}><i className="fa-solid fa-delete-left"></i></Button>
+                                                {(slot.state === 1) && (
+                                                    <div>
+                                                        <Button style={{ marginRight: '15px' }} className='btn btn-warning'><i className="fa-solid fa-pen-to-square"></i></Button>
+                                                        <Button className='btn btn-danger' onClick={(e) => deleteSlotById(slot.id, e)}><i className="fa-solid fa-delete-left"></i></Button>
+                                                    </div>
+                                                )}
                                             </td>
                                         </tr>
 

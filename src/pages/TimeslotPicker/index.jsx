@@ -9,7 +9,6 @@ import { useParams } from 'react-router-dom';
 import { getTimeSlotsByFilter, setItemToCart } from '../../api/httpApiClient';
 import { Button } from 'react-bootstrap';
 import format from 'date-fns/format';
-import Moment from 'react-moment';
 import { useTranslation } from 'react-i18next';
 
 export const TimeSlotPicker = ({
@@ -43,6 +42,7 @@ export const TimeSlotPicker = ({
     useEffect(() => {
         let params = {
             date: format(selectedDate, 'yyyy-MM-dd'),
+            freeOnly: 1,
         }
 
         if (isDoctorPage) {
@@ -113,12 +113,8 @@ export const TimeSlotPicker = ({
                                                 {slot.service.name}
                                             </div>
                                             <div className={TimeSlotStyles.slotTime}>
-                                                <Moment format='HH:mm'>
-                                                    {slot.start_time}
-                                                </Moment> <span> - </span>
-                                                <Moment format='HH:mm'>
-                                                    {slot.end_time}
-                                                </Moment>
+                                                {format(new Date(slot.start_time), 'HH:mm')} <span> - </span>
+                                                {format(new Date(slot.end_time), 'HH:mm')}
                                             </div>
 
                                             <div className={TimeSlotStyles.slotPrice}>{slot.price} {t('uah')}</div>

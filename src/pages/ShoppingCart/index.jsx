@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import CartStyles from './shoppingCart.module.scss';
 import { Badge, Button, Col, Row, Spinner, Table } from 'react-bootstrap';
-import Moment from 'react-moment';
 import { checkout, getShoppingCart, removeItemFromCart, resetShoppingCart } from '../../api/httpApiClient';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 export const ShoppingCart = () => {
     const [cartData, setCartData] = useState([]);
@@ -77,7 +77,7 @@ export const ShoppingCart = () => {
         checkout()
             .then((resp) => {
                 console.log(resp.data);
-                window.location.href = resp.data.session_url;
+                window.location.href = resp.data.session_url || resp.data.success_url;
             })
             .catch((err) => {
                 console.error(err)
@@ -103,7 +103,7 @@ export const ShoppingCart = () => {
                                         <li className={CartStyles.itemContent}>
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <div style={{ fontWeight: 'bold', fontSize: '16px' }}>[{item.service.service_id}] {item.service.name}</div>
-                                                <div style={{ color: 'gray' }}><Moment format='DD.MM.YYYY HH:mm'>{item.service.start_time}</Moment></div>
+                                                <div style={{ color: 'gray' }}>{format(new Date(item.service.start_time), 'dd.MM.yyyy HH:mm')}</div>
                                             </div>
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <div style={{ fontSize: '15px' }}>{item.service.department}</div>

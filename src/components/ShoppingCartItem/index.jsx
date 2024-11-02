@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import CartItemStyles from './ShoppingCartItem.module.scss';
-import Moment from 'react-moment';
 import { downloadPdfTimeslot, getShoppingCart, removeItemFromCart } from '../../api/httpApiClient';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 export const ShoppingCartItem = ({
     service_id,
@@ -59,7 +59,7 @@ export const ShoppingCartItem = ({
             <li className={CartItemStyles.root}>
                 <div className='d-flex justify-content-between align-items-center'>
                     <div style={{ fontWeight: 'bold', fontSize: '16px' }}>[{service_id}] {service_name}</div>
-                    <div style={{ color: 'gray' }}><Moment format='DD.MM.YYYY HH:mm'>{start_time}</Moment></div>
+                    <div style={{ color: 'gray' }}>{format(new Date(start_time), 'dd.MM.yyyy HH:mm')}</div>
                 </div>
                 <div className='d-flex justify-content-between align-items-center'>
                     <div style={{ fontSize: '15px' }}>{department}</div>
