@@ -290,6 +290,12 @@ export const getOrderByFilter = async(params) => {
 }
 
 /**
+ * Send confirmation mail by orderId  
+ */
+export const sendConfirmationEmail = async(params) => {
+    return await axios.post(`order/sendconfirmation`, params);
+}
+/**
  * Download pdf files for timeslot
 */
 

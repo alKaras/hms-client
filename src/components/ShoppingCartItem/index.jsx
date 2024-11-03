@@ -63,7 +63,7 @@ export const ShoppingCartItem = ({
                 </div>
                 <div className='d-flex justify-content-between align-items-center'>
                     <div style={{ fontSize: '15px' }}>{department}</div>
-                    <div style={{ fontWeight: '600', fontSize: '15px' }}>{price} UAH</div>
+                    <div style={{ fontWeight: '600', fontSize: '15px' }}>{price} {t('uah')}</div>
                 </div>
                 {canDownload ? (<button onClick={(e) => downloadItem(e, id)}><i class="fa-solid fa-download"></i></button>) : (<></>)}
                 {canRemove ? (<button onClick={(e) => removeItem(e, key)}>{t('delete')}</button>) : (<></>)}

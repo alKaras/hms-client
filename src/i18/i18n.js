@@ -153,10 +153,18 @@ i18n
 
                     operations: "Operations",
                     totalSum: "Total",
+                    subtotal: "Subtotal",
                     dateSold: "Sold date",
                     reserveExp: "Reserve expired at",
                     client: "Client name",
 
+                    dateCreated: "Created at",
+                    dateConfirmed: "Confirmed at",
+
+                    dateCancel: "Canceled at",
+                    reason: "Cancel reason",
+                    sendSlots: "Send timeslots to email",
+                    cancelOrder: "Cancel order",
                 },
             },
             uk: {
@@ -309,8 +317,16 @@ i18n
                     operations: "Операції",
                     totalSum: "Загальна сума",
                     dateSold: "Дата продажу",
+                    dateCreated: "Дата створення",
+                    dateConfirmed: "Дата підтвердження",
                     reserveExp: "Закінчення резерву",
                     client: "Ім'я клієнта",
+                    subtotal: "Сума послуг",
+                    dateCancel: "Дата скасування",
+                    reason: "Причина скасування",
+
+                    sendSlots: "Відправити талони на пошту",
+                    cancelOrder: "Скасувати замовлення",
                 },
             },
         },

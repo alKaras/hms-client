@@ -21,3 +21,10 @@
         cursor: pointer;
     }
 }
+
+.orderInfoRoot {
+    padding: 20px 30px 10px;
+    display: flex !important;
+    justify-content: space-between;
+    gap: 20px;
+}
