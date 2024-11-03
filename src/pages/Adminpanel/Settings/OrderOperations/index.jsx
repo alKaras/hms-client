@@ -9,6 +9,7 @@ import { Badge, Button, Modal, Spinner, Tab, Table, Tabs } from 'react-bootstrap
 import Pagination from '../../../../components/Pagination';
 import { format } from 'date-fns';
 import { ShoppingCartItem } from '../../../../components/ShoppingCartItem';
+import FeedFilter from '../../../../components/FeedFilter';
 
 export const OrderOperations = () => {
     const { _id } = useParams() ?? null;
@@ -25,6 +26,27 @@ export const OrderOperations = () => {
     const [specificOrderId, setSpecificOrderId] = useState(null);
     const [isSpecificLoaded, setSpecificLoaded] = useState(false);
     const [show, setShow] = useState(false);
+    const [filter, setFilter] = useState([]);
+
+    const fetchOrdersFeed = async (page, filters = []) => {
+        setFilter(filters);
+        getOrderByFilter({
+            filter: OrderFiltersEnum.ORDERS_OPERATIONS,
+            hospital_id: _id,
+            per_page: 10,
+            page: currentPage,
+            criteriaCondition: filters
+        })
+            .then((resp) => {
+                setIsLoaded(true);
+                setOrderFeedData(resp.data.data);
+                setCurrentPage(resp.data.meta.current_page);
+                setTotalPages(resp.data.meta.last_page);
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+    }
 
     const handleClose = () => {
         setShow(false);
@@ -53,21 +75,9 @@ export const OrderOperations = () => {
     }
 
     useEffect(() => {
-        getOrderByFilter({
-            filter: OrderFiltersEnum.ORDERS_OPERATIONS,
-            hospital_id: _id,
-            per_page: 10,
-            page: currentPage
-        })
-            .then((resp) => {
-                setIsLoaded(true);
-                setOrderFeedData(resp.data.data);
-                setCurrentPage(resp.data.meta.current_page);
-                setTotalPages(resp.data.meta.last_page);
-            })
-            .catch((err) => {
-                console.error(err);
-            })
+        fetchOrdersFeed(currentPage, filter);
+        console.log(filter);
+
     }, [currentPage])
 
     const handlePageChange = async (page) => {
@@ -118,7 +128,13 @@ export const OrderOperations = () => {
             <div className={OrderOperationsStyles.root}>
                 <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '25px' }}>{t('operations')}</h1>
                 <div className={OrderOperationsStyles.filterDiv}>
-
+                    <FeedFilter
+                        hospitalId={_id}
+                        filter={OrderFiltersEnum.ORDERS_OPERATIONS}
+                        perPage={10}
+                        page={currentPage}
+                        onFetchData={fetchOrdersFeed}
+                    />
                 </div>
                 {isLoaded ? (
                     <div>

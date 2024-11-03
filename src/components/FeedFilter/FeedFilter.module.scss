@@ -1,0 +1,30 @@
+.root {
+    padding: 10px 20px;
+    margin-bottom: 15px;
+
+    .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    label {
+        margin-bottom: 5px;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    
+    .inputText {
+        padding: 10px;
+        border: 1px solid dodgerblue;
+    }
+
+    select {
+        padding: 10px;
+        border: 1px solid dodgerblue;
+    }
+
+    
+
+    
+}
