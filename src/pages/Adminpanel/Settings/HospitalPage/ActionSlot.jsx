@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 export const ActionSlot = () => {
     const { _id } = useParams();
+    const { hospitalId } = useParams();
 
     const [doctorId, setDoctorId] = useState(null);
     let currentDate = new Date();
@@ -33,7 +34,8 @@ export const ActionSlot = () => {
 
     useEffect(() => {
         fetchDoctorByService({
-            service_id: _id
+            service_id: _id,
+            hospital_id: hospitalId,
         })
             .then((res) => {
                 console.log(res.data);
@@ -46,6 +48,7 @@ export const ActionSlot = () => {
 
         getTimeSlotsByFilter({
             service_id: _id,
+            hospital_id: hospitalId,
             date: format(selectedDate, 'yyyy-MM-dd'),
         })
             .then((resp) => {

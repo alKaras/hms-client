@@ -19,7 +19,7 @@ export const TimeSlotPicker = ({
     const [isSlotLoaded, setisSlotLoaded] = useState(false);
     const [infoSlotCollection, setinfoSlotCollection] = useState([]);
 
-    const { _id } = useParams();
+    const { _id, hospitalId } = useParams();
 
     const pickTimeSlot = async (e, id) => {
         e.preventDefault();
@@ -43,6 +43,7 @@ export const TimeSlotPicker = ({
         let params = {
             date: format(selectedDate, 'yyyy-MM-dd'),
             freeOnly: 1,
+            hospital_id: hospitalId,
         }
 
         if (isDoctorPage) {
@@ -58,7 +59,7 @@ export const TimeSlotPicker = ({
                 setisSlotLoaded(true);
                 let resultData = res.data.data;
                 if (isDoctorPage) {
-                    let doctorsRes = resultData.filter((res) => res.service.name === 'consulting')
+                    let doctorsRes = resultData.filter((res) => res.service.name.includes('Консультація'))
                     // let doctorsRes = resultData.filter((res) => res.service.name.includes('Консультація'));
                     setinfoSlotCollection(doctorsRes);
                 } else {

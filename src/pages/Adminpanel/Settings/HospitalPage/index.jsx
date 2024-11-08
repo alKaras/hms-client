@@ -281,6 +281,14 @@ export default function HospitalPage({
                                                 }}>
                                                     <Button className='btn btn-secondary' >{t('create')}</Button>
                                                 </LinkContainer>
+                                                <LinkContainer style={{ marginLeft: '15px', color: 'white' }} to={{
+                                                    pathname: `/adminpanel/hospital/department/choose`,
+                                                    search: `?hospital=${_id}`
+                                                }}>
+                                                    <Button className='btn btn-info'>
+                                                        Вибрати
+                                                    </Button>
+                                                </LinkContainer>
                                             </div>
                                         </div>
                                         {isDepsLoaded ? (
@@ -469,7 +477,7 @@ export default function HospitalPage({
                                                                                 <i className="fa-solid fa-pen"></i>
                                                                             </Button>
                                                                         </LinkContainer>
-                                                                        <LinkContainer style={{ color: 'white', marginLeft: '15px' }} to={`/adminpanel/hospital/service/${obj.id}/slots`}>
+                                                                        <LinkContainer style={{ color: 'white', marginLeft: '15px' }} to={`/adminpanel/hospital/${_id}/service/${obj.id}/slots`}>
                                                                             <Button style={{ textAlign: 'center' }} className='btn btn-secondary'>
                                                                                 <i className="fa-solid fa-clock"></i>
                                                                             </Button>

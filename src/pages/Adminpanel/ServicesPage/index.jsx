@@ -69,7 +69,10 @@ const ServicesPage = ({ byDoctor, byHospital }) => {
                                 <td>{item.service_name}</td>
                                 <td>{item.department}</td>
                                 <td style={{ width: '100px', textAlign: 'center' }}>
-                                    <LinkContainer to={byDoctor ? `/hospital/service/${item.id}/timeslots` : `/adminpanel/hospital/service/${item.id}/slots`}>
+                                    <LinkContainer to={byDoctor ?
+                                        `/hospital/${hospitalId}/service/${item.id}/timeslots`
+                                        : `/adminpanel/hospital/${hospitalId}/service/${item.id}/slots`
+                                    }>
                                         <button className='btn btn-secondary'><i class="fa-solid fa-clock"></i></button>
                                     </LinkContainer>
                                 </td>

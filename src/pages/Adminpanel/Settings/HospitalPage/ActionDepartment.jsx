@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../../../components/Header'
 import ActionHospitalStyles from './HospitalPage.module.scss';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { createDepartment, editDepartment, fetchDepartment } from '../../../../api/httpApiClient';
+import { attachExistedDepartments, createDepartment, editDepartment, fetchDepartment } from '../../../../api/httpApiClient';
 import { useTranslation } from 'react-i18next';
 
 export const ActionDepartment = ({ isEdit }) => {
@@ -21,7 +21,9 @@ export const ActionDepartment = ({ isEdit }) => {
     const [title, setTitle] = useState('');
     const [description, setDesc] = useState('');
 
+
     useEffect(() => {
+
         if (isEdit) {
             fetchDepartment(_id)
                 .then((resp) => {
@@ -91,6 +93,7 @@ export const ActionDepartment = ({ isEdit }) => {
         }
     }
     const { t } = useTranslation();
+
     return (
         <>
             <Header />

@@ -207,7 +207,7 @@ export default function HospitalInfo() {
                                             <td>{service.service_name}</td>
                                             <td>{service.department}</td>
                                             {isLogged && user.data.email_verified_at && (<td>
-                                                <LinkContainer to={`/hospital/service/${service.id}/timeslots`}>
+                                                <LinkContainer to={`/hospital/${id}/service/${service.id}/timeslots`}>
                                                     <button className={"btn btn-secondary"}><i className="fa-solid fa-circle-plus"></i></button>
                                                 </LinkContainer>
                                             </td>)}

@@ -81,6 +81,14 @@ export const fetchHospitalServices = async (params) => {
     return await axios.post('hospital/fetch/services', params);
 }
 
+export const attachExistedDepartments = async(params) => {
+    return await axios.post(`hospital/department/attach`, params);
+}
+
+export const fetchUnassignedDepartments = async(params) => {
+    return await axios.post(`hospital/department/list/unassigned`, params);
+}
+
 //Departments route controller
 export const fetchDepartments = async () => {
     return await axios.get('department/fetch');

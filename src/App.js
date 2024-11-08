@@ -30,6 +30,7 @@ import { SuccessPage } from "./pages/Checkout/SuccessPage";
 import { CreateReferrals } from "./pages/User/Referrals/CreateReferrals";
 import { UserServices } from "./pages/User/Services";
 import { OrderOperations } from "./pages/Adminpanel/Settings/OrderOperations";
+import { ChooseExistDepartment } from "./pages/Adminpanel/Settings/HospitalPage/ChooseExistDepartment";
 
 function App() {
     const dispatch = useDispatch();
@@ -90,6 +91,7 @@ function App() {
                 {/* Department routes */}
                 <Route path='/adminpanel/hospital/department/create' element={<ActionDepartment isEdit={false} />} />
                 <Route path='/adminpanel/hospital/department/:_id/edit' element={<ActionDepartment isEdit={true} />} />
+                <Route path='/adminpanel/hospital/department/choose' element={<ChooseExistDepartment />} />
 
                 {/* Doctor routes */}
                 <Route path='/adminpanel/hospital/doctor/create' element={<ActionDoctors isEdit={false} />} />
@@ -101,9 +103,9 @@ function App() {
                 <Route path='/adminpanel/hospital/service/create' element={<ActionServices />} />
 
                 {/* Timeslot routes */}
-                <Route path='/hospital/doctor/:_id/timeslots' element={<TimeSlotPicker isDoctorPage={true} />} />
-                <Route path='/hospital/service/:_id/timeslots' element={<TimeSlotPicker isServicePage={true} />} />
-                <Route path='/adminpanel/hospital/service/:_id/slots' element={<ActionSlot />} />
+                <Route path='/hospital/:hospitalId/doctor/:_id/timeslots' element={<TimeSlotPicker isDoctorPage={true} />} />
+                <Route path='/hospital/:hospitalId/service/:_id/timeslots' element={<TimeSlotPicker isServicePage={true} />} />
+                <Route path='/adminpanel/hospital/:hospitalId/service/:_id/slots' element={<ActionSlot />} />
 
                 {/* <Route path='/adminpanel/settings/departments' element={<Departments />} /> */}
                 <Route path={`/adminpanel/${isDoctor ? 'doctor' : 'hospital'}/order-history`} element={<OrderHistory byDoctor={isDoctor} byHospital={isManager} />} />

@@ -93,6 +93,7 @@ export const ActionDoctors = ({ isEdit }) => {
                 createDoctor({
                     ...formData,
                     departments: selectedDepartments,
+                    hospital_id: hospitalId
                 }).then((resp) => {
                     setSuccess('Doctor created successfully');
                     alert('Doctor created successfully');
