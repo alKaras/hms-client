@@ -14,6 +14,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../redux/slices/authSlice';
 import { useTranslation } from 'react-i18next';
+import Pagination from '../../components/Pagination';
 
 export default function HospitalInfo() {
     const [departments, setDepartments] = useState([]);
@@ -40,6 +41,9 @@ export default function HospitalInfo() {
     const [isCreated, setIsCreated] = useState(false);
     const [isDisabled, setDisabled] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(10);
+
     useEffect(() => {
         fetchHospital(id)
             .then((data) => {
@@ -47,20 +51,26 @@ export default function HospitalInfo() {
                 setIsLoaded(true);
             })
             .catch((err) => setIsLoaded(false));
-        fetchHospitalServices({
-            hospital_id: id
-        })
-            .then((resp) => {
-                setServiceLoaded(true);
-                setServiceCollection(resp.data.services)
-            })
-            .catch((err) => {
-                console.error(err);
-            })
 
         fetchReviews(id);
 
     }, [id]);
+
+    useEffect(() => {
+        fetchHospitalServices({
+            hospital_id: id,
+            page: currentPage,
+        })
+            .then((resp) => {
+                setServiceLoaded(true);
+                setServiceCollection(resp.data.services)
+                setTotalPages(resp.data.meta.last_page);
+                setCurrentPage(resp.data.meta.current_page);
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+    }, [currentPage])
 
     const fetchReviews = async (id) => {
         getHospitalReviews({
@@ -74,6 +84,13 @@ export default function HospitalInfo() {
             .catch((err) => {
                 console.error(err.response.message);
             })
+    }
+
+    const handlePageChange = (page) => {
+        if (page !== currentPage) {
+            setCurrentPage(page);
+            console.log("CurrentPage: " + currentPage);
+        }
     }
 
 
@@ -215,6 +232,11 @@ export default function HospitalInfo() {
                                     ))}
                                 </tbody>
                             </Table>
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
+                            />
                         </Tab>
                         <Tab eventKey={'reviews'} title={`${t('reviews')}`} className={HospitalInfoStyles.reviews}>
                             {/* <p className={HospitalInfoStyles.reviewsBadge}></p> */}
