@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import CartStyles from './shoppingCart.module.scss';
-import { Badge, Button, Col, Row, Spinner, Table } from 'react-bootstrap';
+import { Badge, Button, Col, Row } from 'react-bootstrap';
 import { checkout, getShoppingCart, removeItemFromCart, resetShoppingCart } from '../../api/httpApiClient';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
+import CountdownTimer from '../../components/CountdownTimer';
 
 export const ShoppingCart = () => {
     const [cartData, setCartData] = useState([]);
     const [isCartItemsLoaded, setCartItemsLoaded] = useState(false);
     const [totalPrice, setTotalPrice] = useState(0);
     const [shoppingCartId, setShopCartId] = useState(null);
+    const [cartCreatedAt, setCartCreated] = useState(
+        localStorage.getItem('cartCreatedAt') || null
+    );
     const navigate = useNavigate();
 
     const [isRemoved, setRemoved] = useState(false);
@@ -23,6 +27,8 @@ export const ShoppingCart = () => {
                 setCartData(resp.data.items);
                 setTotalPrice(getTotalPriceFromItems(resp.data.items));
                 setShopCartId(resp.data.id);
+                setCartCreated(resp.data.created_at);
+                localStorage.setItem('cartCreatedAt', resp.data.created_at);
             })
             .catch((err) => {
                 console.error(err);
@@ -61,7 +67,9 @@ export const ShoppingCart = () => {
     const cancelShopCart = async (e, id) => {
         e.preventDefault();
 
-        resetShoppingCart(id)
+        resetShoppingCart({
+            cart_id: id
+        })
             .then((resp) => {
                 alert(resp.data.message);
                 navigate('/');
@@ -78,10 +86,19 @@ export const ShoppingCart = () => {
             .then((resp) => {
                 console.log(resp.data);
                 window.location.href = resp.data.session_url || resp.data.success_url;
+                localStorage.removeItem('cartCreatedAt');
+                setCartCreated(null);
             })
             .catch((err) => {
                 console.error(err)
             });
+    }
+
+    const handleExpire = () => {
+        setCartData([]);
+        setCartCreated(null);
+        setTotalPrice(0);
+        localStorage.removeItem('cartCreatedAt');
     }
 
     const { t } = useTranslation();
@@ -90,8 +107,10 @@ export const ShoppingCart = () => {
         <>
             <Header />
             <div className={CartStyles.root}>
-                <h1 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '25px' }}>
-                    {t('cart')} <Badge style={{ marginLeft: '10px' }} bg="secondary">{isCartItemsLoaded ? (cartData.length > 0 ? cartData.length : 0) : 0}</Badge>
+                <h1 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '25px', display: 'flex', 'justifyContent': 'center', alignItems: 'center' }}>
+                    {t('cart')}
+                    <Badge style={{ marginLeft: '10px' }} bg="secondary">{isCartItemsLoaded ? (cartData.length > 0 ? cartData.length : 0) : 0}</Badge>
+                    {cartCreatedAt && <CountdownTimer cartCreatedAt={cartCreatedAt} onExpire={handleExpire} />}
                 </h1>
                 <Row>
                     <Col className={CartStyles.cartContent} lg={8} md={8} xs={8}>

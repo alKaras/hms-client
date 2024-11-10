@@ -12,8 +12,8 @@ const ServicesPage = ({ byDoctor, byHospital }) => {
 
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
-    const doctorId = isLogged && byDoctor && user.data.doctor.id;
-    const hospitalId = isLogged && byHospital && user.hospitalId;
+    const doctorId = isLogged && byDoctor && user.doctor;
+    const hospitalId = isLogged && user.hospitalId;
 
     const [isLoaded, setLoaded] = useState(false);
     const [serviceCollection, setServiceCollection] = useState([]);

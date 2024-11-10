@@ -90,6 +90,11 @@ export const ActionSlot = () => {
         };
 
         let diffHour = differenceInHours(endTime, startTime);
+        if (endTime < startTime) {
+            alert("End time should be less than start time");
+            setDisabled(false);
+            return;
+        }
         if (diffHour > 2) {
             //run generate process
             generateTimeSlots(params)

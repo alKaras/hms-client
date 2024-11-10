@@ -6,7 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TextField } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { useParams } from 'react-router-dom';
-import { getTimeSlotsByFilter, setItemToCart } from '../../api/httpApiClient';
+import { getFreeDates, getTimeSlotsByFilter, setItemToCart } from '../../api/httpApiClient';
 import { Button } from 'react-bootstrap';
 import format from 'date-fns/format';
 import { useTranslation } from 'react-i18next';
@@ -18,13 +18,15 @@ export const TimeSlotPicker = ({
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [isSlotLoaded, setisSlotLoaded] = useState(false);
     const [infoSlotCollection, setinfoSlotCollection] = useState([]);
+    const [isStatsLoaded, setStatsLoaded] = useState(false);
+    const [slotStats, setSlotStats] = useState([]);
 
     const { _id, hospitalId } = useParams();
 
     const pickTimeSlot = async (e, id) => {
         e.preventDefault();
 
-        const params = { time_slot_id: id }
+        const params = { time_slot_id: id, hospital_id: hospitalId }
 
         setItemToCart(params)
             .then((resp) => {
@@ -48,11 +50,35 @@ export const TimeSlotPicker = ({
 
         if (isDoctorPage) {
             params.doctor_id = _id;
+            getFreeDates({
+                doctor_id: _id
+            })
+                .then((resp) => {
+                    setisSlotLoaded(true);
+                    let doctorData = resp.data.data;
+
+                    let consultsFreeSlots = doctorData.filter((res) => res.serviceName.includes('Консультація'));
+                    setSlotStats(consultsFreeSlots);
+
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
         }
         if (isServicePage) {
             params.service_id = _id;
-        }
 
+            getFreeDates({
+                service_id: _id
+            })
+                .then((resp) => {
+                    setisSlotLoaded(true);
+                    setSlotStats(resp.data.data);
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
+        }
 
         getTimeSlotsByFilter(params)
             .then((res) => {
@@ -80,7 +106,30 @@ export const TimeSlotPicker = ({
             <Header />
             <div className={TimeSlotStyles.root}>
 
-                <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px' }} >{t('timeslots')}</h2>
+                <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '25px' }} >{t('timeslots')} {isDoctorPage ? ' на консультацію ' : ''}</h2>
+
+                <div className='d-flex justify-between align-items-center'>
+                    <h3 style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '25px' }}>Доступні талони: </h3>
+
+                    <ul className='d-flex justify-between align-items-center'>
+                        {isSlotLoaded && slotStats.length > 0 ? slotStats.map((slot) => (
+                            <>
+                                <li style={{ border: '1px solid black', borderRadius: '5px', padding: '10px', marginLeft: '10px' }}>
+                                    <p style={{ marginBottom: '5px', fontWeight: 'bold' }}>{[slot.serviceId]} {slot.serviceName}</p>
+                                    <p style={{ marginBottom: '5px' }}>Дата: {format(new Date(slot.date), 'dd.MM.yyyy')}</p>
+                                    <p style={{ margin: 0 }}>к-сть вільних талонів {slot.free_slots}</p>
+                                </li >
+                            </>
+
+                        ))
+                            : (
+                                <>
+                                    Доступних талонів немає
+                                </>
+                            )}
+                    </ul>
+                </div>
+
 
                 <div style={{ marginBottom: '25px' }}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>

@@ -8,11 +8,12 @@ import { getOrderByFilter } from '../../../../api/httpApiClient';
 import { OrderFiltersEnum } from '../../../../utils/enums/OrderFiltersEnum';
 import { useTranslation } from 'react-i18next';
 import Pagination from '../../../../components/Pagination';
+import { format } from 'date-fns';
 
 export default function OrderHistory({ byDoctor, byHospital }) {
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
-    const doctorId = isLogged && byDoctor && user.data.doctor.id;
+    const doctorId = isLogged && byDoctor && user.doctor;
     const hospitalId = isLogged && byHospital && user.hospitalId;
 
     const [isLoaded, setLoaded] = useState(false);
@@ -84,7 +85,7 @@ export default function OrderHistory({ byDoctor, byHospital }) {
                                                 <div className='d-flex align-items-center justity-content-between gap-3' style={{ border: '1px solid black', padding: '5px', borderRadius: '5px', width: '300px', marginBottom: '5px' }}>
                                                     <div>{service.serviceName}</div>
                                                     <div>{service.departmentTitle}</div>
-                                                    <div>{FormData(new Date(service.startTime), 'dd.MM.yyyy HH:mm')}</div>
+                                                    <div>{format(new Date(service.startTime), 'dd.MM.yyyy HH:mm')}</div>
                                                 </div>
                                             ))}
                                         </td>

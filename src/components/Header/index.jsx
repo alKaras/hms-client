@@ -112,7 +112,7 @@ export default function Header() {
                                     {/* <LinkContainer to={'/adminpanel/reports'}>
                                         <Button className={headerStyles['btn-header']}>Звіти</Button>
                                     </LinkContainer> */}
-                                    <LinkContainer to={'/adminpanel/order-history'}>
+                                    <LinkContainer to={'/adminpanel/doctor/order-history'}>
                                         <Button className={headerStyles['btn-header']}>{t('orderHistory')}</Button>
                                     </LinkContainer>
                                 </div>

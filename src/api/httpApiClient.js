@@ -210,6 +210,10 @@ export const destroyTimeSlot = async(_id) => {
     return await axios.delete(`timeslots/${_id}/destroy`);
 }
 
+export const getFreeDates = async(params) => {
+    return await axios.post('timeslots/free/get', params);
+}
+
 // /**
 //  * Get Timeslot by Doctor method | timeslots/getbydoctor POST
 //  * @param {"doctor_id"} params 
@@ -283,8 +287,8 @@ export const cancelCheckout = async (params) => {
 /**
  * Reset shopping cart
  */
-export const resetShoppingCart = async (id) => {
-    return await axios.delete(`shoppingcart/${id}/reset`);
+export const resetShoppingCart = async (params) => {
+    return await axios.post(`shoppingcart/reset`, params);
 }
 
 /**
