@@ -31,6 +31,7 @@ import { CreateReferrals } from "./pages/User/Referrals/CreateReferrals";
 import { UserServices } from "./pages/User/Services";
 import { OrderOperations } from "./pages/Adminpanel/Settings/OrderOperations";
 import { ChooseExistDepartment } from "./pages/Adminpanel/Settings/HospitalPage/ChooseExistDepartment";
+import { DoctorsAttacher } from "./pages/Adminpanel/Settings/HospitalPage/DoctorsAttacher";
 
 function App() {
     const dispatch = useDispatch();
@@ -101,6 +102,7 @@ function App() {
 
                 {/* Services routes */}
                 <Route path='/adminpanel/hospital/service/create' element={<ActionServices />} />
+                <Route path='/adminpanel/hospital/service/:_id/edit' element={<DoctorsAttacher />} />
 
                 {/* Timeslot routes */}
                 <Route path='/hospital/:hospitalId/doctor/:_id/timeslots' element={<TimeSlotPicker isDoctorPage={true} />} />

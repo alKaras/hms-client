@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../../../components/Header'
 import chooseExistDepStyles from './HospitalPage.module.scss';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { attachExistedDepartments, fetchDepartments, fetchHospitalDepartments, fetchUnassignedDepartments } from '../../../../api/httpApiClient';
+import { attachExistedDepartments, fetchUnassignedDepartments } from '../../../../api/httpApiClient';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Alert, Snackbar } from '@mui/material';
 
 export const ChooseExistDepartment = () => {
     const [selectedDepartments, setSelectedDepartments] = useState([]);
@@ -14,12 +15,17 @@ export const ChooseExistDepartment = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const hospitalId = queryParams.get('hospital');
+    const [error, setError] = useState(null);
+    const [info, setInfo] = useState(null);
 
     useEffect(() => {
         fetchUnassignedDepartments({ hospital_id: hospitalId })
             .then((resp) => {
                 setDepLoaded(true);
                 setDepartments(resp.data.data);
+            })
+            .catch((err) => {
+                setError(err.response.message || 'Something went wrong');
             })
     }, []);
 
@@ -36,7 +42,7 @@ export const ChooseExistDepartment = () => {
         e.preventDefault();
 
         if (selectedDepartments.length === 0) {
-            alert('Please select at least one department to attach.');
+            setInfo('Please select at least one department to attach.');
             return;
         }
 
@@ -50,11 +56,15 @@ export const ChooseExistDepartment = () => {
             })
             .catch((err) => {
                 console.error(err);
-                alert('Something went wrong. Please try again.');
+                setError('Something went wrong. Please try again.');
             });
     };
 
     const { t } = useTranslation();
+    const handleClose = () => {
+        setError(null);
+        setInfo(null);
+    }
     return (
         <>
             <Header />
@@ -87,6 +97,18 @@ export const ChooseExistDepartment = () => {
                     </Button>
                 </Form>
             </div>
+            <Snackbar open={!!error} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
+                    {error}
+                </Alert>
+            </Snackbar>
+
+            <Snackbar open={!!info} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity='info' sx={{ width: '100%' }}>
+                    {info}
+                </Alert>
+            </Snackbar >
+
         </>
     );
 };

@@ -159,6 +159,10 @@ export const fetchSingleService = async(_id) => {
     return await axios.get(`services/fetch/${_id}`);
 }
 
+export const attachDoctors = async(params) => {
+    return await axios.post(`services/doctors/attach`, params);
+}
+
 /**
  * Get services by doctor id
  * @param {number} params {doctor_id}

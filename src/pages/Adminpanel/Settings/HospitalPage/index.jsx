@@ -6,6 +6,8 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals, fetchHospitalServices, importDepartment, importDoctors, importServices } from '../../../../api/httpApiClient';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Pagination from '../../../../components/Pagination';
+import { current } from '@reduxjs/toolkit';
 
 export default function HospitalPage({
     specific
@@ -52,12 +54,15 @@ export default function HospitalPage({
 
         fetchHospitalServices(
             {
-                hospital_id: _id
+                hospital_id: _id,
+                page: currentPage,
             }
         )
             .then((resp) => {
                 setCollectionServiceLoaded(true);
                 setServiceCollection(resp.data.services);
+                setTotalPages(resp.data.meta.last_page);
+                setCurrentPage(resp.data.meta.current_page);
             })
             .catch((err) => {
                 setCollectionServiceLoaded(false);
@@ -108,9 +113,41 @@ export default function HospitalPage({
         setDepChosen(true);
     };
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(10);
+
     const handleSubmit = (e) => {
         fetchDoctorsBySelectedDep(e);
     }
+
+    const handlePageChange = (page) => {
+        if (page !== currentPage) {
+            setCurrentPage(page);
+            console.log("CurrentPage: " + currentPage);
+        }
+    }
+
+    useEffect(() => {
+        if (specific) {
+            fetchHospitalServices(
+                {
+                    hospital_id: _id,
+                    page: currentPage,
+                }
+            )
+                .then((resp) => {
+                    setCollectionServiceLoaded(true);
+                    setServiceCollection(resp.data.services);
+                    setTotalPages(resp.data.meta.last_page);
+                    setCurrentPage(resp.data.meta.current_page);
+
+                })
+                .catch((err) => {
+                    setCollectionServiceLoaded(false);
+                    console.log(err);
+                })
+        }
+    }, [_id, currentPage])
 
 
     useEffect(() => {
@@ -131,19 +168,6 @@ export default function HospitalPage({
                     setDepartments(resp.data.data);
                 })
                 .catch((err) => {
-                    console.log(err);
-                })
-            fetchHospitalServices(
-                {
-                    hospital_id: _id
-                }
-            )
-                .then((resp) => {
-                    setCollectionServiceLoaded(true);
-                    setServiceCollection(resp.data.services);
-                })
-                .catch((err) => {
-                    setCollectionServiceLoaded(false);
                     console.log(err);
                 })
 
@@ -489,6 +513,11 @@ export default function HospitalPage({
                                                         ))}
                                                     </tbody>
                                                 </Table>
+                                                <Pagination
+                                                    currentPage={currentPage}
+                                                    totalPages={totalPages}
+                                                    onPageChange={handlePageChange}
+                                                />
                                             </>
 
                                         ) : (
