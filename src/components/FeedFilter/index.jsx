@@ -4,13 +4,16 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import FeedFilterStyles from './FeedFilter.module.scss';
 import { addDays, format } from 'date-fns';
+import { ReportFilterEnum } from '../../utils/enums/ReportFiltersEnum';
 
 export default function FeedFilter({
     hospitalId,
     filter,
     perPage,
     page,
-    onFetchData
+    onFetchData,
+    onFetchReport,
+    reportPage
 }) {
     const [conditions, setConditions] = useState([]);
 
@@ -18,6 +21,7 @@ export default function FeedFilter({
     const [dateEndCreated, setDateEndCreated] = useState(null);
     const [dateConfirmed, setDateConfirmed] = useState(null);
     const [dateEndConfirmed, setDateEndConfirmed] = useState(null);
+    const [reportFilter, setReportFilter] = useState('');
 
     const [title, setTitle] = useState('');
     const [status, setStatus] = useState('');
@@ -85,11 +89,24 @@ export default function FeedFilter({
         ]);
     };
 
+    const handleFilterReportChange = (e) => {
+        const value = e.target.value;
+        setReportFilter(value);
+    }
+
     const fetchData = () => {
-        onFetchData(
-            page,
-            conditions
-        )
+        if (!reportPage) {
+            onFetchData(
+                page,
+                conditions
+            )
+        } else {
+            onFetchReport(
+                conditions,
+                reportFilter
+            )
+        }
+
     };
 
     const refreshFilter = (e) => {
@@ -101,83 +118,99 @@ export default function FeedFilter({
         setDateEndConfirmed(null);
         setTitle('');
         setStatus('');
+        setReportFilter('');
     }
 
     return (
         <div className={FeedFilterStyles.root}>
 
             <div className={FeedFilterStyles.content}>
-                <div className='d-flex flex-column'>
-                    <label>Created Date Start:</label>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            value={dateCreated}
-                            onChange={handleDateCreatedChange}
-                            format='dd.MM.yyyy'
-                            placeholderText="Select start date"
-                        />
-                    </LocalizationProvider>
-                    <label>Created Date End:</label>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            value={dateEndCreated}
-                            onChange={handleDateEndCreatedChange}
-                            minDate={addDays(new Date(dateCreated), 1)}
-                            format='dd.MM.yyyy'
-                            placeholderText="Select end date"
-                        />
-                    </LocalizationProvider>
-                </div>
-
-                <div className='d-flex flex-column'>
-                    <label>Confirmed Date Start:</label>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            value={dateConfirmed}
-                            onChange={handleDateConfirmedChange}
-                            format='dd.MM.yyyy'
-                            placeholderText="Select start date"
-                        />
-                    </LocalizationProvider>
-                    <label>Confirmed Date End:</label>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            value={dateEndConfirmed}
-                            onChange={handleDateEndConfirmedChange}
-                            minDate={addDays(new Date(dateConfirmed), 1)}
-                            format='dd.MM.yyyy'
-                            placeholderText="Select end date"
-                        />
-                    </LocalizationProvider>
-                </div>
-
-                <div className='d-flex flex-column'>
-                    <label>Title:</label>
-                    <input
-                        type="text"
-                        value={title}
-                        placeholder="Enter title"
-                        onChange={handleTitleChange}
-                        className={FeedFilterStyles.inputText}
-                    />
-                </div>
-
-                <div className='d-flex flex-column'>
-                    <label>Status:</label>
-                    <select value={status} defaultValue={""} onChange={handleStatusChange}>
-                        <option value="" disabled>Select Status</option>
-                        <option value="1">PENDING</option>
-                        <option value="2">PAID</option>
-                        <option value="3">CANCELED</option>
-                    </select>
-                </div>
-
                 <div>
-                    <button className='btn btn-primary' onClick={fetchData}>Fetch Data</button>
+                    <div style={{ marginBottom: '10px' }} className='d-flex align-items-center justify-content-between gap-3'>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label={'Created Date Start:'}
+                                value={dateCreated}
+                                onChange={handleDateCreatedChange}
+                                format='dd.MM.yyyy'
+                                placeholderText="Select start date"
+                            />
+                        </LocalizationProvider>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label={'Created Date End:'}
+                                value={dateEndCreated}
+                                onChange={handleDateEndCreatedChange}
+                                minDate={addDays(new Date(dateCreated), 1)}
+                                format='dd.MM.yyyy'
+                                placeholderText="Select end date"
+
+                            />
+                        </LocalizationProvider>
+                    </div>
+
+                    <div className='d-flex align-items-center justify-content-between gap-3'>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label={'Confirmed Date Start:'}
+                                value={dateConfirmed}
+                                onChange={handleDateConfirmedChange}
+                                format='dd.MM.yyyy'
+                                placeholderText="Select start date"
+                            />
+                        </LocalizationProvider>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label={'Confirmed Date End:'}
+                                value={dateEndConfirmed}
+                                onChange={handleDateEndConfirmedChange}
+                                minDate={addDays(new Date(dateConfirmed), 1)}
+                                format='dd.MM.yyyy'
+                                placeholderText="Select end date"
+                            />
+                        </LocalizationProvider>
+                    </div>
                 </div>
-                <button style={{ background: 'none' }} onClick={(e) => refreshFilter(e)}>
-                    <i class="fa-solid fa-arrows-rotate"></i>
-                </button>
+                {!reportPage ? (
+                    <>
+                        <div className='d-flex flex-column'>
+                            <label style={{ marginBottom: '5px', marginTop: '10px', fontWeight: 'bold' }}>Title:</label>
+                            <input
+                                type="text"
+                                value={title}
+                                placeholder="Enter title"
+                                onChange={handleTitleChange}
+                                className={FeedFilterStyles.inputText}
+                            />
+                        </div>
+
+                        <div className='d-flex flex-column'>
+                            <label style={{ marginBottom: '5px', marginTop: '10px', fontWeight: 'bold' }}>Status:</label>
+                            <select value={status} defaultValue={""} onChange={handleStatusChange}>
+                                <option value="" disabled>Select Status</option>
+                                <option value="1">PENDING</option>
+                                <option value="2">PAID</option>
+                                <option value="3">CANCELED</option>
+                            </select>
+                        </div>
+                    </>
+                ) : (
+                    <div className='d-flex flex-column'>
+                        <select value={reportFilter} defaultValue={""} onChange={handleFilterReportChange}>
+                            <option value="" disabled>Select report filter</option>
+                            <option value={ReportFilterEnum.REPORT_BY_HOSPITAL}>Report by hospital</option>
+                        </select>
+                    </div>
+                )}
+
+
+                <div style={{ alignSelf: 'flex-end' }}>
+                    <button style={{ marginRight: '15px' }} className='btn btn-primary' onClick={fetchData}>Fetch Data</button>
+                    <button style={{ background: 'none' }} onClick={(e) => refreshFilter(e)}>
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+
             </div>
         </div>
     );

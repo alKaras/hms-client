@@ -359,3 +359,19 @@ export const removeHospitalReview = async(id) => {
 export const getAverageRatingForHospital = async(params) => {
     return await axios.post(`hospital/rating`, params);
 }
+
+/**
+ * Endpoint to get reports
+ */
+export const getReportByFilter = async(params) => {
+    return await axios.post(`report/get`, params);
+}
+
+/**
+ * Export reports in xlsx format
+ */
+export const exportReport = async(params) => {
+    return await axios.post(`report/render`, params, {
+        responseType: 'blob'
+    });
+}

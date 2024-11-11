@@ -11,6 +11,7 @@ i18n
                     eng: "English",
                     ua: "Ukrainian",
                     //header
+                    report: "Report",
                     patients: "Patients",
                     settings: "Settings",
                     orderHistory: "Order History",
@@ -172,6 +173,7 @@ i18n
                     login: "Увійти",
                     eng: "English",
                     ua: "Українська",
+                    report: "Звіти",
                     patients: "Пацієнти",
                     settings: "Налаштування",
                     orderHistory: "Історія замовлень",

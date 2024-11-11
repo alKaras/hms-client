@@ -71,9 +71,9 @@ export default function Header() {
                                     <LinkContainer to={`/adminpanel/hospital/${hospitalId}/operations`}>
                                         <Button className={headerStyles['btn-header']}>{t('operations')}</Button>
                                     </LinkContainer>
-                                    {/* <LinkContainer to={'/adminpanel/reports'}>
-                                        <Button className={headerStyles['btn-header']}>Звіти</Button>
-                                    </LinkContainer> */}
+                                    <LinkContainer to={'/adminpanel/reports'}>
+                                        <Button className={headerStyles['btn-header']}>{t('report')}</Button>
+                                    </LinkContainer>
                                     <Dropdown>
                                         <Dropdown.Toggle className={headerStyles.btnDrop} variant="success"
                                             id="dropdown-basic">
@@ -112,9 +112,9 @@ export default function Header() {
                                     <LinkContainer to={'/adminpanel/users'}>
                                         <Button className={headerStyles['btn-header']}>{t('patients')}</Button>
                                     </LinkContainer>
-                                    {/* <LinkContainer to={'/adminpanel/reports'}>
-                                        <Button className={headerStyles['btn-header']}>Звіти</Button>
-                                    </LinkContainer> */}
+                                    <LinkContainer to={'/adminpanel/reports'}>
+                                        <Button className={headerStyles['btn-header']}>{t('report')}</Button>
+                                    </LinkContainer>
                                     <LinkContainer to={'/adminpanel/doctor/order-history'}>
                                         <Button className={headerStyles['btn-header']}>{t('orderHistory')}</Button>
                                     </LinkContainer>
