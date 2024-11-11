@@ -12,6 +12,7 @@ export default function Login() {
 
     const isLogged = useSelector(selectIsLogged);
     const roles = useSelector(selectRoles);
+    const user = useSelector(infoAboutUser);
     console.log(roles);
     const { error } = useSelector((state) => state.auth);
     const navigate = useNavigate();
@@ -36,11 +37,17 @@ export default function Login() {
     }
 
     useEffect(() => {
-        if (isLogged && roles === 'user') {
-            navigate('/');
+        if (isLogged && roles === 'doctor') {
+            navigate('/adminpanel/services');
             window.location.reload();
-        } else if (isLogged && (roles === 'admin' || roles === 'doctor' || roles === 'manager')) {
-            navigate('/adminpanel');
+        } else if (isLogged && roles === 'admin') {
+            navigate('/adminpanel/hospitals');
+            window.location.reload();
+        } else if (isLogged && roles === 'manager') {
+            navigate(`/adminpanel/users`);
+            window.location.reload();
+        } else if (isLogged && roles === 'user') {
+            navigate('/');
             window.location.reload();
         }
     }, [isLogged, navigate]);

@@ -7,6 +7,8 @@ import { getUsers } from '../../../api/httpApiClient';
 import Pagination from '../../../components/Pagination';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged, selectRoles } from '../../../redux/slices/authSlice';
 
 export default function UsersPage({
     isDoctor
@@ -21,6 +23,11 @@ export default function UsersPage({
         // dispatch(getUsers({ page: currentPage, perPage: 10 }));
         fetchUsers(currentPage)
     }, [currentPage]);
+
+    const user = useSelector(infoAboutUser);
+    const isLogged = useSelector(selectIsLogged);
+    const roles = useSelector(selectRoles);
+    const isManager = isLogged && user.roles === 'manager';
 
     const fetchUsers = async (page) => {
         setLoading(false);
@@ -87,7 +94,7 @@ export default function UsersPage({
                                             ))}
                                             </td>
                                             <td>
-                                                {!isDoctor ? (
+                                                {isManager ? (<></>) : !isDoctor ? (
                                                     <LinkContainer style={{ color: 'black' }} to={`/adminpanel/user/${obj.id}/edit`}>
                                                         <button className='btn btn-warning'><i className="fa-solid fa-pen"></i></button>
                                                     </LinkContainer>

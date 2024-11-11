@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentAdminStyle from './ContentAdmin.module.scss';
-import {BarChart} from '@mui/x-charts/BarChart';
-import {LineChart} from "@mui/x-charts";
+import { BarChart } from '@mui/x-charts/BarChart';
+import { LineChart } from "@mui/x-charts";
 
 export default function ContentAdmin(props) {
     return (
@@ -21,7 +21,7 @@ export default function ContentAdmin(props) {
                         <div className={ContentAdminStyle.desc}>Рейтинг лікарні</div>
                     </div>
                 </div>
-                    <LineChart
+                {/* <LineChart
                         xAxis={[{data: [1, 2, 3, 5, 8, 10]}]}
                         series={[
                             {
@@ -30,7 +30,7 @@ export default function ContentAdmin(props) {
                         ]}
                         width={1000}
                         height={300}
-                    />
+                    /> */}
             </div>
         </>
     );

@@ -16,7 +16,7 @@ export default function Header() {
     const hospitalId = isLogged && user.hospitalId;
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const isAdminPanel = location.pathname === '/adminpanel';
+    // const isAdminPanel = location.pathname === '/adminpanel';
     const userRole = isLogged && user.roles;
     const isManager = userRole === "manager";
     const isUser = userRole === "user";
@@ -38,7 +38,10 @@ export default function Header() {
 
     return (
         <Navbar expand="md" className={`${headerStyles.root} d-flex align-content-center justify-content-between fixed-top`}>
-            <LinkContainer to={isUser ? '/' : '/adminpanel'}>
+            <LinkContainer to={
+                isUser ? '/' :
+                    isDoctor ? '/adminpanel/services' :
+                        isManager ? '/adminpanel/users' : '/adminpanel/hospitals'}>
                 <Navbar.Brand className='d-flex align-items-center'>
                     <img
                         src="/assets/logo/logo.svg"
@@ -65,7 +68,7 @@ export default function Header() {
                                     <LinkContainer to={'/adminpanel/users'}>
                                         <Button className={headerStyles['btn-header']}>{t('patients')}</Button>
                                     </LinkContainer>
-                                    <LinkContainer to={`/adminpanel/${hospitalId}/operations`}>
+                                    <LinkContainer to={`/adminpanel/hospital/${hospitalId}/operations`}>
                                         <Button className={headerStyles['btn-header']}>{t('operations')}</Button>
                                     </LinkContainer>
                                     {/* <LinkContainer to={'/adminpanel/reports'}>
@@ -133,7 +136,7 @@ export default function Header() {
                                 </Dropdown>
                                 <LangSwitcher />
                             </>
-                        ) : isAdminPanel || isAdmin ? (
+                        ) : isAdmin ? (
                             <>
                                 <div className={headerStyles['menu-header']}>
                                     <LinkContainer to={'/adminpanel/hospitals'}>
@@ -146,9 +149,6 @@ export default function Header() {
                                     </LinkContainer>
                                     <LinkContainer to={'/adminpanel/operations'}>
                                         <Button className={headerStyles['btn-header']}>{t('operations')}</Button>
-                                    </LinkContainer>
-                                    <LinkContainer to={'/adminpanel/order-history'}>
-                                        <Button className={headerStyles['btn-header']}>{t('orderHistory')}</Button>
                                     </LinkContainer>
                                 </div>
                                 <Dropdown align="end">
@@ -168,7 +168,7 @@ export default function Header() {
                                 </Dropdown>
                                 <LangSwitcher />
                             </>
-                        ) : !isAdminPanel && isUser ? (
+                        ) : isUser ? (
                             <>
                                 <div className={headerStyles['menu-header']}>
                                     <LinkContainer to={'/'}>

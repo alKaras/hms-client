@@ -66,6 +66,8 @@ export const ShoppingCart = () => {
 
     const cancelShopCart = async (e, id) => {
         e.preventDefault();
+        setCartCreated(null);
+        localStorage.removeItem('cartCreatedAt');
 
         resetShoppingCart({
             cart_id: id

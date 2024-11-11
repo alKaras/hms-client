@@ -111,7 +111,7 @@ function App() {
 
                 {/* <Route path='/adminpanel/settings/departments' element={<Departments />} /> */}
                 <Route path={`/adminpanel/${isDoctor ? 'doctor' : 'hospital'}/order-history`} element={<OrderHistory byDoctor={isDoctor} byHospital={isManager} />} />
-                <Route path={`/adminpanel${isManager ? '/:_id' : ''}/operations`} element={<OrderOperations />} />
+                <Route path={`/adminpanel${isManager ? '/hospital/:_id' : ''}/operations`} element={<OrderOperations />} />
              </Routes>
         </div>
     );
