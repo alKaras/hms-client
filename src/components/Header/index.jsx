@@ -14,6 +14,7 @@ export default function Header() {
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
     const hospitalId = isLogged && user.hospitalId;
+    const doctorId = (isLogged && user.doctor) ?? null;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     // const isAdminPanel = location.pathname === '/adminpanel';
@@ -108,6 +109,9 @@ export default function Header() {
                                 <div className={headerStyles['menu-header']}>
                                     <LinkContainer to={'/adminpanel/services'}>
                                         <Button className={headerStyles['btn-header']}>{t('services')}</Button>
+                                    </LinkContainer>
+                                    <LinkContainer to={`/adminpanel/doctor/${doctorId}/appointments/list`}>
+                                        <Button className={headerStyles['btn-header']}>Appointment</Button>
                                     </LinkContainer>
                                     <LinkContainer to={'/adminpanel/users'}>
                                         <Button className={headerStyles['btn-header']}>{t('patients')}</Button>
