@@ -14,6 +14,8 @@ export default function Header() {
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
     const hospitalId = isLogged && user.hospitalId;
+    const doctorId = (isLogged && user.doctor) ?? null;
+    const userId = (isLogged && user.id) ?? null;
     const navigate = useNavigate();
     const dispatch = useDispatch();
     // const isAdminPanel = location.pathname === '/adminpanel';
@@ -109,6 +111,9 @@ export default function Header() {
                                     <LinkContainer to={'/adminpanel/services'}>
                                         <Button className={headerStyles['btn-header']}>{t('services')}</Button>
                                     </LinkContainer>
+                                    <LinkContainer to={`/adminpanel/doctor/${doctorId}/appointments/list`}>
+                                        <Button className={headerStyles['btn-header']}>{t('appointments')}</Button>
+                                    </LinkContainer>
                                     <LinkContainer to={'/adminpanel/users'}>
                                         <Button className={headerStyles['btn-header']}>{t('patients')}</Button>
                                     </LinkContainer>
@@ -179,6 +184,9 @@ export default function Header() {
                                     </LinkContainer>
                                     <LinkContainer to={'/user/referrals'}>
                                         <Button className={headerStyles['btn-header']}>{t('userReferrals')}</Button>
+                                    </LinkContainer>
+                                    <LinkContainer to={`/user/${userId}/appointments/list`}>
+                                        <Button className={headerStyles['btn-header']}>{t('appointments')}</Button>
                                     </LinkContainer>
                                 </div>
                                 <div>

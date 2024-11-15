@@ -316,7 +316,7 @@ export const sendConfirmationEmail = async(params) => {
 */
 
 export const downloadPdfTimeslot = async(id) => {
-    return await axios.get(`timeslot/${id}/download-timeslot`, {
+    return await axios.get(`timeslots/${id}/download-timeslot`, {
         responseType: 'blob',
     });
 }
@@ -374,4 +374,53 @@ export const exportReport = async(params) => {
     return await axios.post(`report/render`, params, {
         responseType: 'blob'
     });
+}
+
+/**
+ * Appointment routes
+ */
+export const fetchAppointments = async() => {
+    return await axios.get('appointment/fetch');
+}
+
+export const getSingleAppointment = async(params) => {
+    return await axios.post('appointment/single/get', params);
+}
+
+export const getAppointmentByDoctor = async(params) => {
+    return await axios.post('appointment/bydoctor/get', params);
+}
+
+export const getAppointmentByUser = async(params) => {
+    return await axios.post(`appointment/byuser/get`, params);
+}
+
+export const createAppointment = async(params) => {
+    return await axios.post('appointment/create', params);
+}
+
+export const editAppointment = async(params) => {
+    return await axios.post('appointment/edit', params);
+}
+
+export const cancelAppointment = async(params) => {
+    return await axios.post('appointment/cancel', params);
+}
+
+export const destroyAppointment = async(params) => {
+    return await axios.delete('appointment/delete', params);
+}
+
+export const confirmAppointment = async(params) => {
+    return await axios.post('appointment/confirm', params);
+}
+
+export const downloadAppointmentSummary = async(id) => {
+    return await axios.get(`appointment/${id}/download`, {
+        responseType: 'blob',
+    });
+}
+
+export const sendAppointmentSummary = async(params) => {
+    return await axios.post(`appointment/summary/send`, params);
 }

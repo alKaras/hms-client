@@ -117,12 +117,12 @@ export default function Reports() {
                     />
                 </div>
                 <div style={{ marginTop: '25px' }}>
-                    <Button disabled={disabled} onClick={(e) => onDownloadReport(e)} className='btn btn-secondary'>Download <i className="fa-solid fa-file-export"></i></Button>
+                    <Button disabled={disabled} onClick={(e) => onDownloadReport(e)} className='btn btn-secondary'>{t('download')} <i className="fa-solid fa-file-export"></i></Button>
                 </div>
                 <div style={{ marginTop: '50px' }}>
                     {isLoaded ? (
                         <>
-                            <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '15px' }}>Загальна інформація</h2>
+                            <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '15px' }}>{t('avgServicePerDay')}</h2>
                             <Table style={{ marginBottom: '25px' }}>
                                 <thead>
                                     <tr className='text-center'>
@@ -131,7 +131,7 @@ export default function Reports() {
                                         <th>{t('address')}</th>
                                         <th>{t('numofservices')}</th>
                                         <th>{t('totalSum')}</th>
-                                        <th>Середня к-сть послуг/день</th>
+                                        <th>{t('avgServicePerDay')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -148,7 +148,7 @@ export default function Reports() {
                                 </tbody>
                             </Table>
 
-                            <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '15px' }}>Детальна інформація</h2>
+                            <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '15px' }}>{t('detailedInfo')}</h2>
                             <Table>
                                 <thead>
                                     <tr>

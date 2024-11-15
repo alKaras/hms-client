@@ -166,10 +166,73 @@ i18n
                     reason: "Cancel reason",
                     sendSlots: "Send timeslots to email",
                     cancelOrder: "Cancel order",
+
+                    processTime: "Time for processing:",
+                    appointments: "Appointments",
+
+                    dateCreatedStart: "Initial create date",
+                    dateCreatedEnd: "End create date",
+
+                    dateConfirmedStart: "Initial confirm date",
+                    dateConfirmedEnd: "End confirm date",
+
+                    chReportFilter: "Choose report filter",
+                    reportByHospital: "Report by hospital",
+
+                    generate: "Generate",
+
+                    avgServicePerDay: "Average number of services/day",
+                    detailedInfo: "Detailed information",
+                    
+                    download: "Download",
+                    patient: "Patient",
+
+                    emptyAppointments: "You don't have appointments",
+
+                    urAppointments: "Your appointments",
+                    medAppointment: "Medical Appointment",
+
+                    summary: "Summary",
+                    notes: "Notes",
+                    recommendations: "Recommendations",
+
+                    completed: "Completed",
+                    scheduled: "Scheduled",
+                    canceledAppointment: "Canceled"
                 },
             },
             uk: {
                 translation: {
+                    processTime: "Час на оформлення:",
+                    appointments: "Відвідування",
+                    download: "Завантажити",
+
+                    emptyAppointments: "'У вас немає запланованих зустрічей'",
+
+                    dateCreatedStart: "Початкова дата створення",
+                    dateCreatedEnd: "Кінцева дата створення",
+
+                    dateConfirmedStart: "Початкова дата підтвердження",
+                    dateConfirmedEnd: "Кінцева дата підтвердження",
+
+                    chReportFilter: "Виберіть фільтр звіту",
+                    reportByHospital: "Звіт за лікарнею",
+
+                    generate: "Сформувати",
+
+                    avgServicePerDay: "Середня к-сть послуг/день",
+
+                    urAppointments: "Ваші зустрічі",
+                    medAppointment: "Медичний прийом",
+
+                    summary: "Висновок",
+                    notes: "Замітки",
+                    recommendations: "Рекомендації",
+
+                    completed: "Проведено",
+                    scheduled: "Заплановано",
+                    canceledAppointment: "Скасовано",
+
                     login: "Увійти",
                     eng: "English",
                     ua: "Українська",
@@ -193,6 +256,7 @@ i18n
                     delete: "Видалити",
                     //HospitalPage
                     information: "Основна інформація",
+                    detailedInfo: "Детальна інформація",
                     name: "Назва",
                     address: "Адреса",
                     description: "Опис",
@@ -284,6 +348,7 @@ i18n
                     service: "Послуга",
                     department: "Відділення",
                     reviews: "Відгуки",
+                    patient: "Пацієнт",
                     review: "Відгук",
                     addReviews: "Напишіть власний відгук",
                     rating: "Рейтинг",

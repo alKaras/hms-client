@@ -32,6 +32,8 @@ import { UserServices } from "./pages/User/Services";
 import { OrderOperations } from "./pages/Adminpanel/Settings/OrderOperations";
 import { ChooseExistDepartment } from "./pages/Adminpanel/Settings/HospitalPage/ChooseExistDepartment";
 import { DoctorsAttacher } from "./pages/Adminpanel/Settings/HospitalPage/DoctorsAttacher";
+import { AppointmentList } from "./pages/Adminpanel/Appointments/AppointmentList";
+import { SingleAppointment } from "./pages/Adminpanel/Appointments/SingleAppointment";
 
 function App() {
     const dispatch = useDispatch();
@@ -45,6 +47,7 @@ function App() {
     const userRole = isLogged && user.roles;
     const isDoctor = userRole === "doctor";
     const isManager = userRole === "manager";
+    const isUser = userRole === 'user';
 
     useEffect(() => {
         dispatch(getMe());
@@ -69,7 +72,7 @@ function App() {
                 <Route path={"/checkout/payment/success"} element={<SuccessPage />} />
                 {/* UserProfile routes */}
                 <Route path='/user/profile' element={<UserProfile />} />
-                <Route path='user/referrals' element={<Referrals />} />
+                <Route path='/user/referrals' element={<Referrals />} />
 
 
                 <Route path='/adminpanel' element={<AdminHome />} />
@@ -112,6 +115,13 @@ function App() {
                 {/* <Route path='/adminpanel/settings/departments' element={<Departments />} /> */}
                 <Route path={`/adminpanel/${isDoctor ? 'doctor' : 'hospital'}/order-history`} element={<OrderHistory byDoctor={isDoctor} byHospital={isManager} />} />
                 <Route path={`/adminpanel${isManager ? '/hospital/:_id' : ''}/operations`} element={<OrderOperations />} />
+
+                <Route 
+                path={!isUser ? `/adminpanel/doctor/:_id/appointments/list` : `user/:userId/appointments/list`} 
+                element={<AppointmentList forUser={isUser} />} 
+                />
+
+                <Route path={`${!isUser ? '/adminpanel' : '/user' }/appointments/:_id/appointment` } element={<SingleAppointment />} />
              </Routes>
         </div>
     );
