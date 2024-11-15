@@ -388,7 +388,11 @@ export const getSingleAppointment = async(params) => {
 }
 
 export const getAppointmentByDoctor = async(params) => {
-    return await axios.post('appointment/get/bydoctor', params);
+    return await axios.post('appointment/bydoctor/get', params);
+}
+
+export const getAppointmentByUser = async(params) => {
+    return await axios.post(`appointment/byuser/get`, params);
 }
 
 export const createAppointment = async(params) => {

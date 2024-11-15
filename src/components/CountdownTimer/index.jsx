@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const CountdownTimer = ({ cartCreatedAt, onExpire }) => {
     const [timeLeft, setTimeLeft] = useState(calculateRemainingTime(cartCreatedAt));
@@ -23,9 +24,11 @@ const CountdownTimer = ({ cartCreatedAt, onExpire }) => {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
+    const { t } = useTranslation();
+
     return (
         <div>
-            <span style={{ margin: '0', marginLeft: '15px' }}>Час на оформлення:</span> <span>{formatTime(timeLeft)}</span>
+            <span style={{ margin: '0', marginLeft: '15px' }}>{t('processTime')}</span><span>{formatTime(timeLeft)}</span>
         </div>
     );
 };

@@ -5,6 +5,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import FeedFilterStyles from './FeedFilter.module.scss';
 import { addDays, format } from 'date-fns';
 import { ReportFilterEnum } from '../../utils/enums/ReportFiltersEnum';
+import { useTranslation } from 'react-i18next';
 
 export default function FeedFilter({
     hospitalId,
@@ -121,6 +122,8 @@ export default function FeedFilter({
         setReportFilter('');
     }
 
+    const { t } = useTranslation();
+
     return (
         <div className={FeedFilterStyles.root}>
 
@@ -129,21 +132,22 @@ export default function FeedFilter({
                     <div style={{ marginBottom: '10px' }} className='d-flex align-items-center justify-content-between gap-3'>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
-                                label={'Created Date Start:'}
+                                label={t('dateCreatedStart')}
                                 value={dateCreated}
                                 onChange={handleDateCreatedChange}
                                 format='dd.MM.yyyy'
-                                placeholderText="Select start date"
+                                placeholderText={t('dateCreatedStart')}
+
                             />
                         </LocalizationProvider>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
-                                label={'Created Date End:'}
+                                label={t('dateCreatedEnd')}
                                 value={dateEndCreated}
                                 onChange={handleDateEndCreatedChange}
                                 minDate={addDays(new Date(dateCreated), 1)}
                                 format='dd.MM.yyyy'
-                                placeholderText="Select end date"
+                                placeholderText={t('dateCreatedEnd')}
 
                             />
                         </LocalizationProvider>
@@ -152,21 +156,21 @@ export default function FeedFilter({
                     <div className='d-flex align-items-center justify-content-between gap-3'>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
-                                label={'Confirmed Date Start:'}
+                                label={t('dateConfirmedStart')}
                                 value={dateConfirmed}
                                 onChange={handleDateConfirmedChange}
                                 format='dd.MM.yyyy'
-                                placeholderText="Select start date"
+                                placeholderText={t('dateConfirmedStart')}
                             />
                         </LocalizationProvider>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
-                                label={'Confirmed Date End:'}
+                                label={t('dateConfirmedEnd')}
                                 value={dateEndConfirmed}
                                 onChange={handleDateEndConfirmedChange}
                                 minDate={addDays(new Date(dateConfirmed), 1)}
                                 format='dd.MM.yyyy'
-                                placeholderText="Select end date"
+                                placeholderText={t('dateConfirmedEnd')}
                             />
                         </LocalizationProvider>
                     </div>
@@ -174,38 +178,38 @@ export default function FeedFilter({
                 {!reportPage ? (
                     <>
                         <div className='d-flex flex-column'>
-                            <label style={{ marginBottom: '5px', marginTop: '10px', fontWeight: 'bold' }}>Title:</label>
+                            <label style={{ marginBottom: '5px', marginTop: '10px', fontWeight: 'bold' }}>{t('name')}:</label>
                             <input
                                 type="text"
                                 value={title}
-                                placeholder="Enter title"
+                                placeholder={t('name')}
                                 onChange={handleTitleChange}
                                 className={FeedFilterStyles.inputText}
                             />
                         </div>
 
                         <div className='d-flex flex-column'>
-                            <label style={{ marginBottom: '5px', marginTop: '10px', fontWeight: 'bold' }}>Status:</label>
+                            <label style={{ marginBottom: '5px', marginTop: '10px', fontWeight: 'bold' }}>{t('status')}:</label>
                             <select value={status} defaultValue={""} onChange={handleStatusChange}>
-                                <option value="" disabled>Select Status</option>
-                                <option value="1">PENDING</option>
-                                <option value="2">PAID</option>
-                                <option value="3">CANCELED</option>
+                                <option value="" disabled>{t('paymentStatus')}</option>
+                                <option value="1">{t('pending')}</option>
+                                <option value="2">{t('paid')}</option>
+                                <option value="3">{t('cancel')}</option>
                             </select>
                         </div>
                     </>
                 ) : (
                     <div className='d-flex flex-column'>
                         <select value={reportFilter} defaultValue={""} onChange={handleFilterReportChange}>
-                            <option value="" disabled>Select report filter</option>
-                            <option value={ReportFilterEnum.REPORT_BY_HOSPITAL}>Report by hospital</option>
+                            <option value="" disabled>{t('chReportFilter')}</option>
+                            <option value={ReportFilterEnum.REPORT_BY_HOSPITAL}>{t('reportByHospital')}</option>
                         </select>
                     </div>
                 )}
 
 
                 <div style={{ alignSelf: 'flex-end' }}>
-                    <button style={{ marginRight: '15px' }} className='btn btn-primary' onClick={fetchData}>Fetch Data</button>
+                    <button style={{ marginRight: '15px' }} className='btn btn-primary' onClick={fetchData}>{t('generate')}</button>
                     <button style={{ background: 'none' }} onClick={(e) => refreshFilter(e)}>
                         <i class="fa-solid fa-arrows-rotate"></i>
                     </button>

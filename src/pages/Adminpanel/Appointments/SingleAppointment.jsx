@@ -4,6 +4,7 @@ import SingleAppointStyles from './Appointment.module.scss';
 import { useParams } from 'react-router-dom';
 import { confirmAppointment, getSingleAppointment } from '../../../api/httpApiClient';
 import { Badge, Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 export const SingleAppointment = () => {
     const { _id } = useParams();
@@ -85,6 +86,9 @@ export const SingleAppointment = () => {
         }
 
     }
+
+    const { t } = useTranslation();
+
     return (
         <>
             <Header />
@@ -94,80 +98,80 @@ export const SingleAppointment = () => {
                     <>
                         <div className={SingleAppointStyles.contentSingle}>
                             <h1 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold', marginBottom: '25px' }}>
-                                Medical Appointment [{appointment.id}] <Badge bg={appointment.status === 'scheduled' ? 'info' : appointment.status === 'canceled' ? 'danger' : 'success'}>
-                                    <span style={{ textTransform: 'uppercase' }}>{appointment.status}</span>
+                                {t('medAppointment')} [{appointment.id}] <Badge bg={appointment.status === 'scheduled' ? 'info' : appointment.status === 'canceled' ? 'danger' : 'success'}>
+                                    <span style={{ textTransform: 'uppercase' }}>{appointment.status === 'scheduled' ? t('scheduled') : appointment.status === 'completed' ? t('completed') : t('canceledAppointment')}</span>
                                 </Badge>
                             </h1>
 
                             <div>
                                 <div>
                                     <p>
-                                        <strong>Послуга: </strong> [{appointment.service.id}] {appointment.service.name}
+                                        <strong>{t('service')}: </strong> [{appointment.service.id}] {appointment.service.name}
                                     </p>
                                     <p>
-                                        <strong>Час зустрічі: </strong> {appointment.service.start_time}
+                                        <strong>{t('startTime')}: </strong> {appointment.service.start_time}
                                     </p>
                                     <p>
-                                        <strong>Лікарня: </strong> {appointment.hospital.title} ({appointment.hospital.address}) | {appointment.hospital.email}
+                                        <strong>{t('hospital')}: </strong> {appointment.hospital.title} ({appointment.hospital.address}) | {appointment.hospital.email}
                                     </p>
                                     <p>
-                                        <strong>Лікар: </strong> {appointment.doctor.name} {appointment.doctor.surname}
-                                    </p>
-
-                                    <p>
-                                        <strong>Пошта лікаря: </strong> {appointment.doctor.email}
+                                        <strong>{t('doctor')}: </strong> {appointment.doctor.name} {appointment.doctor.surname}
                                     </p>
 
                                     <p>
-                                        <strong>Пацієнт: </strong> {appointment.patient.name} {appointment.patient.surname}
+                                        <strong>{t('email')}: </strong> {appointment.doctor.email}
+                                    </p>
+
+                                    <p>
+                                        <strong>{t('patient')}: </strong> {appointment.patient.name} {appointment.patient.surname}
                                     </p>
                                     <p>
-                                        <strong>Пошта пацієнта: </strong> {appointment.patient.email}
+                                        <strong>{t('email')}: </strong> {appointment.patient.email}
                                     </p>
                                 </div>
 
                                 <Form onSubmit={handleSubmit} style={{ marginTop: '50px' }}>
                                     <Form.Group style={{ marginBottom: '25px' }} className="d-flex flex-column">
-                                        <Form.Label style={{ fontWeight: 'bold' }}>Summary</Form.Label>
+                                        <Form.Label style={{ fontWeight: 'bold' }}>{t('summary')}</Form.Label>
                                         <Form.Control
                                             as="textarea"
                                             style={{ border: '1px solid dodgerblue', resize: 'none' }}
                                             rows={3}
                                             disabled={!isConfirm}
                                             value={formData.summary}
-                                            placeholder={'Summary'}
+                                            placeholder={t('summary')}
                                             name="summary"
                                             onChange={(e) => handleChange(e)}
                                         />
                                     </Form.Group>
                                     <Form.Group style={{ marginBottom: '25px' }} className="d-flex flex-column">
-                                        <Form.Label style={{ fontWeight: 'bold' }}>Notes</Form.Label>
+                                        <Form.Label style={{ fontWeight: 'bold' }}>{t('notes')}</Form.Label>
                                         <Form.Control
                                             as="textarea"
                                             rows={3}
                                             disabled={!isConfirm}
                                             style={{ border: '1px solid dodgerblue', resize: 'none' }}
                                             value={formData.notes}
-                                            placeholder={'Notes'}
+                                            placeholder={t('notes')}
                                             name="notes"
                                             onChange={(e) => handleChange(e)}
                                         />
                                     </Form.Group>
                                     <Form.Group style={{ marginBottom: '25px' }} className="d-flex flex-column">
-                                        <Form.Label style={{ fontWeight: 'bold' }}>Recommendations</Form.Label>
+                                        <Form.Label style={{ fontWeight: 'bold' }}>{t('recommendations')}</Form.Label>
                                         <Form.Control
                                             as="textarea"
                                             rows={3}
                                             disabled={!isConfirm}
                                             style={{ border: '1px solid dodgerblue', resize: 'none' }}
                                             value={formData.recommendations}
-                                            placeholder={'Recommendations'}
+                                            placeholder={t('recommendations')}
                                             name="recommendations"
                                             onChange={(e) => handleChange(e)}
                                         />
                                     </Form.Group>
 
-                                    <Button type="submit" disabled={!isConfirm} className='btn btn-success'>Confirm</Button>
+                                    <Button type="submit" disabled={!isConfirm} className='btn btn-success'>{t('confirmAct')}</Button>
                                 </Form>
                             </div>
                         </div>

@@ -4,15 +4,16 @@ import AppointmentStyles from './Appointment.module.scss';
 import { Badge, Button, Spinner, Table } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { cancelAppointment, destroyAppointment, downloadAppointmentSummary, getAppointmentByDoctor, sendAppointmentSummary } from '../../../api/httpApiClient';
+import { cancelAppointment, destroyAppointment, downloadAppointmentSummary, getAppointmentByDoctor, getAppointmentByUser, sendAppointmentSummary } from '../../../api/httpApiClient';
 import { format } from 'date-fns';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
 
-export const AppointmentList = () => {
+export const AppointmentList = ({ forUser }) => {
     const [isLoaded, setLoaded] = useState(false);
     const { _id } = useParams();
+    const { userId } = useParams();
     const { t } = useTranslation();
 
     const user = useSelector(infoAboutUser);
@@ -24,17 +25,32 @@ export const AppointmentList = () => {
     const [appointmentList, setAppointmentList] = useState([]);
 
     const getAppointmentList = async (id) => {
-        getAppointmentByDoctor({
-            doctor_id: id
-        })
-            .then((resp) => {
-                setLoaded(true);
-                setAppointmentList(resp.data.data);
+        if (forUser) {
+            getAppointmentByUser({
+                user_id: userId
             })
-            .catch((err) => {
-                console.error(err);
-                alert(err.response.message || "Something went wrong");
+                .then((resp) => {
+                    setLoaded(true);
+                    setAppointmentList(resp.data.data);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    alert(err.response.message || "Something went wrong");
+                })
+        } else {
+            getAppointmentByDoctor({
+                doctor_id: id
             })
+                .then((resp) => {
+                    setLoaded(true);
+                    setAppointmentList(resp.data.data);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    alert(err.response.message || "Something went wrong");
+                })
+        }
+
     }
 
     useEffect(() => {
@@ -111,7 +127,7 @@ export const AppointmentList = () => {
         <>
             <Header />
             <div className={AppointmentStyles.root}>
-                <h1 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '25px' }}>Ваші зустрічі</h1>
+                <h1 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '25px' }}>{t('urAppointments')}</h1>
 
                 {!isLoaded ? (
                     <div className={"d-flex justify-content-center align-items-center"}>
@@ -122,12 +138,12 @@ export const AppointmentList = () => {
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Doctor</th>
-                                <th>Service</th>
-                                <th>Patient</th>
-                                <th>Start Time</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th>{t('doctor')}</th>
+                                <th>{t('service')}</th>
+                                <th>{t('patient')}</th>
+                                <th>{t('startTime')}</th>
+                                <th>{t('status')}</th>
+                                <th>{t('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -149,11 +165,13 @@ export const AppointmentList = () => {
 
                                     <td>
                                         <Badge bg={item.status === 'scheduled' ? 'info' : item.status === 'canceled' ? 'danger' : 'success'}>
-                                            <span style={{ textTransform: 'uppercase' }}>{item.status}</span>
+                                            <span style={{ textTransform: 'uppercase' }}>
+                                                <span style={{ textTransform: 'uppercase' }}>{item.status === 'scheduled' ? t('scheduled') : item.status === 'completed' ? t('completed') : t('canceledAppointment')}</span>
+                                            </span>
                                         </Badge>
                                     </td>
                                     <td className='d-flex'>
-                                        {isManager && (
+                                        {isManager && !forUser && (
                                             <>
                                                 <LinkContainer style={{ color: 'black' }} to={`/adminpanel/appointment/${item.id}/edit`}>
                                                     <Button className='btn btn-warning'><i className="fa-solid fa-pen"></i></Button>
@@ -161,10 +179,15 @@ export const AppointmentList = () => {
                                                 <Button onClick={(e) => deleteAppointment(e, item.id)} style={{ color: 'black', marginLeft: '10px' }} className='btn btn-danger'><i className="fa-solid fa-trash"></i></Button>
                                             </>
                                         )}
-                                        <LinkContainer style={{ color: 'black', marginLeft: '10px' }} to={`/adminpanel/appointmentlist/${item.id}/appointment`}>
+                                        <LinkContainer
+                                            style={{ color: 'black', marginLeft: '10px' }}
+                                            to={`${forUser ? '/user' : '/adminpanel'}/appointments/${item.id}/appointment`}
+                                        >
                                             <Button className='btn btn-info'><i className="fa-solid fa-up-right-from-square"></i></Button>
                                         </LinkContainer>
-                                        {item.status === "completed" && (
+
+
+                                        {item.status === "completed" && !forUser && (
                                             <>
                                                 <Button
                                                     title={'Send email summary to user'}
@@ -186,7 +209,7 @@ export const AppointmentList = () => {
                                         )}
 
 
-                                        {item.status !== 'completed' && (
+                                        {item.status !== 'completed' && !forUser && (
                                             <>
                                                 <Button
                                                     title="Cancel"
@@ -199,17 +222,23 @@ export const AppointmentList = () => {
                                             </>
                                         )}
 
-
+                                        {(isManager || !forUser) && (
+                                            <>
+                                                <LinkContainer style={{ color: 'white', marginLeft: '10px' }} to={`/adminpanel/user/${item.patient.id}/referral`}>
+                                                    <Button title={'create referral'} className='btn btn-primary'><i class="fa-solid fa-file-contract"></i></Button>
+                                                </LinkContainer>
+                                            </>
+                                        )}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </Table>
                 ) : (
-                    'У вас немає запланованих зустрічей'
+                    t('emptyAppointments')
                 )}
 
-            </div>
+            </div >
         </>
     )
 }
