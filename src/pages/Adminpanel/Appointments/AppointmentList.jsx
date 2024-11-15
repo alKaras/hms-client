@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../../components/Header'
 import AppointmentStyles from './Appointment.module.scss';
-import { Badge, Button, Table } from 'react-bootstrap';
+import { Badge, Button, Spinner, Table } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { cancelAppointment, destroyAppointment, downloadAppointmentSummary, getAppointmentByDoctor, sendAppointmentSummary } from '../../../api/httpApiClient';
@@ -19,12 +19,13 @@ export const AppointmentList = () => {
     const isLogged = useSelector(selectIsLogged);
     const isDoctor = isLogged && user.roles === 'doctor';
     const isManager = isLogged && user.roles === 'manager';
+    const [isChanged, setIsChanged] = useState(false);
 
     const [appointmentList, setAppointmentList] = useState([]);
 
-    useEffect(() => {
+    const getAppointmentList = async (id) => {
         getAppointmentByDoctor({
-            doctor_id: _id
+            doctor_id: id
         })
             .then((resp) => {
                 setLoaded(true);
@@ -34,6 +35,13 @@ export const AppointmentList = () => {
                 console.error(err);
                 alert(err.response.message || "Something went wrong");
             })
+    }
+
+    useEffect(() => {
+        if (isChanged) {
+            getAppointmentList(_id);
+        }
+        getAppointmentList(_id);
     }, [])
 
     const sendSummary = (e, id) => {
@@ -80,6 +88,7 @@ export const AppointmentList = () => {
         })
             .then((resp) => {
                 alert(resp.data.message);
+                setIsChanged(true);
             })
             .catch((err) => {
                 console.error(err);
@@ -104,7 +113,11 @@ export const AppointmentList = () => {
             <div className={AppointmentStyles.root}>
                 <h1 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '25px' }}>Ваші зустрічі</h1>
 
-                {isLoaded && appointmentList.length > 0 ? (
+                {!isLoaded ? (
+                    <div className={"d-flex justify-content-center align-items-center"}>
+                        <Spinner animation="border" variant="primary" />
+                    </div>
+                ) : isLoaded && appointmentList.length > 0 ? (
                     <Table bordered>
                         <thead>
                             <tr>
@@ -151,22 +164,27 @@ export const AppointmentList = () => {
                                         <LinkContainer style={{ color: 'black', marginLeft: '10px' }} to={`/adminpanel/appointmentlist/${item.id}/appointment`}>
                                             <Button className='btn btn-info'><i className="fa-solid fa-up-right-from-square"></i></Button>
                                         </LinkContainer>
-                                        <Button
-                                            title={'Send email summary to user'}
-                                            style={{ color: 'white', marginLeft: '10px' }}
-                                            className='btn btn-primary'
-                                            onClick={(e) => sendSummary(e, item.id)}
-                                        >
-                                            <i className="fa-solid fa-paper-plane"></i>
-                                        </Button>
+                                        {item.status === "completed" && (
+                                            <>
+                                                <Button
+                                                    title={'Send email summary to user'}
+                                                    style={{ color: 'white', marginLeft: '10px' }}
+                                                    className='btn btn-primary'
+                                                    onClick={(e) => sendSummary(e, item.id)}
+                                                >
+                                                    <i className="fa-solid fa-paper-plane"></i>
+                                                </Button>
 
-                                        <Button style={{ color: 'white', marginLeft: '10px' }}
-                                            title={'download'}
-                                            className='btn btn-secondary'
-                                            onClick={(e) => downloadPdf(e, item.id)}
-                                        >
-                                            <i className="fa-solid fa-file-pdf"></i>
-                                        </Button>
+                                                <Button style={{ color: 'white', marginLeft: '10px' }}
+                                                    title={'download'}
+                                                    className='btn btn-secondary'
+                                                    onClick={(e) => downloadPdf(e, item.id)}
+                                                >
+                                                    <i className="fa-solid fa-file-pdf"></i>
+                                                </Button>
+                                            </>
+                                        )}
+
 
                                         {item.status !== 'completed' && (
                                             <>
