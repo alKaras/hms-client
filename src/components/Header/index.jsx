@@ -130,7 +130,7 @@ export default function Header() {
                                             className={headerStyles.title}>{user.data.name} {user.data.surname}</div>
                                         <div className={headerStyles.image}>
                                             <img src="/assets/profile.jpg" alt="profile" />
-                                        </div>
+                                        </div>ь
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu id={'headerMenu'} className='mt-3 p-3'>
                                         <LinkContainer to={'/user/profile'}>
@@ -179,15 +179,23 @@ export default function Header() {
                                     <LinkContainer to={'/'}>
                                         <Button className={headerStyles['btn-header']}>{t('home')}</Button>
                                     </LinkContainer>
-                                    <LinkContainer to={`/user/${user.id}/services`}>
-                                        <Button className={headerStyles['btn-header']}>{t('userServices')}</Button>
-                                    </LinkContainer>
-                                    <LinkContainer to={'/user/referrals'}>
-                                        <Button className={headerStyles['btn-header']}>{t('userReferrals')}</Button>
+                                    <LinkContainer to={'/user/medcard'}>
+                                        <Button className={headerStyles['btn-header']}>{t('medcard')}</Button>
                                     </LinkContainer>
                                     <LinkContainer to={`/user/${userId}/appointments/list`}>
                                         <Button className={headerStyles['btn-header']}>{t('appointments')}</Button>
                                     </LinkContainer>
+                                    <Dropdown>
+                                        <Dropdown.Toggle className={headerStyles.btnDrop} variant="success"
+                                            id="dropdown-basic">
+                                            {t('medicalHub')}
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item href={'/user/referrals'}>{t('userReferrals')}</Dropdown.Item>
+                                            <Dropdown.Item href={`/user/${user.id}/services`}>{t('userServices')}</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
                                 </div>
                                 <div>
                                     <Dropdown>

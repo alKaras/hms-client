@@ -66,8 +66,8 @@ export const ShoppingCart = () => {
 
     const cancelShopCart = async (e, id) => {
         e.preventDefault();
-        setCartCreated(null);
         localStorage.removeItem('cartCreatedAt');
+        setCartCreated(null);
 
         resetShoppingCart({
             cart_id: id
@@ -112,7 +112,7 @@ export const ShoppingCart = () => {
                 <h1 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '25px', display: 'flex', 'justifyContent': 'center', alignItems: 'center' }}>
                     {t('cart')}
                     <Badge style={{ marginLeft: '10px' }} bg="secondary">{isCartItemsLoaded ? (cartData.length > 0 ? cartData.length : 0) : 0}</Badge>
-                    {cartCreatedAt && <CountdownTimer cartCreatedAt={cartCreatedAt} onExpire={handleExpire} />}
+                    {cartCreatedAt !== null && <CountdownTimer cartCreatedAt={cartCreatedAt} onExpire={handleExpire} />}
                 </h1>
                 <Row>
                     <Col className={CartStyles.cartContent} lg={8} md={8} xs={8}>
@@ -123,7 +123,10 @@ export const ShoppingCart = () => {
                                     <>
                                         <li className={CartStyles.itemContent}>
                                             <div className='d-flex justify-content-between align-items-center'>
-                                                <div style={{ fontWeight: 'bold', fontSize: '16px' }}>[{item.service.service_id}] {item.service.name}</div>
+                                                <div style={{ fontWeight: 'bold', fontSize: '16px' }}>
+                                                    [{item.service.service_id}]
+                                                    {item.service.name}
+                                                </div>
                                                 <div style={{ color: 'gray' }}>{format(new Date(item.service.start_time), 'dd.MM.yyyy HH:mm')}</div>
                                             </div>
                                             <div className='d-flex justify-content-between align-items-center'>

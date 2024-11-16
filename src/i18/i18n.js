@@ -198,14 +198,29 @@ i18n
 
                     completed: "Completed",
                     scheduled: "Scheduled",
-                    canceledAppointment: "Canceled"
+                    canceledAppointment: "Canceled",
+                    availableSlots: 'Available tickets',
+                    emptyAvailableSlots: "No tickets available",
+                    date: "Date",
+
+                    numofavailable: "Number of available",
+                    medicalHub: "Medical records",
+                    medcard: "Med Card",
+                    
                 },
             },
             uk: {
                 translation: {
+                    medcard: "Медична карта",
+                    medicalHub: "Медичні записи",
+                    numofavailable: "К-сть вільних талонів",
+                    date: "Дата",
                     processTime: "Час на оформлення:",
                     appointments: "Відвідування",
                     download: "Завантажити",
+
+                    availableSlots: 'Доступні талони',
+                    emptyAvailableSlots: "Доступних талонів немає",
 
                     emptyAppointments: "'У вас немає запланованих зустрічей'",
 

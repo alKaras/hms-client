@@ -34,6 +34,8 @@ import { ChooseExistDepartment } from "./pages/Adminpanel/Settings/HospitalPage/
 import { DoctorsAttacher } from "./pages/Adminpanel/Settings/HospitalPage/DoctorsAttacher";
 import { AppointmentList } from "./pages/Adminpanel/Appointments/AppointmentList";
 import { SingleAppointment } from "./pages/Adminpanel/Appointments/SingleAppointment";
+import { MedCard } from "./pages/User/MedCard";
+import { MedCardAction } from "./pages/User/MedCard/MedCardAction";
 
 function App() {
     const dispatch = useDispatch();
@@ -122,6 +124,9 @@ function App() {
                 />
 
                 <Route path={`${!isUser ? '/adminpanel' : '/user' }/appointments/:_id/appointment` } element={<SingleAppointment />} />
+                
+                <Route path={'/user/medcard'} element={<MedCard />} />
+                <Route path={'/user/medcard/create'} element={<MedCardAction isEdit={false} />} />
              </Routes>
         </div>
     );
