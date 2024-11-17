@@ -424,3 +424,31 @@ export const downloadAppointmentSummary = async(id) => {
 export const sendAppointmentSummary = async(params) => {
     return await axios.post(`appointment/summary/send`, params);
 }
+
+/**
+ * Medcard routes
+ */
+
+export const fetchAllMedCards = async() => {
+    return await axios.get(`medcard/fetch`);
+}
+
+export const fetchMedCardById = async(id) => {
+    return await axios.get(`medcard/${id}/get`);
+}
+
+export const fetchUserMedCard = async(params) => {
+    return await axios.post(`medcard/user/get`, params);
+}
+
+export const createMedCard = async(params) => {
+    return await axios.post(`medcard/create`, params);
+}
+
+export const editMedCard = async(params) => {
+    return await axios.post(`medcard/edit`, params);
+}
+
+export const deleteMedCard = async(params) => {
+    return await axios.delete(`medcard/delete`, params);
+}

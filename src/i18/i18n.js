@@ -198,14 +198,86 @@ i18n
 
                     completed: "Completed",
                     scheduled: "Scheduled",
-                    canceledAppointment: "Canceled"
+                    canceledAppointment: "Canceled",
+                    availableSlots: 'Available tickets',
+                    emptyAvailableSlots: "No tickets available",
+                    date: "Date",
+
+                    numofavailable: "Number of available",
+                    medicalHub: "Medical records",
+                    medcard: "Med Card",
+                    onlySold: "(Only sold orders)",
+
+                    emptyMedcard: "Unfortunately, your medical record has not been created or completed",
+
+                    yourMedCard: "Your Medical Card",
+                    gender: "Gender",
+
+                    male: "Male",
+                    female: "Female",
+                    nonBinary: "Non-binary",
+                    date_birthday: "Birthday",
+
+                    blood_type: 'Blood type',
+                    emergency_contact_name: "Emergency contact name",
+                    emergency_contact_phone: "Emergency contact phone",
+
+                    insurance_details: "Insurance details",
+                    chronic_conditions: "Chronic conditions",
+                    current_medications: "Current medications",
+                    additional_notes: "Additional notes",
+
+                    details: "Details",
+                    allergies: "Allergies",
+                    fillMedCard: "Fill out a medical card",
+                    editMedCard: "Edit a medical card information",
+                    isOnline: "Service type",
+                    online: "online",
+                    offline: "offline",
                 },
             },
             uk: {
                 translation: {
+                    emptyMedcard: "На жаль ваша медична картка не створена або не заповнена",
+                    gender: "Стать",
+                    online: "онлайн",
+                    offline: "у лікарні",
+
+                    isOnline: "Тип послуги",
+
+                    details: "Деталі",
+                    allergies: "Алергії",
+
+                    male: "Чоловіча",
+                    female: "Жіноча",
+                    nonBinary: "Небінарна",
+                    blood_type: 'Група крові',
+
+                    date_birthday: "День народження",
+                    additional_notes: "Додаткові примітки",
+
+                    fillMedCard: "Заповнити медичну картку",
+                    editMedCard: "Змінити інформацію медичної картки",
+                    yourMedCard: "Ваша медична картка",
+                    current_medications: "Поточні ліки",
+
+                    emergency_contact_name: "Ім'я екстреного контакту",
+                    emergency_contact_phone: "Телефон екстреного контакту",
+
+                    insurance_details: "Деталі страхування",
+                    chronic_conditions: "Хронічні захворювання",
+
+                    onlySold: "(Тільки оплачені замовлення)",
+                    medcard: "Медична карта",
+                    medicalHub: "Медичні записи",
+                    numofavailable: "К-сть вільних талонів",
+                    date: "Дата",
                     processTime: "Час на оформлення:",
                     appointments: "Відвідування",
                     download: "Завантажити",
+
+                    availableSlots: 'Доступні талони',
+                    emptyAvailableSlots: "Доступних талонів немає",
 
                     emptyAppointments: "'У вас немає запланованих зустрічей'",
 

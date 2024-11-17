@@ -109,22 +109,22 @@ export const TimeSlotPicker = ({
                 <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '25px' }} >{t('timeslots')} {isDoctorPage ? ' на консультацію ' : ''}</h2>
 
                 <div className='d-flex justify-between align-items-center'>
-                    <h3 style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '25px' }}>Доступні талони: </h3>
+                    <h3 style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '25px' }}>{t('availableSlots')}: </h3>
 
                     <ul className='d-flex justify-between align-items-center'>
                         {isSlotLoaded && slotStats.length > 0 ? slotStats.map((slot) => (
                             <>
                                 <li style={{ border: '1px solid black', borderRadius: '5px', padding: '10px', marginLeft: '10px' }}>
                                     <p style={{ marginBottom: '5px', fontWeight: 'bold' }}>{[slot.serviceId]} {slot.serviceName}</p>
-                                    <p style={{ marginBottom: '5px' }}>Дата: {format(new Date(slot.date), 'dd.MM.yyyy')}</p>
-                                    <p style={{ margin: 0 }}>к-сть вільних талонів {slot.free_slots}</p>
+                                    <p style={{ marginBottom: '5px' }}>{t('date')}: {format(new Date(slot.date), 'dd.MM.yyyy')}</p>
+                                    <p style={{ margin: 0 }}>{t('numofavailable')} {slot.free_slots}</p>
                                 </li >
                             </>
 
                         ))
                             : (
                                 <>
-                                    Доступних талонів немає
+                                    {t('emptyAvailableSlots')}
                                 </>
                             )}
                     </ul>
@@ -158,9 +158,10 @@ export const TimeSlotPicker = ({
                             infoSlotCollection.map((slot) => (
                                 <>
                                     <li>
-                                        <Button onClick={(e) => pickTimeSlot(e, slot.id)} className={TimeSlotStyles.slotBtn}>
+                                        <Button onClick={(e) => pickTimeSlot(e, slot.id)} className={`${TimeSlotStyles.slotBtn} ${slot.isOnline ? TimeSlotStyles.onlineBtn : ''}`}>
                                             <div className={TimeSlotStyles.slotContent}>
                                                 {slot.service.name}
+                                                {slot.isOnline ? ' (Online)' : (<></>)}
                                             </div>
                                             <div className={TimeSlotStyles.slotTime}>
                                                 {format(new Date(slot.start_time), 'HH:mm')} <span> - </span>
