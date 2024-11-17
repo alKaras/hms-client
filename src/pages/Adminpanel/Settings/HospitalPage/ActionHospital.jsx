@@ -4,6 +4,8 @@ import Header from '../../../../components/Header';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createHospital, editHospital, fetchHospital } from '../../../../api/httpApiClient';
 import { useTranslation } from 'react-i18next';
+import { infoAboutUser, selectIsLogged } from '../../../../redux/slices/authSlice';
+import { useSelector } from 'react-redux';
 
 export default function ActionHospital({ isEdit }) {
     const [title, setTitle] = useState(null);
@@ -17,6 +19,10 @@ export default function ActionHospital({ isEdit }) {
 
     const { _id } = useParams();
     const navigate = useNavigate();
+
+    const user = useSelector(infoAboutUser);
+    const isLogged = useSelector(selectIsLogged);
+    const isManager = isLogged && user.roles === 'manager';
 
 
     useEffect(() => {
@@ -36,6 +42,7 @@ export default function ActionHospital({ isEdit }) {
             setHospitalEmail(hospitalData.hospital_email);
             setAlias(hospitalData.alias);
             setHospitalPhone(hospitalData.hospital_phone);
+            setHospDescr(hospitalData.content.description);
         }
     }, [isLoaded])
 
@@ -58,7 +65,12 @@ export default function ActionHospital({ isEdit }) {
                 editHospital(_id, params)
                     .then((resp) => {
                         alert("Hospital info changed successfully");
-                        navigate('/adminpanel/hospitals');
+                        if (isManager) {
+                            navigate(`/adminpanel/settings/${_id}/hospital`)
+                        } else {
+                            navigate('/adminpanel/hospitals');
+                        }
+
                     })
                     .catch((err) => {
                         alert("Something went wrong");
@@ -150,10 +162,11 @@ export default function ActionHospital({ isEdit }) {
                         </div>
                         <div className="d-flex flex-column">
                             <label>{t('description')}</label>
-                            <input
-                                style={{ padding: '10px', border: '1px solid dodgerblue', resize: 'none' }}
-                                type="text"
+                            <textarea
+                                style={{ padding: '10px', border: '1px solid dodgerblue', resize: 'none', borderRadius: '5px' }}
                                 value={hospitalDescription}
+                                rows={5}
+                                cols={10}
                                 onChange={(e) => setHospDescr(e.target.value)}
                             />
                         </div>

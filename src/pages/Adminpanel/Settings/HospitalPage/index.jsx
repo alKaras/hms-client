@@ -283,7 +283,13 @@ export default function HospitalPage({
                             <>
                                 <div className={HospitalPageStyles.contentSingle}>
                                     <div className={HospitalPageStyles.mainInfo}>
-                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>{t('information')}</div>
+                                        <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex justify-content-between align-content-center'>
+                                            <p>{t('information')}</p>
+                                            <LinkContainer to={`/adminpanel/hospital/${hospital.id}/edit`}>
+                                                <Button className='btn btn-warning'><i className="fa-solid fa-pen"></i></Button>
+                                            </LinkContainer>
+
+                                        </div>
                                         <div className={HospitalPageStyles.innerContent}>
                                             <div><span>{t('name')}: </span>{hospital.content.title} [id: {hospital.id}]</div>
                                             <div><span>{t('address')}: </span>{hospital.content.address}</div>

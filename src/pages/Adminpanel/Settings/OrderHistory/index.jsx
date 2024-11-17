@@ -82,7 +82,7 @@ export default function OrderHistory({ byDoctor, byHospital }) {
                                         {byHospital && (<td width={250}>{item.payment_id}</td>)}
                                         <td className='d-flex align-items-center flex-wrap gap-1'>
                                             {item.serviceData.map((service) => (
-                                                <div className='d-flex align-items-center justity-content-between gap-3' style={{ border: '1px solid black', padding: '5px', borderRadius: '5px', width: '300px', marginBottom: '5px' }}>
+                                                <div className='d-flex align-items-center justity-content-between gap-3' style={{ padding: '5px', marginBottom: '5px', width: '300px', borderLeft: '1px solid black' }}>
                                                     <div>{service.serviceName}</div>
                                                     <div>{service.departmentTitle}</div>
                                                     <div>{format(new Date(service.startTime), 'dd.MM.yyyy HH:mm')}</div>
