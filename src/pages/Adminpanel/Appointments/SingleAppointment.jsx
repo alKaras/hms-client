@@ -6,7 +6,7 @@ import { confirmAppointment, getSingleAppointment } from '../../../api/httpApiCl
 import { Badge, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-export const SingleAppointment = () => {
+export const SingleAppointment = ({ forUser }) => {
     const { _id } = useParams();
     const [isLoaded, setLoaded] = useState(false);
     const [appointment, setAppointment] = useState(null);
@@ -106,7 +106,7 @@ export const SingleAppointment = () => {
                             <div>
                                 <div>
                                     <p>
-                                        <strong>{t('service')}: </strong> [{appointment.service.id}] {appointment.service.name}
+                                        <strong>{t('service')}: </strong> [{appointment.service.id}] {appointment.service.name} {appointment.service.isOnline ? '(Online)' : ''}
                                     </p>
                                     <p>
                                         <strong>{t('startTime')}: </strong> {appointment.service.start_time}
@@ -128,51 +128,66 @@ export const SingleAppointment = () => {
                                     <p>
                                         <strong>{t('email')}: </strong> {appointment.patient.email}
                                     </p>
+                                    {appointment.service.isOnline ? (
+                                        <>
+                                            <p>
+                                                <strong>{t('Link')}</strong> {appointment.meetLink}
+                                            </p>
+                                        </>) : (<></>)}
+
                                 </div>
+                                {(forUser && isConfirm) ? (
+                                    <>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Form onSubmit={handleSubmit} style={{ marginTop: '50px' }}>
+                                            <Form.Group style={{ marginBottom: '25px' }} className="d-flex flex-column">
+                                                <Form.Label style={{ fontWeight: 'bold' }}>{t('summary')}</Form.Label>
+                                                <Form.Control
+                                                    as="textarea"
+                                                    style={{ border: '1px solid dodgerblue', resize: 'none' }}
+                                                    rows={3}
+                                                    disabled={!isConfirm}
+                                                    value={formData.summary}
+                                                    placeholder={t('summary')}
+                                                    name="summary"
+                                                    onChange={(e) => handleChange(e)}
+                                                />
+                                            </Form.Group>
+                                            <Form.Group style={{ marginBottom: '25px' }} className="d-flex flex-column">
+                                                <Form.Label style={{ fontWeight: 'bold' }}>{t('notes')}</Form.Label>
+                                                <Form.Control
+                                                    as="textarea"
+                                                    rows={3}
+                                                    disabled={!isConfirm}
+                                                    style={{ border: '1px solid dodgerblue', resize: 'none' }}
+                                                    value={formData.notes}
+                                                    placeholder={t('notes')}
+                                                    name="notes"
+                                                    onChange={(e) => handleChange(e)}
+                                                />
+                                            </Form.Group>
+                                            <Form.Group style={{ marginBottom: '25px' }} className="d-flex flex-column">
+                                                <Form.Label style={{ fontWeight: 'bold' }}>{t('recommendations')}</Form.Label>
+                                                <Form.Control
+                                                    as="textarea"
+                                                    rows={3}
+                                                    disabled={!isConfirm}
+                                                    style={{ border: '1px solid dodgerblue', resize: 'none' }}
+                                                    value={formData.recommendations}
+                                                    placeholder={t('recommendations')}
+                                                    name="recommendations"
+                                                    onChange={(e) => handleChange(e)}
+                                                />
+                                            </Form.Group>
 
-                                <Form onSubmit={handleSubmit} style={{ marginTop: '50px' }}>
-                                    <Form.Group style={{ marginBottom: '25px' }} className="d-flex flex-column">
-                                        <Form.Label style={{ fontWeight: 'bold' }}>{t('summary')}</Form.Label>
-                                        <Form.Control
-                                            as="textarea"
-                                            style={{ border: '1px solid dodgerblue', resize: 'none' }}
-                                            rows={3}
-                                            disabled={!isConfirm}
-                                            value={formData.summary}
-                                            placeholder={t('summary')}
-                                            name="summary"
-                                            onChange={(e) => handleChange(e)}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group style={{ marginBottom: '25px' }} className="d-flex flex-column">
-                                        <Form.Label style={{ fontWeight: 'bold' }}>{t('notes')}</Form.Label>
-                                        <Form.Control
-                                            as="textarea"
-                                            rows={3}
-                                            disabled={!isConfirm}
-                                            style={{ border: '1px solid dodgerblue', resize: 'none' }}
-                                            value={formData.notes}
-                                            placeholder={t('notes')}
-                                            name="notes"
-                                            onChange={(e) => handleChange(e)}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group style={{ marginBottom: '25px' }} className="d-flex flex-column">
-                                        <Form.Label style={{ fontWeight: 'bold' }}>{t('recommendations')}</Form.Label>
-                                        <Form.Control
-                                            as="textarea"
-                                            rows={3}
-                                            disabled={!isConfirm}
-                                            style={{ border: '1px solid dodgerblue', resize: 'none' }}
-                                            value={formData.recommendations}
-                                            placeholder={t('recommendations')}
-                                            name="recommendations"
-                                            onChange={(e) => handleChange(e)}
-                                        />
-                                    </Form.Group>
+                                            <Button type="submit" disabled={!isConfirm} className='btn btn-success'>{t('confirmAct')}</Button>
+                                        </Form>
+                                    </>
+                                )}
 
-                                    <Button type="submit" disabled={!isConfirm} className='btn btn-success'>{t('confirmAct')}</Button>
-                                </Form>
+
                             </div>
                         </div>
                     </>

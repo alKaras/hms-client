@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
+import { Snackbar, Alert } from '@mui/material';
 
 export const AppointmentList = ({ forUser }) => {
     const [isLoaded, setLoaded] = useState(false);
@@ -114,13 +115,32 @@ export const AppointmentList = ({ forUser }) => {
     const deleteAppointment = async (e, id) => {
         e.preventDefault();
 
-        destroyAppointment
+        destroyAppointment({
+            appointmentId: id,
+        })
             .then((resp) => {
                 alert(resp.data.message);
             })
             .catch((err) => {
                 console.error(err);
             })
+    }
+
+    const [copyStatus, setCopyStatus] = useState("");
+
+    const copyLinkToClipBoard = async (e, link) => {
+        e.preventDefault();
+
+        try {
+            await navigator.clipboard.writeText(link);
+            setCopyStatus('Link copied to clipboard');
+        } catch (err) {
+            setCopyStatus('Failed to copy the link.');
+        }
+    }
+
+    const handleClose = () => {
+        setCopyStatus(null);
     }
 
     return (
@@ -186,6 +206,16 @@ export const AppointmentList = ({ forUser }) => {
                                             <Button className='btn btn-info'><i className="fa-solid fa-up-right-from-square"></i></Button>
                                         </LinkContainer>
 
+                                        {(item.status === 'scheduled' && item.service.isOnline) && (
+                                            <Button
+                                                style={{ marginLeft: '10px' }}
+                                                className='btn btn-secondary'
+                                                onClick={(e) => copyLinkToClipBoard(e, item.meetLink)}
+                                            >
+                                                <i class="fa-regular fa-copy"></i>
+                                            </Button>
+                                        )}
+
 
                                         {item.status === "completed" && !forUser && (
                                             <>
@@ -238,7 +268,17 @@ export const AppointmentList = ({ forUser }) => {
                     t('emptyAppointments')
                 )}
 
+                <Snackbar open={!!copyStatus} autoHideDuration={6000} onClose={handleClose}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                >
+
+                    <Alert onClose={handleClose} severity={'info'} sx={{ width: '100%' }}>
+                        {copyStatus}
+                    </Alert>
+                </Snackbar>
+
             </div >
+
         </>
     )
 }

@@ -123,10 +123,11 @@ function App() {
                 element={<AppointmentList forUser={isUser} />} 
                 />
 
-                <Route path={`${!isUser ? '/adminpanel' : '/user' }/appointments/:_id/appointment` } element={<SingleAppointment />} />
+                <Route path={`${!isUser ? '/adminpanel' : '/user' }/appointments/:_id/appointment` } element={<SingleAppointment forUser={isUser} />} />
                 
                 <Route path={'/user/medcard'} element={<MedCard />} />
                 <Route path={'/user/medcard/create'} element={<MedCardAction isEdit={false} />} />
+                <Route path={'/user/medcard/:_id/edit'} element={<MedCardAction isEdit={true} />} />
              </Routes>
         </div>
     );

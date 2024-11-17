@@ -18,13 +18,15 @@ export const UserServices = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(10);
 
+    const [onlySold, setOnlySold] = useState(1);
+
     useEffect(() => {
         getOrderByFilter({
             filter: OrderFiltersEnum.ORDERS_BY_USER,
             user_id: _id,
             per_page: 10,
             page: currentPage,
-            onlySold: 1
+            onlySold: onlySold
         })
             .then((resp) => {
                 setIsLoaded(true);
@@ -36,7 +38,7 @@ export const UserServices = () => {
             .catch((err) => {
                 console.error(err.response);
             })
-    }, [currentPage])
+    }, [currentPage, onlySold])
 
     const downloadItem = async (e, id) => {
         e.preventDefault();
@@ -72,7 +74,7 @@ export const UserServices = () => {
         <>
             <Header />
             <div className={UserServiceStyle.root}>
-                <h2 style={{ fontSize: '24px', marginBottom: '25px' }}>{t('userServices')}</h2>
+                <h2 style={{ fontSize: '24px', marginBottom: '25px' }}>{t('userServices')} {onlySold ? t('onlySold') : ''}</h2>
                 <div className={UserServiceStyle.content}>
                     {isLoaded && userServiceData.length > 0 ? userServiceData.map((item) => (
                         <Accordion>

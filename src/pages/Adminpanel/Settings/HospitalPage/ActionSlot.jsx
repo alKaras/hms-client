@@ -6,7 +6,7 @@ import { createTimeSlot, destroyTimeSlot, fetchDoctorByService, generateTimeSlot
 import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TextField } from '@mui/material';
-import { Button, Spinner, Table } from 'react-bootstrap';
+import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import { differenceInHours, format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -19,6 +19,7 @@ export const ActionSlot = () => {
     const [startTime, setStartTime] = useState(currentDate.setHours(10, 0, 0));
     const [endTime, setEndTime] = useState(currentDate.setHours(19, 0, 0));
     const [price, setPrice] = useState("");
+    const [isOnline, setOnline] = useState(0);
 
     const [isDoctorsLoaded, setDoctorLoaded] = useState(false);
     const [serviceDoctorList, setServiceDoctorList] = useState([]);
@@ -86,7 +87,8 @@ export const ActionSlot = () => {
             service_id: _id,
             start_time: format(startTime, 'yyyy-MM-dd HH:mm'),
             end_time: format(endTime, 'yyyy-MM-dd HH:mm'),
-            price: Number(price)
+            price: Number(price),
+            isOnline: Number(isOnline)
         };
 
         let diffHour = differenceInHours(endTime, startTime);
@@ -104,7 +106,8 @@ export const ActionSlot = () => {
                     setDefaults();
                 })
                 .catch((err) => {
-                    alert(err.data.message);
+                    alert(err.response.message);
+                    setDefaults();
                 })
         } else {
             createTimeSlot(params)
@@ -113,7 +116,8 @@ export const ActionSlot = () => {
                     setDefaults();
                 })
                 .catch((err) => {
-                    alert(err.data.message);
+                    alert(err.response.message);
+                    setDefaults();
                 })
         }
     }
@@ -123,6 +127,11 @@ export const ActionSlot = () => {
         setStartTime(null);
         setEndTime(null);
         setDoctorId(null);
+        setOnline(0);
+    }
+
+    const handleToggle = () => {
+        setOnline(!isOnline);
     }
 
     const deleteSlotById = async (slotId, e) => {
@@ -198,6 +207,16 @@ export const ActionSlot = () => {
                             />
                         </LocalizationProvider>
                     </div>
+                    <Form.Group className="d-flex flex-column">
+                        <Form.Label>{t('isOnline')}</Form.Label>
+                        <Form.Check
+                            type="switch"
+                            id="slot-toggle"
+                            label={isOnline ? t('online') : t('offline')}
+                            checked={isOnline}
+                            onChange={handleToggle}
+                        />
+                    </Form.Group>
                     <div className="d-flex flex-column">
                         <label style={{ marginBottom: '5px' }}>{t('price')} ({t('uah')})</label>
                         <input
@@ -243,6 +262,7 @@ export const ActionSlot = () => {
                                     <th>{t('endTime')}</th>
                                     <th>{t('price')}</th>
                                     <th>{t('status')}</th>
+                                    <th>{t('type')}</th>
                                     <th>{t('actions')}</th>
                                 </tr>
                             </thead>
@@ -266,11 +286,12 @@ export const ActionSlot = () => {
                                                 />
                                             </td>
                                             <td>{slot.state === 2 ? t('sold') : slot.state === 1 ? t('free') : t('reserved')}</td>
+                                            <td>{slot.isOnline !== 0 ? t('online') : t('offline')}</td>
                                             <td>
                                                 {(slot.state === 1) && (
                                                     <div>
-                                                        <Button style={{ marginRight: '15px' }} className='btn btn-warning'><i className="fa-solid fa-pen-to-square"></i></Button>
-                                                        <Button className='btn btn-danger' onClick={(e) => deleteSlotById(slot.id, e)}><i className="fa-solid fa-delete-left"></i></Button>
+                                                        {/* <Button style={{ marginRight: '15px' }} className='btn btn-warning'><i className="fa-solid fa-pen-to-square"></i></Button> */}
+                                                        <Button title={'delete slot'} className='btn btn-danger' onClick={(e) => deleteSlotById(slot.id, e)}><i className="fa-solid fa-delete-left"></i></Button>
                                                     </div>
                                                 )}
                                             </td>

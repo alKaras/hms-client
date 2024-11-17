@@ -7,11 +7,13 @@ import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { createMedCard } from '../../../api/httpApiClient';
+import { createMedCard, editMedCard, fetchUserMedCard } from '../../../api/httpApiClient';
 import { format } from 'date-fns';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const MedCardAction = ({ isEdit }) => {
     const { t } = useTranslation();
+    const { _id } = useParams();
     const [loaded, setLoaded] = useState(false);
     const [birthdate, setBirthDate] = useState('');
     const [formData, setFormData] = useState({
@@ -31,6 +33,8 @@ export const MedCardAction = ({ isEdit }) => {
         additional_notes: '',
     });
 
+    const navigate = useNavigate();
+
     const user = useSelector(infoAboutUser);
     const isLogged = useSelector(selectIsLogged);
 
@@ -42,6 +46,27 @@ export const MedCardAction = ({ isEdit }) => {
                 lastname: user.data.surname,
                 contact_number: user.data.phone,
             });
+        } else if (isEdit && isLogged) {
+            fetchUserMedCard({
+                user_id: user.id,
+            }).then((resp) => {
+                let result = resp.data.data;
+                setFormData({
+                    firstname: result.firstname,
+                    lastname: result.lastname,
+                    gender: result.gender,
+                    contact_number: result.contact_number || '',
+                    address: result.address || '',
+                    allergies: result.allergies || '',
+                    chronic_conditions: result.chronic_conditions || '',
+                    current_medications: result.current_medications || '',
+                    emergency_contact_name: result.emergency_contact_name || '',
+                    emergency_contact_phone: result.emergency_contact_phone || '',
+                    insurance_details: result.insurance_details || '',
+                    additional_notes: result.additional_notes || '',
+                })
+            })
+
         }
     }, [isLogged]);
 
@@ -54,7 +79,17 @@ export const MedCardAction = ({ isEdit }) => {
         e.preventDefault();
 
         if (isEdit) {
-
+            editMedCard({
+                medcard_id: _id,
+                ...formData
+            })
+                .then((resp) => {
+                    alert(resp.data.message);
+                    navigate('/user/medcard')
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
         } else {
             createMedCard({
                 ...formData,
@@ -62,6 +97,8 @@ export const MedCardAction = ({ isEdit }) => {
             })
                 .then((resp) => {
                     alert(resp.data.message);
+                    navigate('/user/medcard')
+
                 })
                 .catch((err) => {
                     console.log(err);
@@ -72,11 +109,12 @@ export const MedCardAction = ({ isEdit }) => {
 
 
 
+
     return (
         <>
             <Header />
             <div className={MedCardStyles.root}>
-                <h1 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold', marginBottom: '25px' }}>Заповнити мед картку</h1>
+                <h1 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold', marginBottom: '25px' }}>{isEdit ? t('editMedCard') : t('fillMedCard')}</h1>
                 <Form onSubmit={handleSubmit}>
                     <div className='d-flex justify-content-between align-items-center'>
                         <Form.Group>
@@ -104,32 +142,35 @@ export const MedCardAction = ({ isEdit }) => {
                         </Form.Group>
 
                         <Form.Group>
-                            <Form.Label>{t('contact_number')}</Form.Label>
+                            <Form.Label>{t('phone')}</Form.Label>
                             <Form.Control
                                 type='text'
                                 name='contact_number'
                                 value={formData.contact_number}
                                 onChange={(e) => handleChange(e)}
-                                placeholder={t('contact_number')}
+                                placeholder={t('phone')}
                                 required={true}
                             />
                         </Form.Group>
 
-                        <div style={{ alignSelf: 'flex-end' }}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DatePicker
-                                    label={t('date_birthday')}
-                                    value={birthdate}
-                                    format='dd.MM.yyyy'
-                                    onChange={(newDate) => {
-                                        if (newDate) {
-                                            setBirthDate(newDate);
-                                        }
+                        {!isEdit && (
+                            <div style={{ alignSelf: 'flex-end' }}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DatePicker
+                                        label={t('date_birthday')}
+                                        value={birthdate}
+                                        format='dd.MM.yyyy'
+                                        onChange={(newDate) => {
+                                            if (newDate) {
+                                                setBirthDate(newDate);
+                                            }
 
-                                    }}
-                                />
-                            </LocalizationProvider>
-                        </div>
+                                        }}
+                                    />
+                                </LocalizationProvider>
+                            </div>
+                        )}
+
 
                         <Form.Group>
                             <Form.Label>{t('gender')}</Form.Label>
@@ -142,10 +183,10 @@ export const MedCardAction = ({ isEdit }) => {
                                 required={true}
 
                             >
-                                <option value={""} disabled>Choose gender</option>
-                                <option value={"male"}>Male</option>
-                                <option value={"female"}>Female</option>
-                                <option value={"non-binary"}>Non-binary</option>
+                                <option value={""} disabled>{t('gender')}</option>
+                                <option value={"male"}>{t('male')}</option>
+                                <option value={"female"}>{t('female')}</option>
+                                <option value={"non-binary"}>{t('nonBinary')}</option>
                             </Form.Control>
                         </Form.Group>
                     </div>
@@ -184,16 +225,19 @@ export const MedCardAction = ({ isEdit }) => {
                                 required={true}
                             />
                         </Form.Group>
-                        <Form.Group>
-                            <Form.Label>{t('blood_type')}</Form.Label>
-                            <Form.Control
-                                type='text'
-                                name='blood_type'
-                                value={formData.blood_type}
-                                onChange={(e) => handleChange(e)}
-                                placeholder={t('blood_type')}
-                            />
-                        </Form.Group>
+                        {!isEdit && (
+                            <Form.Group>
+                                <Form.Label>{t('blood_type')}</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    name='blood_type'
+                                    value={formData.blood_type}
+                                    onChange={(e) => handleChange(e)}
+                                    placeholder={t('blood_type')}
+                                />
+                            </Form.Group>
+                        )}
+
                     </div>
                     <div style={{ marginTop: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Form.Group style={{ marginBottom: '25px' }}>
