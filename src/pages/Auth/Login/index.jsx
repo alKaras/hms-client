@@ -36,7 +36,11 @@ export default function Login() {
         dispatch(loginUser(values));
     }
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (isLogged && roles === 'doctor') {
             navigate('/adminpanel/services');
             window.location.reload();

@@ -38,6 +38,13 @@ export default function Header() {
     //     }
     // }, [isAdmin, isDoctor, isManager, navigate]);
 
+    const { i18n } = useTranslation();
+
+    useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
+    }, [])
+
     return (
         <Navbar expand="md" className={`${headerStyles.root} d-flex align-content-center justify-content-between fixed-top`}>
             <LinkContainer to={
@@ -76,7 +83,10 @@ export default function Header() {
                                     <LinkContainer to={'/adminpanel/reports'}>
                                         <Button className={headerStyles['btn-header']}>{t('report')}</Button>
                                     </LinkContainer>
-                                    <Dropdown>
+                                    <LinkContainer to={`/adminpanel/settings/${hospitalId}/hospital`}>
+                                        <Button className={headerStyles['btn-header']}>{t('hospital')}</Button>
+                                    </LinkContainer>
+                                    {/* <Dropdown>
                                         <Dropdown.Toggle className={headerStyles.btnDrop} variant="success"
                                             id="dropdown-basic">
                                             {t('settings')}
@@ -86,7 +96,7 @@ export default function Header() {
                                             <Dropdown.Item href={`/adminpanel/settings/${hospitalId}/hospital`}>{t('hospital')}</Dropdown.Item>
                                             <Dropdown.Item href="/adminpanel/hospital/order-history">{t('orderHistory')}</Dropdown.Item>
                                         </Dropdown.Menu>
-                                    </Dropdown>
+                                    </Dropdown> */}
                                     <Dropdown align="end">
                                         <Dropdown.Toggle id={'headerToggle'} className={` ${headerStyles.profileBadge}`}>
                                             <div

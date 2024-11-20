@@ -149,8 +149,12 @@ export default function HospitalPage({
         }
     }, [_id, currentPage])
 
+    const { i18n } = useTranslation();
+
 
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (specific) {
             setDoctorsLoaded(false);
             fetchHospital(_id)

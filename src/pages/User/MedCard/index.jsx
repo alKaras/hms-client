@@ -18,7 +18,11 @@ export const MedCard = () => {
     const userId = isLogged && user.id;
     const [noRecord, setNoRecord] = useState(false);
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (isLogged) {
             fetchUserMedCard({
                 user_id: userId,

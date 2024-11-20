@@ -38,7 +38,11 @@ export const MedCardAction = ({ isEdit }) => {
     const user = useSelector(infoAboutUser);
     const isLogged = useSelector(selectIsLogged);
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (!isEdit && isLogged) {
             setFormData({
                 user_id: user.id,

@@ -38,7 +38,12 @@ export const ActionDepartment = ({ isEdit }) => {
         }
     }, [_id, isEdit])
 
+    const { t } = useTranslation();
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (isLoaded) {
             setTitle(currentDep.content.title);
             setAlias(currentDep.alias);
@@ -92,7 +97,7 @@ export const ActionDepartment = ({ isEdit }) => {
                 })
         }
     }
-    const { t } = useTranslation();
+
 
     return (
         <>

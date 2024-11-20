@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAccordionButton } from 'react-bootstrap';
 import togglerStyle from './ServiceToggler.module.scss';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,12 @@ import { useTranslation } from 'react-i18next';
 export const ServiceToggler = ({ children, eventKey, orderId, status, amountServices }) => {
     const decoratedOnClick = useAccordionButton(eventKey, () => (console.log('clicked')));
     const { t } = useTranslation();
+    const { i18n } = useTranslation();
+
+    useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
+    }, [])
     return (
         <>
             <div className={`${togglerStyle.root}`} style={status === 'СКАСОВАНО' ? { color: 'gray' } : {}}>

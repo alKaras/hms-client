@@ -5,7 +5,7 @@ import ReportStyles from './Reports.module.scss';
 import FeedFilter from '../../../components/FeedFilter';
 import { exportReport, getReportByFilter } from '../../../api/httpApiClient';
 import { Button, Table } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, i18n } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
 import { Alert, Snackbar } from '@mui/material';
@@ -58,14 +58,17 @@ export default function Reports() {
                 setError("Data is not provided or there is no data for this filters");
             })
     }
-
+    const { t } = useTranslation();
+    const { i18n } = useTranslation();
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchReportFeed(filter, reportFilter);
         console.log(filter);
     }, [hospitalId]);
 
 
-    const { t } = useTranslation();
+
 
     const onDownloadReport = async (e) => {
         e.preventDefault();

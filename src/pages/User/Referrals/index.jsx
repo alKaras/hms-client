@@ -14,7 +14,11 @@ export default function Referrals() {
     const [referralId, setReferralId] = useState(null);
     const [isRefLoaded, setIsRefLoaded] = useState(false);
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchUserReferrals()
             .then((resp) => {
                 setLoaded(true);

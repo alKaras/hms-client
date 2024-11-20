@@ -1,4 +1,4 @@
-import React, { useState, useTransition } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import DoctorCardStyles from './DoctorCard.module.scss';
 import { LinkContainer } from "react-router-bootstrap";
 import { Button, Modal, ProgressBar } from "react-bootstrap";
@@ -15,6 +15,7 @@ export default function DoctorCard({
     doctor_id,
 }) {
     const { t } = useTranslation();
+    const { i18n } = useTranslation();
 
     const [step, setStep] = useState(1);
     const [slots, setSlots] = useState([]);
@@ -25,6 +26,11 @@ export default function DoctorCard({
 
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
+
+    useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
+    }, [])
 
     return (
         <>

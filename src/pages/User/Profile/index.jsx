@@ -34,8 +34,11 @@ export default function UserProfile() {
     const [ordersLoaded, setOrdersLoaded] = useState(false);
 
     const { t } = useTranslation();
+    const { i18n } = useTranslation();
 
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (isLogged && user.data) {
             setName(user.data.name || '');
             setSurname(user.data.surname || '');

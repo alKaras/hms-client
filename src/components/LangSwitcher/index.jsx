@@ -8,6 +8,7 @@ export const LangSwitcher = () => {
 
     const changeLanguage = (lng) => {
         i18n.changeLanguage(lng);
+        localStorage.setItem('language', lng);
     }
     return (
         <DropdownButton style={{ alignSelf: 'center', marginLeft: '20px' }} id="dropdown-basic-button" title={<><i class="fa-solid fa-language"></i></>}>

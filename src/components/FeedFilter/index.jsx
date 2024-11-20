@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getOrderByFilter } from '../../api/httpApiClient';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -123,6 +123,12 @@ export default function FeedFilter({
     }
 
     const { t } = useTranslation();
+    const { i18n } = useTranslation();
+
+    useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
+    }, [])
 
     return (
         <div className={FeedFilterStyles.root}>

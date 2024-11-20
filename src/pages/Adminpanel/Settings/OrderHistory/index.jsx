@@ -22,7 +22,11 @@ export default function OrderHistory({ byDoctor, byHospital }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(10);
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (doctorId) {
             getOrderByFilter({ filter: OrderFiltersEnum.ORDERS_BY_DOCTOR, doctor_id: Number(doctorId), per_page: 10, page: currentPage })
                 .then((resp) => {

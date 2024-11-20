@@ -234,10 +234,12 @@ i18n
                     isOnline: "Service type",
                     online: "online",
                     offline: "offline",
+                    forConsult: "for consultation",
                 },
             },
             uk: {
                 translation: {
+                    forConsult: "на консультацію",
                     emptyMedcard: "На жаль ваша медична картка не створена або не заповнена",
                     gender: "Стать",
                     online: "онлайн",

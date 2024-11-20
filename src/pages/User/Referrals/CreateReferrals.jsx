@@ -17,7 +17,12 @@ export const CreateReferrals = () => {
     const [serviceCollection, setServiceCollection] = useState([]);
     const [selectedServiceIds, setSelectedServiceIds] = useState([]);
 
+    const { i18n } = useTranslation();
+
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchHospitalServices({
             hospital_id: hospitalId
         })

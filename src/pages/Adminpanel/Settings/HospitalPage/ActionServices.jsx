@@ -21,7 +21,11 @@ export const ActionServices = () => {
     const [departmentAlias, setDepartmentAlias] = useState('');
     const [doctorId, setDoctorId] = useState(null);
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchHospitalDepartments(hospitalId)
             .then((resp) => {
                 setHospDepColl(resp.data.data)

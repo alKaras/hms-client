@@ -35,7 +35,11 @@ export const ShoppingCart = () => {
             })
     }
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchShoppingCart();
         if (isRemoved) {
             fetchShoppingCart();
@@ -147,7 +151,6 @@ export const ShoppingCart = () => {
                         <Col className={CartStyles.checkoutCard} lg={4} md={4} xs={4}>
                             <div className={CartStyles.checkoutCardContent} >
                                 <div style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center', marginBottom: '15px' }}>{t('userOrder')}</div>
-                                <hr />
                                 {isCartItemsLoaded && cartData.map((item) => (
                                     <>
                                         <div style={{ marginBottom: '10px' }} className='d-flex align-content-center justify-content-between'>
@@ -156,10 +159,9 @@ export const ShoppingCart = () => {
                                         </div>
                                     </>
                                 ))}
-                                <hr />
                                 <div style={{ marginTop: '15px' }} className='d-flex align-content-center justify-content-between'>
                                     <div className={CartStyles.cartFirstEl}>{t('serviceFee')}</div>
-                                    <div>15%</div>
+                                    <div>10%</div>
                                 </div>
                                 <hr />
                                 <div className='d-flex align-content-center justify-content-between'>

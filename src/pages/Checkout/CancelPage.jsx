@@ -11,7 +11,11 @@ export const CancelPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const sessionId = queryParams.get('session_id');
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         cancelCheckout({
             session_id: sessionId
         })

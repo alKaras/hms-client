@@ -40,8 +40,10 @@ export const TimeSlotPicker = ({
     }
 
 
-
+    const { i18n } = useTranslation();
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         let params = {
             date: format(selectedDate, 'yyyy-MM-dd'),
             freeOnly: 1,
@@ -54,7 +56,7 @@ export const TimeSlotPicker = ({
                 doctor_id: _id
             })
                 .then((resp) => {
-                    setisSlotLoaded(true);
+                    setStatsLoaded(true);
                     let doctorData = resp.data.data;
 
                     let consultsFreeSlots = doctorData.filter((res) => res.serviceName.includes('Консультація'));
@@ -72,7 +74,7 @@ export const TimeSlotPicker = ({
                 service_id: _id
             })
                 .then((resp) => {
-                    setisSlotLoaded(true);
+                    setStatsLoaded(true);
                     setSlotStats(resp.data.data);
                 })
                 .catch((err) => {
@@ -106,7 +108,7 @@ export const TimeSlotPicker = ({
             <Header />
             <div className={TimeSlotStyles.root}>
 
-                <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '25px' }} >{t('timeslots')} {isDoctorPage ? ' на консультацію ' : ''}</h2>
+                <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '25px' }} >{t('timeslots')} {isDoctorPage ? t('forConsult') : ''}</h2>
 
                 <div className='d-flex justify-between align-items-center'>
                     <h3 style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '25px' }}>{t('availableSlots')}: </h3>

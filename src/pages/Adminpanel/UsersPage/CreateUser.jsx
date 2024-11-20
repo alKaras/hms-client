@@ -42,7 +42,12 @@ export default function CreateUser(props) {
         })
 
     }
+
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (isCreated) {
             navigate('/adminpanel/users');
         }

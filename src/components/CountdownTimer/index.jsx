@@ -3,8 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 const CountdownTimer = ({ cartCreatedAt, onExpire }) => {
     const [timeLeft, setTimeLeft] = useState(calculateRemainingTime(cartCreatedAt));
+    const { i18n } = useTranslation();
 
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (timeLeft <= 0) {
             onExpire();
             return;

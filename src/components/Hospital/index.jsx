@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Spinner } from "react-bootstrap";
 import HospitalStyles from './Hospital.module.scss';
 import { Link } from "react-router-dom";
@@ -15,6 +15,12 @@ export default function Hospital({
     isLoading
 }) {
     const { t } = useTranslation();
+    const { i18n } = useTranslation();
+
+    useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
+    }, []);
     return (
         <>
             {isLoading ?

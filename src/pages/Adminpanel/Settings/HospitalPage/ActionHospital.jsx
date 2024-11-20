@@ -24,8 +24,12 @@ export default function ActionHospital({ isEdit }) {
     const isLogged = useSelector(selectIsLogged);
     const isManager = isLogged && user.roles === 'manager';
 
+    const { i18n } = useTranslation();
+
 
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (isEdit) {
             fetchHospital(_id).then((resp) => {
                 setHospitalData(resp.data);

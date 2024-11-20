@@ -17,7 +17,12 @@ export const SuccessPage = () => {
     const [orderData, setOrderData] = useState(null);
     const [orderServiceData, setOrderServiceData] = useState([]);
     const [isDataLoaded, setDataLoaded] = useState(false);
+
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         let params = {};
         if (sessionId) {
             params.session_id = sessionId;

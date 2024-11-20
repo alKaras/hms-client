@@ -44,7 +44,11 @@ export default function HospitalInfo() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(10);
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchHospital(id)
             .then((data) => {
                 setHospitalContent(data.data);

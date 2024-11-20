@@ -22,7 +22,11 @@ export default function EditUser() {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         getUser(_id).then((resp) => {
             setUser(resp.data.data);
             setLoaded(true);

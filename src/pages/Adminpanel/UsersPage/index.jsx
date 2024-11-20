@@ -19,7 +19,12 @@ export default function UsersPage({
     const [totalPages, setTotalPages] = useState(10);
     console.log(users);
     console.log(isLoading);
+
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         // dispatch(getUsers({ page: currentPage, perPage: 10 }));
         fetchUsers(currentPage)
     }, [currentPage]);

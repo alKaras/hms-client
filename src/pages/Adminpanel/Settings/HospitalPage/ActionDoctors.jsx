@@ -31,7 +31,11 @@ export const ActionDoctors = ({ isEdit }) => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchHospitalDepartments(hospitalId)
             .then((resp) => {
                 setDepartments(resp.data.data);

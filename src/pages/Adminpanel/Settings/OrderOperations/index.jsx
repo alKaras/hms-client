@@ -73,8 +73,11 @@ export const OrderOperations = () => {
         // let result = orderFeedData.find((order) => order.orderId === order_id);
         // setSpecificOrder(result);
     }
+    const { i18n } = useTranslation();
 
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchOrdersFeed(currentPage, filter);
         console.log(filter);
 

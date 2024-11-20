@@ -45,8 +45,11 @@ export const SingleAppointment = ({ forUser }) => {
     }
 
 
+    const { i18n } = useTranslation();
 
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (confirmed) {
             getSingleRecord(_id);
         }

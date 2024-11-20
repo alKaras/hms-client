@@ -19,8 +19,11 @@ export const UserServices = () => {
     const [totalPages, setTotalPages] = useState(10);
 
     const [onlySold, setOnlySold] = useState(1);
+    const { i18n } = useTranslation();
 
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         getOrderByFilter({
             filter: OrderFiltersEnum.ORDERS_BY_USER,
             user_id: _id,

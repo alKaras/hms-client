@@ -34,7 +34,11 @@ export default function Register() {
         dispatch(registerUser(values));
     }
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (isRegged) {
             navigate("/sign-in")
         }

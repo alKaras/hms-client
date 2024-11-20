@@ -33,7 +33,11 @@ export const ActionSlot = () => {
 
     const [DeletedSuccesfully, setDeleted] = useState(false);
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchDoctorByService({
             service_id: _id,
             hospital_id: hospitalId,

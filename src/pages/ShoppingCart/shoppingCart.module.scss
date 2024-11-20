@@ -54,13 +54,13 @@
     .cartFirstEl {
         font-size: 14px;
 
-        &::after {
-            position: relative;
-            top: 0;
-            left: 9px;
-            content: "----------------------------------";
-            width: 1000px;
-            height: 100px;
-        }
+        // &::after {
+        //     position: relative;
+        //     top: 0;
+        //     left: 9px;
+        //     content: "----------------------------------";
+        //     width: 1000px;
+        //     height: 100px;
+        // }
     }
 }

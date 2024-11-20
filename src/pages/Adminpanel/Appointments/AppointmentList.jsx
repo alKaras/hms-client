@@ -54,7 +54,11 @@ export const AppointmentList = ({ forUser }) => {
 
     }
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (isChanged) {
             getAppointmentList(_id);
         }

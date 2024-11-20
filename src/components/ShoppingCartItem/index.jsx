@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CartItemStyles from './ShoppingCartItem.module.scss';
 import { downloadPdfTimeslot, getShoppingCart, removeItemFromCart } from '../../api/httpApiClient';
 import { useTranslation } from 'react-i18next';
@@ -53,6 +53,12 @@ export const ShoppingCartItem = ({
     }
 
     const { t } = useTranslation();
+    const { i18n } = useTranslation();
+
+    useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
+    }, [])
 
     return (
         <>

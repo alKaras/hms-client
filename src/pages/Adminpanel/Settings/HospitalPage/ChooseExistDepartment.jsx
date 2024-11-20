@@ -18,7 +18,11 @@ export const ChooseExistDepartment = () => {
     const [error, setError] = useState(null);
     const [info, setInfo] = useState(null);
 
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchUnassignedDepartments({ hospital_id: hospitalId })
             .then((resp) => {
                 setDepLoaded(true);

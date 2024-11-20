@@ -17,8 +17,11 @@ const ServicesPage = ({ byDoctor, byHospital }) => {
 
     const [isLoaded, setLoaded] = useState(false);
     const [serviceCollection, setServiceCollection] = useState([]);
+    const { i18n } = useTranslation();
 
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         if (byDoctor) {
             fetchServicesByDoctorId({
                 doctor_id: doctorId,
