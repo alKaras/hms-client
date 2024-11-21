@@ -63,8 +63,9 @@ export default function Reports() {
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
-        fetchReportFeed(filter, reportFilter);
-        console.log(filter);
+        if (isLogged) {
+            fetchReportFeed(filter, reportFilter);
+        }
     }, [hospitalId]);
 
 

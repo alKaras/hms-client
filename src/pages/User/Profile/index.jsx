@@ -35,6 +35,7 @@ export default function UserProfile() {
 
     const { t } = useTranslation();
     const { i18n } = useTranslation();
+    // const [onlySold, setOnlySold] = useState(1);
 
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
@@ -58,7 +59,8 @@ export default function UserProfile() {
         getOrderByFilter({
             filter: OrderFiltersEnum.ORDERS_BY_USER,
             limit: 3,
-            user_id: userId
+            user_id: userId,
+            // onlySold: onlySold
         })
             .then((resp) => {
                 console.log(resp.data);

@@ -288,28 +288,28 @@ export const cancelCheckout = async (params) => {
  * Reset shopping cart
  */
 export const resetShoppingCart = async (params) => {
-    return await axios.post(`shoppingcart/reset`, params);
+    return await axios.post(`/shoppingcart/reset`, params);
 }
 
 /**
  * Remove specific item from shopping cart
  */
 export const removeItemFromCart = async(id) => {
-    return await axios.delete(`shoppingcart/item/${id}/remove`);
+    return await axios.delete(`/shoppingcart/item/${id}/remove`);
 }
 
 /**
  * Get Order by sessionId / orderId
  */
 export const getOrderByFilter = async(params) => {
-    return await axios.post(`order/get`, params);
+    return await axios.post(`/order/feed/get`, params);
 }
 
 /**
  * Send confirmation mail by orderId  
  */
 export const sendConfirmationEmail = async(params) => {
-    return await axios.post(`order/sendconfirmation`, params);
+    return await axios.post(`/order/sendconfirmation`, params);
 }
 /**
  * Download pdf files for timeslot
@@ -384,7 +384,7 @@ export const fetchAppointments = async() => {
 }
 
 export const getSingleAppointment = async(params) => {
-    return await axios.post('appointment/single/get', params);
+    return await axios.post('/appointment/single/get', params);
 }
 
 export const getAppointmentByDoctor = async(params) => {

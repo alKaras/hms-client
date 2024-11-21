@@ -4,7 +4,7 @@ import UserServiceStyle from './Services.module.scss';
 import { useParams } from 'react-router-dom';
 import { downloadPdfTimeslot, getOrderByFilter } from '../../../api/httpApiClient';
 import { OrderFiltersEnum } from '../../../utils/enums/OrderFiltersEnum';
-import { Accordion, Button, Card } from 'react-bootstrap';
+import { Accordion, Button, Card, Form } from 'react-bootstrap';
 import { ServiceToggler } from '../../../components/ServiceToggler';
 import { useTranslation } from 'react-i18next';
 import Pagination from '../../../components/Pagination';
@@ -29,7 +29,7 @@ export const UserServices = () => {
             user_id: _id,
             per_page: 10,
             page: currentPage,
-            onlySold: onlySold
+            // onlySold: onlySold
         })
             .then((resp) => {
                 setIsLoaded(true);
@@ -41,7 +41,7 @@ export const UserServices = () => {
             .catch((err) => {
                 console.error(err.response);
             })
-    }, [currentPage, onlySold])
+    }, [currentPage])
 
     const downloadItem = async (e, id) => {
         e.preventDefault();
@@ -77,7 +77,9 @@ export const UserServices = () => {
         <>
             <Header />
             <div className={UserServiceStyle.root}>
-                <h2 style={{ fontSize: '24px', marginBottom: '25px' }}>{t('userServices')} {onlySold ? t('onlySold') : ''}</h2>
+                <h2 style={{ fontSize: '24px', marginBottom: '25px' }}>{t('userServices')}
+                    {/* {onlySold ? t('onlySold') : ''} */}
+                </h2>
                 <div className={UserServiceStyle.content}>
                     {isLoaded && userServiceData.length > 0 ? userServiceData.map((item) => (
                         <Accordion>

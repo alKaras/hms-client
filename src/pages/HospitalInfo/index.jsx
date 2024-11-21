@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import SearchStyles from '../../components/ContentWeb/Search.module.scss';
 import ReviewCard from "../../components/ReviewCard";
 // import { fetchHospital } from '../../redux/slices/hospitalSlice';
-import { createHospitalReviews, fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitalServices, getCountOfHospitalReviews, getHospitalReviews } from '../../api/httpApiClient';
+import { createHospitalReviews, fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitalServices, getAverageRatingForHospital, getCountOfHospitalReviews, getHospitalReviews } from '../../api/httpApiClient';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector } from 'react-redux';
 import { infoAboutUser, selectIsLogged } from '../../redux/slices/authSlice';
@@ -22,6 +22,7 @@ export default function HospitalInfo() {
     const [doctorsCollections, setDoctorsCollections] = useState(null);
 
     const [rating, setRating] = useState(0);
+    const [hospRating, setHospRating] = useState(0);
     const [reviewBody, setReviewBody] = useState("");
     const isLogged = useSelector(selectIsLogged);
     const user = useSelector(infoAboutUser);
@@ -57,6 +58,15 @@ export default function HospitalInfo() {
             .catch((err) => setIsLoaded(false));
 
         fetchReviews(id);
+        getAverageRatingForHospital({
+            hospital_id: id
+        })
+            .then((resp) => {
+                setHospRating(resp.data.avgRating);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
 
     }, [id]);
 
@@ -167,7 +177,7 @@ export default function HospitalInfo() {
                 <Hospital
                     _id={id}
                     title={hospitalContent.content.title}
-                    rating={5}
+                    rating={hospRating}
                     isFullContent={true}
                 >
                     <div>{hospitalContent.content.description}
@@ -256,9 +266,10 @@ export default function HospitalInfo() {
                                     </div>
 
                                 </Col>
-                                <Col lg={6} md={6} xs={6} className={HospitalInfoStyles.addReview}>
-                                    {isLogged && user.data.email_verified_at && (
-                                        <>
+
+                                {isLogged && user.data.email_verified_at && (
+                                    <>
+                                        <Col lg={6} md={6} xs={6} className={HospitalInfoStyles.addReview}>
                                             <p style={{ fontWeight: 'bold', fontSize: "16px" }}>{t('addReviews')}</p>
                                             <Form onSubmit={(e) => handleSubmitReviews(e)}>
                                                 <Form.Group controlId="formRating">
@@ -287,19 +298,21 @@ export default function HospitalInfo() {
                                                     {isCreated && isDisabled ? (<i class="fa-solid fa-check"></i>) : (`${t('sendSth')}`)}
                                                 </Button>
                                             </Form>
-                                        </>
-                                    )}
+                                        </Col>
+                                    </>
+                                )}
 
-                                </Col>
+
                             </Row>
                         </Tab>
                     </Tabs>
-                </Hospital>
+                </Hospital >
             ) : (
                 <div className={"d-flex justify-content-center align-items-center"} style={{ minHeight: '100vh' }}>
                     <Spinner animation="border" variant="primary" />
                 </div>
-            )}
+            )
+            }
 
         </>
     );

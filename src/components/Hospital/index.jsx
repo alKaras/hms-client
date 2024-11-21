@@ -16,7 +16,8 @@ export default function Hospital({
 }) {
     const { t } = useTranslation();
     const { i18n } = useTranslation();
-
+    const stars = Array(Number(rating)).fill(0);
+    console.log(stars);
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
@@ -30,7 +31,7 @@ export default function Hospital({
                 :
                 <>
                     <div
-                        className={`${isFullContent ? HospitalStyles['fullpost'] : HospitalStyles['root']} shadow-lg mb-5 bg-white`}>
+                        className={`${isFullContent ? HospitalStyles['fulldesc'] : HospitalStyles['root']} shadow-lg mb-5 bg-white`}>
 
                         {isFullContent ?
                             <>
@@ -46,22 +47,6 @@ export default function Hospital({
                             </>
 
                         }
-                        {/* {imageUrl ?
-                            <>
-                                <div
-                                    className={`${!isFullContent ? HospitalStyles['post-img'] : HospitalStyles['fullpost-img']}`}>
-                                    <img
-                                        src={imageUrl}
-                                        alt="phot"
-                                        className='img-fluid'
-                                    />
-                                </div>
-                            </>
-                            :
-                            <>
-                            </>
-
-                        } */}
 
                         <div className={`${HospitalStyles['text-content']}`}>
                             <div className={`${HospitalStyles['title-wrapper']}`}>
@@ -69,10 +54,10 @@ export default function Hospital({
                                     <>
 
                                         <Link style={{ cursor: 'pointer' }} to={`/hospital/${_id}`}>
-                                            <div className={`${HospitalStyles['post-headtext']}`}>
+                                            <div className={`${HospitalStyles['hosp-headtext']}`}>
                                                 {title}
                                             </div>
-                                            <div className={`${HospitalStyles.postDescr}`}>{description}</div>
+                                            <div className={`${HospitalStyles.hospDescr}`}>{description}</div>
                                         </Link>
                                     </>
                                     :
@@ -81,6 +66,11 @@ export default function Hospital({
                                             <div className={`${HospitalStyles['full-headtext']}`}>
                                                 {title}
                                             </div>
+                                            <ul style={{ display: 'flex', alignItems: 'center', color: 'orange', gap: '5px' }}>
+                                                {stars.map((_, index) => (
+                                                    <li key={index}><i className="fa-solid fa-star"></i></li>
+                                                ))}
+                                            </ul>
                                         </div>
 
                                     </>
