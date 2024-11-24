@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../../components/Header'
 import AppointmentStyles from './Appointment.module.scss';
 import { Badge, Button, Spinner, Table } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { cancelAppointment, destroyAppointment, downloadAppointmentSummary, getAppointmentByDoctor, getAppointmentByUser, sendAppointmentSummary } from '../../../api/httpApiClient';
 import { format } from 'date-fns';
@@ -26,9 +26,10 @@ export const AppointmentList = ({ forUser }) => {
     const [appointmentList, setAppointmentList] = useState([]);
 
     const getAppointmentList = async (id) => {
+
         if (forUser) {
             getAppointmentByUser({
-                user_id: userId
+                user_id: id
             })
                 .then((resp) => {
                     setLoaded(true);
@@ -55,15 +56,24 @@ export const AppointmentList = ({ forUser }) => {
     }
 
     const { i18n } = useTranslation();
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
+        if (isLogged) {
+            if ((user.roles === 'user' && Number(user.id) !== Number(userId))) {
+                navigate('/404');
+            }
+            getAppointmentList(userId);
+
+        }
         if (isChanged) {
             getAppointmentList(_id);
         }
-        getAppointmentList(_id);
-    }, [])
+
+    }, [isLogged])
 
     const sendSummary = (e, id) => {
         e.preventDefault();
@@ -210,7 +220,7 @@ export const AppointmentList = ({ forUser }) => {
                                             <Button className='btn btn-info'><i className="fa-solid fa-up-right-from-square"></i></Button>
                                         </LinkContainer>
 
-                                        {(item.status === 'scheduled' && item.service.isOnline) && (
+                                        {(item.status === 'scheduled' && item.service.isOnline) ? (
                                             <Button
                                                 style={{ marginLeft: '10px' }}
                                                 className='btn btn-secondary'
@@ -218,6 +228,9 @@ export const AppointmentList = ({ forUser }) => {
                                             >
                                                 <i class="fa-regular fa-copy"></i>
                                             </Button>
+                                        ) : (
+                                            <>
+                                            </>
                                         )}
 
 

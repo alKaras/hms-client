@@ -4,10 +4,12 @@ import HospitalPageStyles from './HospitalPage.module.scss';
 import { Button, Form, Spinner, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { fetchHospital, fetchHospitalDepartments, fetchHospitalDoctors, fetchHospitals, fetchHospitalServices, importDepartment, importDoctors, importServices } from '../../../../api/httpApiClient';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Pagination from '../../../../components/Pagination';
 import { current } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../../../redux/slices/authSlice';
 
 export default function HospitalPage({
     specific
@@ -28,6 +30,10 @@ export default function HospitalPage({
 
     const [isCollectionServiceLoaded, setCollectionServiceLoaded] = useState(false);
     const [ServiceCollection, setServiceCollection] = useState([]);
+
+    const user = useSelector(infoAboutUser);
+    const isLogged = useSelector(selectIsLogged);
+    const isAdminOrManager = isLogged ? ((user.roles === 'manager' && Number(user.hospitalId) === Number(_id)) || user.roles === 'admin') : false;
 
     const refreshDoctorsCollection = (e) => {
         e.preventDefault();
@@ -127,27 +133,36 @@ export default function HospitalPage({
         }
     }
 
-    useEffect(() => {
-        if (specific) {
-            fetchHospitalServices(
-                {
-                    hospital_id: _id,
-                    page: currentPage,
-                }
-            )
-                .then((resp) => {
-                    setCollectionServiceLoaded(true);
-                    setServiceCollection(resp.data.services);
-                    setTotalPages(resp.data.meta.last_page);
-                    setCurrentPage(resp.data.meta.current_page);
+    const navigate = useNavigate();
 
-                })
-                .catch((err) => {
-                    setCollectionServiceLoaded(false);
-                    console.log(err);
-                })
+    useEffect(() => {
+        if (specific && isLogged) {
+            if (isAdminOrManager) {
+                fetchHospitalServices(
+                    {
+                        hospital_id: _id,
+                        page: currentPage,
+                    }
+                )
+                    .then((resp) => {
+                        setCollectionServiceLoaded(true);
+                        setServiceCollection(resp.data.services);
+                        setTotalPages(resp.data.meta.last_page);
+                        setCurrentPage(resp.data.meta.current_page);
+
+                    })
+                    .catch((err) => {
+                        setCollectionServiceLoaded(false);
+                        console.log(err);
+                    })
+            } else {
+                alert("You have not permissions to see this hospital");
+                navigate('/404');
+
+            }
+
         }
-    }, [_id, currentPage])
+    }, [_id, isLogged, currentPage, isAdminOrManager])
 
     const { i18n } = useTranslation();
 
@@ -155,39 +170,42 @@ export default function HospitalPage({
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
-        if (specific) {
-            setDoctorsLoaded(false);
-            fetchHospital(_id)
-                .then((resp) => {
-                    setSingleLoaded(true);
-                    setHospital(resp.data);
-                })
-                .catch((err) => {
-                    alert("something went wrong Err: " + err);
-                    setSingleLoaded(false);
-                });
-            fetchHospitalDepartments(_id)
-                .then((resp) => {
-                    setDepsLoaded(true);
-                    setDepartments(resp.data.data);
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
+        if (isLogged) {
+            if (specific) {
+                setDoctorsLoaded(false);
+                fetchHospital(_id)
+                    .then((resp) => {
+                        setSingleLoaded(true);
+                        setHospital(resp.data);
+                    })
+                    .catch((err) => {
+                        alert("something went wrong Err: " + err);
+                        setSingleLoaded(false);
+                    });
+                fetchHospitalDepartments(_id)
+                    .then((resp) => {
+                        setDepsLoaded(true);
+                        setDepartments(resp.data.data);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
 
 
-        } else {
-            fetchHospitals()
-                .then((resp) => {
-                    setCollectionLoaded(true);
-                    setHospitals(resp.data.data);
-                })
-                .catch((err) => {
-                    setCollectionLoaded(false);
-                    alert("Can't fetch hospitals");
-                });
+            } else {
+                fetchHospitals()
+                    .then((resp) => {
+                        setCollectionLoaded(true);
+                        setHospitals(resp.data.data);
+                    })
+                    .catch((err) => {
+                        setCollectionLoaded(false);
+                        alert("Can't fetch hospitals");
+                    });
+            }
         }
-    }, [_id, specific]);
+
+    }, [_id, specific, isLogged]);
 
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
@@ -216,7 +234,8 @@ export default function HospitalPage({
                     alert(resp.data.message);
                 })
                 .catch((err) => {
-                    alert(err.response.data.errors.file);
+                    alert(err.response.data.error);
+                    setFile(null);
                 });
         } else {
             alert("Please select a file");
@@ -242,7 +261,8 @@ export default function HospitalPage({
                     alert(resp.data.message);
                 })
                 .catch((err) => {
-                    alert(err.response.data.errors.file);
+                    alert(err.response.data.error);
+                    setFile(null);
                 });
         } else {
             alert("Please select a file");
@@ -268,7 +288,9 @@ export default function HospitalPage({
                     alert(resp.data.message);
                 })
                 .catch((err) => {
-                    alert(err.response.data.errors.file);
+                    alert(err.response.data.error);
+                    setFile(null);
+
                 });
         } else {
             alert("Please select a file");
@@ -289,13 +311,27 @@ export default function HospitalPage({
                                     <div className={HospitalPageStyles.mainInfo}>
                                         <div style={{ fontSize: '20px', fontWeight: 'bold' }} className='d-flex justify-content-between align-content-center'>
                                             <p>{t('information')}</p>
-                                            <LinkContainer to={`/adminpanel/hospital/${hospital.id}/edit`}>
-                                                <Button className='btn btn-warning'><i className="fa-solid fa-pen"></i></Button>
-                                            </LinkContainer>
+                                            {isAdminOrManager ? (
+                                                <div className='d-flex justify-content-between align-content-center'>
 
+                                                    <LinkContainer style={{ color: 'white' }} to={{
+                                                        pathname: `/adminpanel/user/create`,
+                                                        search: `?hospital=${_id}`
+                                                    }}>
+                                                        <Button className='btn btn-secondary'>{t('addManager')}</Button>
+                                                    </LinkContainer>
+
+                                                    <LinkContainer style={{ marginLeft: '10px' }} to={`/adminpanel/hospital/${hospital.id}/edit`}>
+                                                        <Button className='btn btn-warning'><i className="fa-solid fa-pen"></i></Button>
+                                                    </LinkContainer>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                </>
+                                            )}
                                         </div>
                                         <div className={HospitalPageStyles.innerContent}>
-                                            <div><span>{t('name')}: </span>{hospital.content.title} [id: {hospital.id}]</div>
+                                            <div><span>{t('name')}: </span>{hospital.content.title}</div>
                                             <div><span>{t('address')}: </span>{hospital.content.address}</div>
                                             <div><p>{t('description')}:</p>{hospital.content.description}</div>
                                             <div><span>{t('phone')}: </span>{hospital.hospital_phone}</div>
@@ -332,9 +368,10 @@ export default function HospitalPage({
                                                         <tr>
                                                             <th>#ID</th>
                                                             <th>{t('name')}</th>
-                                                            <th>{t('email')}</th>
-                                                            <th>{t('phone')}</th>
-                                                            <th>{t('actions')}</th>
+                                                            <th>{t('description')}</th>
+                                                            {/* <th>{t('email')}</th> */}
+                                                            {/* <th>{t('phone')}</th> */}
+                                                            {/* <th>{t('actions')}</th> */}
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -342,15 +379,16 @@ export default function HospitalPage({
                                                             <tr>
                                                                 <td>{dep.id}</td>
                                                                 <td>{dep.content.title}</td>
-                                                                <td>{dep.email}</td>
-                                                                <td>{dep.phone}</td>
-                                                                <td>
+                                                                <td>{dep.content.description}</td>
+                                                                {/* <td>{dep.email}</td> */}
+                                                                {/* <td>{dep.phone}</td> */}
+                                                                {/* <td>
                                                                     <LinkContainer to={`/adminpanel/hospital/department/${dep.id}/edit`}>
                                                                         <Button style={{ textAlign: 'center' }} className='btn btn-warning'>
                                                                             <i className="fa-solid fa-pen"></i>
                                                                         </Button>
                                                                     </LinkContainer>
-                                                                </td>
+                                                                </td> */}
                                                             </tr>
                                                         ))}
                                                     </tbody>

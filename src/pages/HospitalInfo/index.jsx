@@ -237,7 +237,7 @@ export default function HospitalInfo() {
                                             <td>{service.id}</td>
                                             <td>{service.service_name}</td>
                                             <td>{service.department}</td>
-                                            {isLogged && user.data.email_verified_at && (<td>
+                                            {isLogged && (user.data.email_verified_at && user.roles === 'user') && (<td>
                                                 <LinkContainer to={`/hospital/${id}/service/${service.id}/timeslots`}>
                                                     <button className={"btn btn-secondary"}><i className="fa-solid fa-circle-plus"></i></button>
                                                 </LinkContainer>
@@ -267,7 +267,7 @@ export default function HospitalInfo() {
 
                                 </Col>
 
-                                {isLogged && user.data.email_verified_at && (
+                                {isLogged && (user.data.email_verified_at && user.roles === 'user') && (
                                     <>
                                         <Col lg={6} md={6} xs={6} className={HospitalInfoStyles.addReview}>
                                             <p style={{ fontWeight: 'bold', fontSize: "16px" }}>{t('addReviews')}</p>

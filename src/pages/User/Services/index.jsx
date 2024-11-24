@@ -9,9 +9,12 @@ import { ServiceToggler } from '../../../components/ServiceToggler';
 import { useTranslation } from 'react-i18next';
 import Pagination from '../../../components/Pagination';
 import { format } from 'date-fns';
+import { useSelector } from 'react-redux';
+import { selectIsLogged } from '../../../redux/slices/authSlice';
 
 export const UserServices = () => {
     const [isLoaded, setIsLoaded] = useState(false);
+    const isLogged = useSelector(selectIsLogged);
     const [userServiceData, setUserServiceData] = useState([]);
     const { _id } = useParams();
 
@@ -24,24 +27,27 @@ export const UserServices = () => {
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
-        getOrderByFilter({
-            filter: OrderFiltersEnum.ORDERS_BY_USER,
-            user_id: _id,
-            per_page: 10,
-            page: currentPage,
-            // onlySold: onlySold
-        })
-            .then((resp) => {
-                setIsLoaded(true);
-                //Output only sold orders
-                setUserServiceData(resp.data.data);
-                setTotalPages(resp.data.meta.last_page);
-                setCurrentPage(resp.data.meta.current_page);
+        if (isLogged) {
+            getOrderByFilter({
+                filter: OrderFiltersEnum.ORDERS_BY_USER,
+                user_id: _id,
+                per_page: 10,
+                page: currentPage,
+                // onlySold: onlySold
             })
-            .catch((err) => {
-                console.error(err.response);
-            })
-    }, [currentPage])
+                .then((resp) => {
+                    setIsLoaded(true);
+                    //Output only sold orders
+                    setUserServiceData(resp.data.data);
+                    setTotalPages(resp.data.meta.last_page);
+                    setCurrentPage(resp.data.meta.current_page);
+                })
+                .catch((err) => {
+                    console.error(err.response);
+                })
+        }
+
+    }, [currentPage, isLogged])
 
     const downloadItem = async (e, id) => {
         e.preventDefault();

@@ -62,7 +62,7 @@ export default function DoctorCard({
                             <span style={{ color: 'red' }}><i className="fa-solid fa-circle"></i></span>
                         )}
                     </div>
-                    {isLogged && user.data.email_verified_at && (<LinkContainer to={`/hospital/${hospital_id}/doctor/${doctor_id}/timeslots`}>
+                    {isLogged && (user.data.email_verified_at && user.roles === 'user') && (<LinkContainer to={`/hospital/${hospital_id}/doctor/${doctor_id}/timeslots`}>
                         <Button className={DoctorCardStyles.btnWidget}>{t('appointment')}</Button>
                     </LinkContainer>)}
                 </div>

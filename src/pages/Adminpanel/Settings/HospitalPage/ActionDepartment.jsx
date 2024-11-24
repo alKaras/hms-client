@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../../../components/Header'
 import ActionHospitalStyles from './HospitalPage.module.scss';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { attachExistedDepartments, createDepartment, editDepartment, fetchDepartment } from '../../../../api/httpApiClient';
+import { createDepartment, editDepartment, fetchDepartment } from '../../../../api/httpApiClient';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../../../redux/slices/authSlice';
 
 export const ActionDepartment = ({ isEdit }) => {
     const [currentDep, setCurrentDep] = useState(null);
@@ -13,7 +15,7 @@ export const ActionDepartment = ({ isEdit }) => {
     const { _id } = useParams();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const hospitalId = queryParams.get('hospital');
+    const hospitalId = queryParams.get('hospital') ?? null;
 
     const [alias, setAlias] = useState('');
     const [email, setEmail] = useState('');
@@ -21,10 +23,18 @@ export const ActionDepartment = ({ isEdit }) => {
     const [title, setTitle] = useState('');
     const [description, setDesc] = useState('');
 
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+    const isAllowedToView = (isLogged && !isEdit) && ((user.roles === 'manager' && (Number(user.hospitalId) === Number(hospitalId))) || (user.roles === 'admin'));
+
 
     useEffect(() => {
 
-        if (isEdit) {
+        if (isLogged && !isAllowedToView && !isEdit) {
+            navigate('/404');
+        }
+
+        if (isLogged && isEdit) {
             fetchDepartment(_id)
                 .then((resp) => {
                     setCurrentDep(resp.data.data);
@@ -36,7 +46,7 @@ export const ActionDepartment = ({ isEdit }) => {
                     setIsLoaded(false);
                 })
         }
-    }, [_id, isEdit])
+    }, [_id, isEdit, isLogged])
 
     const { t } = useTranslation();
     const { i18n } = useTranslation();

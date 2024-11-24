@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { attachDoctors, fetchDoctorByService } from '../../../../api/httpApiClient';
 import { Alert, Snackbar } from '@mui/material';
 import { Button, Col, Form, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 
 export const DoctorsAttacher = () => {
@@ -22,7 +23,12 @@ export const DoctorsAttacher = () => {
     const [info, setInfo] = useState(null);
     const [success, setSuccess] = useState(null);
 
+    const { t } = useTranslation();
+    const { i18n } = useTranslation();
+
     useEffect(() => {
+        const savedLanguage = localStorage.getItem('language') || 'uk';
+        i18n.changeLanguage(savedLanguage);
         fetchDoctorByService({
             hospital_id: hospitalId,
             service_id: Number(_id),
@@ -33,7 +39,7 @@ export const DoctorsAttacher = () => {
                 setLoaded(true);
             })
             .catch((err) => {
-                setError(err.response.message || 'Something went wrong');
+                setError(err.response.data.message || 'Something went wrong');
             })
     }, [])
 
@@ -48,7 +54,7 @@ export const DoctorsAttacher = () => {
         e.preventDefault();
 
         if (selectedDoctors.length === 0) {
-            setInfo('Please select at least one department to attach.');
+            setInfo('Please select at least one doctor to attach.');
             return;
         }
 
@@ -77,12 +83,19 @@ export const DoctorsAttacher = () => {
         setSuccess(null);
     }
 
+    console.log(selectedDoctors);
+    console.log(doctors);
+
+
+
+
+
     return (
         <>
             <Header />
             <div className={`${DoctorAttacherStyles.actionRoot}`} style={{ margin: '100px auto', maxWidth: '1280px' }}>
                 <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '50px' }}>
-                    Тут можна прикріпити лікаря до послуги
+                    {t('doctorAttacher')}
                 </h3>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="d-flex flex-column">
@@ -93,19 +106,20 @@ export const DoctorsAttacher = () => {
                                         type="checkbox"
                                         label={doctor.name + ' ' + doctor.surname + ' | ' + doctor.email}
                                         value={doctor.doctorId}
-                                        checked={selectedDoctors.includes(doctor.doctorId)}
+                                        disabled={doctor.linkedToCurrentService}
+                                        checked={doctor.linkedToCurrentService}
                                         onChange={handleDoctorsChange}
                                     />
                                 </Col>
                             )) : (
                                 <>
-                                    <p>Для відділення цієї послуги немає вільних лікарів</p>
+                                    <p>{t('emptyDoctors')}</p>
                                 </>
                             )}
                         </Row>
                     </Form.Group>
                     <Button disabled={!doctorsLoaded || doctors.length <= 0} type="submit" className="btn btn-secondary">
-                        Attach
+                        {t('attach')}
                     </Button>
                 </Form>
             </div>

@@ -1,17 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header';
 import createUserStyle from './PatientsPage.module.scss';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 // import { createUser } from '../../../redux/slices/userSlice';
 import { createUser } from '../../../api/httpApiClient';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
 
 export default function CreateUser(props) {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [isCreated, setIsCreated] = useState(false);
+
+    const location = useLocation();
+
+    const queryParams = new URLSearchParams(location.search);
+    const hospitalId = queryParams.get('hospital') ?? null;
+
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+    const isAllowedToView = (isLogged && hospitalId !== null) && ((user.roles === 'manager' && Number(user.hospitalId) === Number(hospitalId)) || (user.roles === 'admin'));
+
+    console.log(hospitalId);
+    console.log(isAllowedToView);
 
     const {
         register,
@@ -32,7 +46,11 @@ export default function CreateUser(props) {
 
     const onSubmit = (values) => {
         // dispatch(createUser(values));
-        createUser(values).then((resp) => {
+        createUser({
+            ...values,
+            hospital_id: hospitalId,
+            isManager: Boolean(hospitalId),
+        }).then((resp) => {
             alert("User Created Successfully");
             setIsCreated(true);
         }).catch((err) => {
@@ -48,10 +66,15 @@ export default function CreateUser(props) {
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
+
+        if (hospitalId && !isAllowedToView) {
+            navigate('/404');
+        }
+
         if (isCreated) {
             navigate('/adminpanel/users');
         }
-    })
+    }, [isCreated, isLogged])
 
     const { t } = useTranslation();
 

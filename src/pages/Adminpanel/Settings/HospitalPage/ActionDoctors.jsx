@@ -5,6 +5,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { createDoctor, editDoctor, fetchHospitalDepartments, fetchSingleDoctor } from '../../../../api/httpApiClient';
 import { Button, Form, FormControl, Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../../../redux/slices/authSlice';
 
 export const ActionDoctors = ({ isEdit }) => {
     const [currentDoctor, setDoctor] = useState(null);
@@ -33,37 +35,53 @@ export const ActionDoctors = ({ isEdit }) => {
 
     const { i18n } = useTranslation();
 
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+    const isAllowedToView = (isLogged && !isEdit) && ((user.roles === 'manager' && (Number(user.hospitalId) === Number(hospitalId))) || (user.roles === 'admin'));
+
+    const isAllowedToEdit = (isLogged && isEdit) && ((user.roles === 'manager' && (Number(user.hospitalId) === Number(hospitalId))) || (user.roles === 'admin'));
+
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
-        fetchHospitalDepartments(hospitalId)
-            .then((resp) => {
-                setDepartments(resp.data.data);
-                setDepLoaded(true);
-            })
-            .catch((err) => {
-                setError('Failed to load departments');
-            });
+        if (isLogged) {
 
-        if (isEdit && _id) {
-            fetchSingleDoctor(_id)
+            if (!isEdit && !isAllowedToView) {
+                navigate('/404');
+            }
+            if (isEdit && !isAllowedToEdit) {
+                navigate('/404');
+            }
+            fetchHospitalDepartments(hospitalId)
                 .then((resp) => {
-                    const doctor = resp.data.data;
-                    setDoctorLoaded(true);
-                    setFormData({
-                        specialization: doctor.specialization || '',
-                        name: doctor.name || '',
-                        surname: doctor.surname || '',
-                        email: doctor.email || '',
-                        phone: doctor.phone || ''
-                    });
-                    setSelectedDepartments(doctor.departments?.map(dep => dep.name));
+                    setDepartments(resp.data.data);
+                    setDepLoaded(true);
                 })
                 .catch((err) => {
-                    setError("Failed to load doctor data");
-                })
+                    setError('Failed to load departments');
+                });
+
+            if (isEdit && _id) {
+                fetchSingleDoctor(_id)
+                    .then((resp) => {
+                        const doctor = resp.data.data;
+                        setDoctorLoaded(true);
+                        setFormData({
+                            specialization: doctor.specialization || '',
+                            name: doctor.name || '',
+                            surname: doctor.surname || '',
+                            email: doctor.email || '',
+                            phone: doctor.phone || ''
+                        });
+                        setSelectedDepartments(doctor.departments?.map(dep => dep.name));
+                    })
+                    .catch((err) => {
+                        setError("Failed to load doctor data");
+                    })
+            }
         }
-    }, [_id, hospitalId, isEdit])
+
+    }, [_id, hospitalId, isEdit, isLogged])
 
     const handleChange = (e) => {
         const { name, value } = e.target;

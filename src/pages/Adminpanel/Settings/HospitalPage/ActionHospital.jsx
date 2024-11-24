@@ -26,18 +26,25 @@ export default function ActionHospital({ isEdit }) {
 
     const { i18n } = useTranslation();
 
+    const isAllowedToEdit = (isLogged && isEdit) && ((isManager && (Number(user.hospitalId) === Number(_id))) || user.roles === 'admin');
+
 
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
-        if (isEdit) {
-            fetchHospital(_id).then((resp) => {
-                setHospitalData(resp.data);
-                setLoaded(true);
-            });
-
+        if (isLogged) {
+            if (!isAllowedToEdit) {
+                navigate('/404');
+            }
+            if (isEdit) {
+                fetchHospital(_id).then((resp) => {
+                    setHospitalData(resp.data);
+                    setLoaded(true);
+                });
+            }
         }
-    }, [_id, isEdit])
+
+    }, [_id, isEdit, isLogged])
 
     useEffect(() => {
         if (isLoaded) {

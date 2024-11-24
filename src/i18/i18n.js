@@ -235,10 +235,23 @@ i18n
                     online: "online",
                     offline: "offline",
                     forConsult: "for consultation",
+
+                    addManager: "Add manager",
+                    pageNotFound: "Unfortunately, this page does not exist or you do not have permission to view this content.",
+                    returnHome: "Return home",
+                    doctorAttacher: "Here you can assign a doctor to the service.",
+                    emptyDoctors: "There are no doctors available for this service",
+                    attach: "Attach",
                 },
             },
             uk: {
                 translation: {
+                    attach: "Прикріпити",
+                    emptyDoctors: "Для відділення цієї послуги немає вільних лікарів",
+                    doctorAttacher: "Тут можна прикріпити лікаря до послуги",
+                    pageNotFound: "На жаль, такої сторінки не існує або у вас немає дозволу до перегляду цього вмісту.",
+                    returnHome: "Повернутись додому",
+
                     forConsult: "на консультацію",
                     emptyMedcard: "На жаль ваша медична картка не створена або не заповнена",
                     gender: "Стать",
@@ -349,6 +362,7 @@ i18n
                     specialization: "Спеціалізація",
                     status: "Статус",
                     addHospital: "Додати лікарню",
+                    addManager: "Додати менеджера",
                     alias: "Слаг",
 
                     addService: "Інтегрувати нову послугу",

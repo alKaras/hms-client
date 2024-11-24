@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../../components/Header'
 import SingleAppointStyles from './Appointment.module.scss';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { confirmAppointment, getSingleAppointment } from '../../../api/httpApiClient';
 import { Badge, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
 
 export const SingleAppointment = ({ forUser }) => {
     const { _id } = useParams();
@@ -12,7 +14,7 @@ export const SingleAppointment = ({ forUser }) => {
     const [appointment, setAppointment] = useState(null);
 
     const [isConfirm, setIsConfirm] = useState(true);
-    const { confirmed, setConfirmed } = useState(false);
+    const [confirmed, setConfirmed] = useState(false);
 
     const [formData, setFormData] = useState({
         summary: '',
@@ -61,32 +63,29 @@ export const SingleAppointment = ({ forUser }) => {
         setFormData({ ...formData, [name]: value })
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            confirmAppointment({
-                appointment: _id,
-                ...formData
-            })
-                .then((resp) => {
-                    alert('Appointment confirmed');
-                    setFormData({
-                        recommendations: resp.data.data.recommendations || '',
-                        notes: resp.data.data.notes || '',
-                        summary: resp.data.data.summary || ''
-                    })
-                    setConfirmed(true);
+        confirmAppointment({
+            appointment: _id,
+            ...formData
+        })
+            .then((resp) => {
+                alert('Appointment confirmed');
+                setFormData({
+                    recommendations: resp.data.data.recommendations || '',
+                    notes: resp.data.data.notes || '',
+                    summary: resp.data.data.summary || ''
+                })
+                setConfirmed(true);
+                window.location.reload();
 
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-        } catch (error) {
-            alert(error.response?.data?.error || "An error occurred");
-        } finally {
-            // setLoading(false);
-        }
+            })
+            .catch((err) => {
+                // alert(err.response?.data?.error || "An error occurred")
+                console.log(err);
+            })
 
     }
 

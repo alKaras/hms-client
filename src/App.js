@@ -1,4 +1,4 @@
-import {Route, Routes, useNavigate} from "react-router-dom";
+import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import "./index.css";
 import Home from "./pages/Home";
 import HospitalInfo from "./pages/HospitalInfo";
@@ -36,6 +36,7 @@ import { AppointmentList } from "./pages/Adminpanel/Appointments/AppointmentList
 import { SingleAppointment } from "./pages/Adminpanel/Appointments/SingleAppointment";
 import { MedCard } from "./pages/User/MedCard";
 import { MedCardAction } from "./pages/User/MedCard/MedCardAction";
+import { NonExistedPage } from "./pages/Utils/404";
 
 function App() {
     const dispatch = useDispatch();
@@ -115,19 +116,30 @@ function App() {
                 <Route path='/adminpanel/hospital/:hospitalId/service/:_id/slots' element={<ActionSlot />} />
 
                 {/* <Route path='/adminpanel/settings/departments' element={<Departments />} /> */}
-                <Route path={`/adminpanel/${isDoctor ? 'doctor' : 'hospital'}/order-history`} element={<OrderHistory byDoctor={isDoctor} byHospital={isManager} />} />
-                <Route path={`/adminpanel${isManager ? '/hospital/:_id' : ''}/operations`} element={<OrderOperations />} />
+                <Route path={`/adminpanel/doctor/order-history`} element={<OrderHistory byDoctor={isDoctor} byHospital={isManager} />} />
 
-                <Route 
+
+                <Route path={`/adminpanel/operations`} element={<OrderOperations isManager={!isManager} />} />
+                <Route path={`/adminpanel/hospital/:_id/operations`} element={<OrderOperations isManager={isManager} />} />
+
+
+                <Route path={`/adminpanel/doctor/:_id/appointments/list`} element={<AppointmentList forUser={isUser} />} />
+                <Route path={`user/:userId/appointments/list`} element={<AppointmentList forUser={isUser} />} />
+
+                {/* <Route 
                 path={!isUser ? `/adminpanel/doctor/:_id/appointments/list` : `user/:userId/appointments/list`} 
                 element={<AppointmentList forUser={isUser} />} 
-                />
+                /> */}
 
-                <Route path={`${!isUser ? '/adminpanel' : '/user' }/appointments/:_id/appointment` } element={<SingleAppointment forUser={isUser} />} />
+                <Route path={`/adminpanel/appointments/:_id/appointment` } element={<SingleAppointment forUser={isUser} />} />
+                <Route path={`/user/appointments/:_id/appointment` } element={<SingleAppointment forUser={isUser} />} />
                 
                 <Route path={'/user/medcard'} element={<MedCard />} />
                 <Route path={'/user/medcard/create'} element={<MedCardAction isEdit={false} />} />
                 <Route path={'/user/medcard/:_id/edit'} element={<MedCardAction isEdit={true} />} />
+
+                <Route path={'/404'} element={<NonExistedPage />} />
+                <Route path="*" element={ <Navigate to="/404" replace />} />
              </Routes>
         </div>
     );

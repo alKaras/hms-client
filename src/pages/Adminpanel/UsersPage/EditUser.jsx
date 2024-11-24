@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../../components/Header';
 import editUserStyles from './PatientsPage.module.scss';
-import { Button, Col, Row, Spinner, Table } from 'react-bootstrap';
+import { Alert, Button, Col, Row, Spinner, Table } from 'react-bootstrap';
 import { fetchRoles, getUser, attachRole, detachRole, editUser } from '../../../api/httpApiClient';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Snackbar } from '@mui/material';
 
 export default function EditUser() {
     const { _id } = useParams();
@@ -23,6 +24,7 @@ export default function EditUser() {
     const [password, setPassword] = useState('');
 
     const { i18n } = useTranslation();
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
@@ -32,9 +34,13 @@ export default function EditUser() {
             setLoaded(true);
         }).catch((err) => {
             setLoaded(false);
+            setError(err.response?.data?.message);
         });
         fetchRoles().then((resp) => {
             setAllRoles(resp.data);
+        }).catch((err) => {
+            setError(err.response?.data?.message);
+
         });
     }, [_id]);
 
@@ -98,6 +104,9 @@ export default function EditUser() {
     }
 
     const { t } = useTranslation();
+    const handleClose = () => {
+        setError(null);
+    }
     return (
         <>
 
@@ -200,6 +209,11 @@ export default function EditUser() {
                 }
 
             </div >
+            <Snackbar open={!!error} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
+                    {error}
+                </Alert>
+            </Snackbar>
         </>
     );
 }

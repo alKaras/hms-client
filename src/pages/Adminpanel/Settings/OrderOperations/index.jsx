@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { cancelCheckout, getOrderByFilter, sendConfirmationEmail } from '../../../../api/httpApiClient';
 import { OrderFiltersEnum } from '../../../../utils/enums/OrderFiltersEnum';
 import OrderOperationsStyles from './OrderOperations.module.scss';
@@ -10,8 +10,10 @@ import Pagination from '../../../../components/Pagination';
 import { format } from 'date-fns';
 import { ShoppingCartItem } from '../../../../components/ShoppingCartItem';
 import FeedFilter from '../../../../components/FeedFilter';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../../../redux/slices/authSlice';
 
-export const OrderOperations = () => {
+export const OrderOperations = ({ isManager }) => {
     const { _id } = useParams() ?? null;
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -27,6 +29,12 @@ export const OrderOperations = () => {
     const [isSpecificLoaded, setSpecificLoaded] = useState(false);
     const [show, setShow] = useState(false);
     const [filter, setFilter] = useState([]);
+
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+    const isNotAllowedToSee = (_id === undefined && !isManager);
+
+    console.log(isNotAllowedToSee);
 
     const fetchOrdersFeed = async (page, filters = []) => {
         setFilter(filters);
@@ -74,14 +82,18 @@ export const OrderOperations = () => {
         // setSpecificOrder(result);
     }
     const { i18n } = useTranslation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
-        fetchOrdersFeed(currentPage, filter);
-        console.log(filter);
+        if (isLogged && !isNotAllowedToSee) {
+            fetchOrdersFeed(currentPage, filter);
+        } else if (isNotAllowedToSee) {
+            navigate('/404');
+        }
 
-    }, [currentPage])
+    }, [currentPage, isLogged])
 
     const handlePageChange = async (page) => {
         if (page !== currentPage) {
@@ -236,7 +248,7 @@ export const OrderOperations = () => {
                                                     {specificOrder.reserve_expiration && (
                                                         <p>
                                                             <strong>{t('reserveExp')}:</strong>
-                                                            <span> {specificOrder.reserve_expiration}</span>
+                                                            <span> {format(new Date(specificOrder.reserve_expiration), 'dd.MM.yyyy HH:mm')}</span>
                                                         </p>
                                                     )}
                                                 </div>
@@ -309,7 +321,7 @@ export const OrderOperations = () => {
                                                         department={item.timeslot.department.title}
                                                         price={item.timeslot.price}
                                                         key={ind}
-                                                        canDownload={true}
+                                                        canDownload={specificOrder.paid_status !== 'CANCELED' && specificOrder.paid_status !== 'PENDING'}
 
                                                     />
                                                 ))}

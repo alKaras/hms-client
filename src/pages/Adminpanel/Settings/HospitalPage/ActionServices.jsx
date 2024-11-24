@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../../../components/Header'
 import ActionServicesStyles from './HospitalPage.module.scss';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { createService, fetchHospitalDepartments, fetchHospitalDoctors } from '../../../../api/httpApiClient';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../../../redux/slices/authSlice';
 
 export const ActionServices = () => {
     const [hospitalDoctorsCollection, setHospDoctors] = useState([]);
@@ -23,18 +25,31 @@ export const ActionServices = () => {
 
     const { i18n } = useTranslation();
 
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+    const isAllowedToEdit = isLogged && ((user.roles === 'manager' && Number(user.hospitalId) === Number(hospitalId)) || user.roles === 'admin')
+    const navigate = useNavigate();
+
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
-        fetchHospitalDepartments(hospitalId)
-            .then((resp) => {
-                setHospDepColl(resp.data.data)
-                setHospitalDepLoaded(true);
-            }).catch((err) => {
-                console.log(err);
-            })
+        if (isLogged) {
 
-    }, [hospitalId])
+            if (!isAllowedToEdit) {
+                navigate('/404');
+            }
+
+            fetchHospitalDepartments(hospitalId)
+                .then((resp) => {
+                    setHospDepColl(resp.data.data)
+                    setHospitalDepLoaded(true);
+                }).catch((err) => {
+                    console.log(err);
+                })
+        }
+
+
+    }, [hospitalId, isLogged])
 
     const handleDepartmentChange = (e) => {
         const selectedAlias = e.target.value;

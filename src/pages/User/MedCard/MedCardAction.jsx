@@ -37,12 +37,16 @@ export const MedCardAction = ({ isEdit }) => {
 
     const user = useSelector(infoAboutUser);
     const isLogged = useSelector(selectIsLogged);
+    const isAllowedToView = (isLogged && user.roles === 'user') && (Number(user.medcard) === Number(_id));
 
     const { i18n } = useTranslation();
 
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
+        if (isLogged && !isAllowedToView) {
+            navigate('/404');
+        }
         if (!isEdit && isLogged) {
             setFormData({
                 user_id: user.id,
@@ -70,8 +74,8 @@ export const MedCardAction = ({ isEdit }) => {
                     additional_notes: result.additional_notes || '',
                 })
             })
-
         }
+
     }, [isLogged]);
 
     const handleChange = (e) => {
