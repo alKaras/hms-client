@@ -242,11 +242,13 @@ i18n
                     doctorAttacher: "Here you can assign a doctor to the service.",
                     emptyDoctors: "There are no doctors available for this service",
                     attach: "Attach",
+                    checkSlots: "Check slots",
                 },
             },
             uk: {
                 translation: {
                     attach: "Прикріпити",
+                    checkSlots: "Перевірити талони",
                     emptyDoctors: "Для відділення цієї послуги немає вільних лікарів",
                     doctorAttacher: "Тут можна прикріпити лікаря до послуги",
                     pageNotFound: "На жаль, такої сторінки не існує або у вас немає дозволу до перегляду цього вмісту.",

@@ -10,6 +10,8 @@ import { getFreeDates, getTimeSlotsByFilter, setItemToCart } from '../../api/htt
 import { Button } from 'react-bootstrap';
 import format from 'date-fns/format';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../redux/slices/authSlice';
 
 export const TimeSlotPicker = ({
     isDoctorPage,
@@ -22,6 +24,11 @@ export const TimeSlotPicker = ({
     const [slotStats, setSlotStats] = useState([]);
 
     const { _id, hospitalId } = useParams();
+
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+    const isDoctor = isLogged && user.roles === 'doctor';
+
 
     const pickTimeSlot = async (e, id) => {
         e.preventDefault();
@@ -50,55 +57,59 @@ export const TimeSlotPicker = ({
             hospital_id: hospitalId,
         }
 
-        if (isDoctorPage) {
-            params.doctor_id = _id;
-            getFreeDates({
-                doctor_id: _id
-            })
-                .then((resp) => {
-                    setStatsLoaded(true);
-                    let doctorData = resp.data.data;
+        if (isLogged) {
+            if (isDoctorPage) {
+                params.doctor_id = _id;
+                getFreeDates({
+                    doctor_id: _id
+                })
+                    .then((resp) => {
+                        setStatsLoaded(true);
+                        let doctorData = resp.data.data;
 
-                    let consultsFreeSlots = doctorData.filter((res) => res.serviceName.includes('Консультація'));
-                    setSlotStats(consultsFreeSlots);
+                        let consultsFreeSlots = doctorData.filter((res) => res.serviceName.includes('Консультація'));
+                        setSlotStats(consultsFreeSlots);
 
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    })
+            }
+            if (isServicePage) {
+                params.service_id = _id;
+
+                getFreeDates({
+                    service_id: _id
+                })
+                    .then((resp) => {
+                        setStatsLoaded(true);
+                        setSlotStats(resp.data.data);
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    })
+            }
+
+            getTimeSlotsByFilter(params)
+                .then((res) => {
+                    setisSlotLoaded(true);
+                    let resultData = res.data.data;
+                    if (isDoctorPage) {
+                        let doctorsRes = resultData.filter((res) => res.service.name.includes('Консультація'))
+                        // let doctorsRes = resultData.filter((res) => res.service.name.includes('Консультація'));
+                        setinfoSlotCollection(doctorsRes);
+                    } else {
+                        setinfoSlotCollection(resultData);
+                    }
                 })
                 .catch((err) => {
+                    setisSlotLoaded(false);
                     console.error(err);
                 })
         }
-        if (isServicePage) {
-            params.service_id = _id;
 
-            getFreeDates({
-                service_id: _id
-            })
-                .then((resp) => {
-                    setStatsLoaded(true);
-                    setSlotStats(resp.data.data);
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-        }
 
-        getTimeSlotsByFilter(params)
-            .then((res) => {
-                setisSlotLoaded(true);
-                let resultData = res.data.data;
-                if (isDoctorPage) {
-                    let doctorsRes = resultData.filter((res) => res.service.name.includes('Консультація'))
-                    // let doctorsRes = resultData.filter((res) => res.service.name.includes('Консультація'));
-                    setinfoSlotCollection(doctorsRes);
-                } else {
-                    setinfoSlotCollection(resultData);
-                }
-            })
-            .catch((err) => {
-                setisSlotLoaded(false);
-                console.error(err);
-            })
-    }, [selectedDate])
+    }, [selectedDate, isLogged])
 
     console.log(infoSlotCollection);
     const { t } = useTranslation();
@@ -110,27 +121,33 @@ export const TimeSlotPicker = ({
 
                 <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '25px' }} >{t('timeslots')} {isDoctorPage ? t('forConsult') : ''}</h2>
 
-                <div className='d-flex justify-between align-items-center'>
-                    <h3 style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '25px' }}>{t('availableSlots')}: </h3>
+                {(!isDoctor) ? (
+                    <div className='d-flex justify-between align-items-center'>
+                        <h3 style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '25px' }}>{t('availableSlots')}: </h3>
 
-                    <ul className='d-flex justify-between align-items-center'>
-                        {isSlotLoaded && slotStats.length > 0 ? slotStats.map((slot) => (
-                            <>
-                                <li style={{ border: '1px solid black', borderRadius: '5px', padding: '10px', marginLeft: '10px' }}>
-                                    <p style={{ marginBottom: '5px', fontWeight: 'bold' }}>{[slot.serviceId]} {slot.serviceName}</p>
-                                    <p style={{ marginBottom: '5px' }}>{t('date')}: {format(new Date(slot.date), 'dd.MM.yyyy')}</p>
-                                    <p style={{ margin: 0 }}>{t('numofavailable')} {slot.free_slots}</p>
-                                </li >
-                            </>
-
-                        ))
-                            : (
+                        <ul className='d-flex justify-between align-items-center'>
+                            {(isSlotLoaded && slotStats.length > 0) ? slotStats.map((slot) => (
                                 <>
-                                    {t('emptyAvailableSlots')}
+                                    <li style={{ border: '1px solid black', borderRadius: '5px', padding: '10px', marginLeft: '10px' }}>
+                                        <p style={{ marginBottom: '5px', fontWeight: 'bold' }}>{[slot.serviceId]} {slot.serviceName}</p>
+                                        <p style={{ marginBottom: '5px' }}>{t('date')}: {format(new Date(slot.date), 'dd.MM.yyyy')}</p>
+                                        <p style={{ margin: 0 }}>{t('numofavailable')} {slot.free_slots}</p>
+                                    </li >
                                 </>
-                            )}
-                    </ul>
-                </div>
+
+                            ))
+                                : (
+                                    <>
+                                        {t('emptyAvailableSlots')}
+                                    </>
+                                )}
+                        </ul>
+                    </div>
+                ) : (
+                    <>
+                    </>
+                )}
+
 
 
                 <div style={{ marginBottom: '25px' }}>
@@ -152,7 +169,7 @@ export const TimeSlotPicker = ({
                 </div>
 
                 <div style={{ marginBottom: '25px' }}>
-                    <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px' }} >{t('selectTimeslot')}</h2>
+                    <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '25px' }} >{!isDoctor ? t('selectTimeslot') : t('checkSlots')}</h2>
 
                     <ul className={TimeSlotStyles.slotmenu}>
                         {isSlotLoaded &&
@@ -160,7 +177,7 @@ export const TimeSlotPicker = ({
                             infoSlotCollection.map((slot) => (
                                 <>
                                     <li>
-                                        <Button onClick={(e) => pickTimeSlot(e, slot.id)} className={`${TimeSlotStyles.slotBtn} ${slot.isOnline ? TimeSlotStyles.onlineBtn : ''}`}>
+                                        <Button disabled={isDoctor} onClick={(e) => pickTimeSlot(e, slot.id)} className={`${TimeSlotStyles.slotBtn} ${slot.isOnline ? TimeSlotStyles.onlineBtn : ''}`}>
                                             <div className={TimeSlotStyles.slotContent}>
                                                 {slot.service.name}
                                                 {slot.isOnline ? ' (Online)' : (<></>)}
