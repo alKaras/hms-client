@@ -66,7 +66,11 @@ export const AppointmentList = ({ forUser }) => {
             if ((user.roles === 'user' && Number(user.id) !== Number(userId))) {
                 navigate('/404');
             }
-            getAppointmentList(userId);
+            if (forUser) {
+                getAppointmentList(userId);
+            } else {
+                getAppointmentList(_id);
+            }
 
         }
         if (isChanged) {
