@@ -6,6 +6,8 @@ import FeedFilterStyles from './FeedFilter.module.scss';
 import { addDays, format } from 'date-fns';
 import { ReportFilterEnum } from '../../utils/enums/ReportFiltersEnum';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { infoAboutUser, selectIsLogged } from '../../redux/slices/authSlice';
 
 export default function FeedFilter({
     hospitalId,
@@ -125,6 +127,10 @@ export default function FeedFilter({
     const { t } = useTranslation();
     const { i18n } = useTranslation();
 
+    const isLogged = useSelector(selectIsLogged);
+    const user = useSelector(infoAboutUser);
+    const isManager = isLogged && user.roles === 'manager';
+
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
@@ -183,16 +189,24 @@ export default function FeedFilter({
                 </div>
                 {!reportPage ? (
                     <>
-                        <div className='d-flex flex-column'>
-                            <label style={{ marginBottom: '5px', marginTop: '10px', fontWeight: 'bold' }}>{t('name')}:</label>
-                            <input
-                                type="text"
-                                value={title}
-                                placeholder={t('name')}
-                                onChange={handleTitleChange}
-                                className={FeedFilterStyles.inputText}
-                            />
-                        </div>
+                        {!isManager ? (
+                            <>
+                                <div className='d-flex flex-column'>
+                                    <label style={{ marginBottom: '5px', marginTop: '10px', fontWeight: 'bold' }}>{t('name')}:</label>
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        placeholder={t('name')}
+                                        onChange={handleTitleChange}
+                                        className={FeedFilterStyles.inputText}
+                                    />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                            </>
+                        )}
+
 
                         <div className='d-flex flex-column'>
                             <label style={{ marginBottom: '5px', marginTop: '10px', fontWeight: 'bold' }}>{t('status')}:</label>
