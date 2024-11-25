@@ -20,6 +20,7 @@ export const OrderOperations = ({ isManager }) => {
     const [totalPages, setTotalPages] = useState(10);
     const [orderFeedData, setOrderFeedData] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isCanceled, setIsCanceled] = useState(false);
 
     const { t } = useTranslation();
 
@@ -93,7 +94,12 @@ export const OrderOperations = ({ isManager }) => {
             navigate('/404');
         }
 
-    }, [currentPage, isLogged])
+        if (isCanceled) {
+            fetchOrdersFeed(currentPage, filter);
+            setIsCanceled(false);
+        }
+
+    }, [currentPage, isLogged, isCanceled])
 
     const handlePageChange = async (page) => {
         if (page !== currentPage) {
@@ -129,6 +135,8 @@ export const OrderOperations = ({ isManager }) => {
                 setTimeout(() => {
                     setIsDisabled(false);
                 }, 20000);
+                setIsCanceled(true);
+                handleClose();
             })
             .catch((err) => {
                 console.error(err);

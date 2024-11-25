@@ -47,30 +47,33 @@ export default function UserProfile() {
     }, [isLogged]);
 
     useEffect(() => {
-        fetchFirstThreeReferrals()
-            .then((res) => {
-                setReferrals(res.data.data);
-                setLoaded(true);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if (isLogged) {
+            fetchFirstThreeReferrals()
+                .then((res) => {
+                    setReferrals(res.data.data);
+                    setLoaded(true);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
 
-        getOrderByFilter({
-            filter: OrderFiltersEnum.ORDERS_BY_USER,
-            limit: 3,
-            user_id: userId,
-            // onlySold: onlySold
-        })
-            .then((resp) => {
-                console.log(resp.data);
-                setOrdersLoaded(true);
-                setFirstThreeOrders(resp.data.data);
+            getOrderByFilter({
+                filter: OrderFiltersEnum.ORDERS_BY_USER,
+                limit: 3,
+                user_id: userId,
+                // onlySold: onlySold
             })
-            .catch((err) => {
-                console.error(err);
-            })
-    }, [userId])
+                .then((resp) => {
+                    console.log(resp.data);
+                    setOrdersLoaded(true);
+                    setFirstThreeOrders(resp.data.data);
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
+        }
+
+    }, [isLogged])
 
 
     const handleSubmit = async (e) => {
