@@ -101,7 +101,7 @@ export const ActionSlot = () => {
             setDisabled(false);
             return;
         }
-        if (diffHour > 2) {
+        if (diffHour > 1) {
             //run generate process
             generateTimeSlots(params)
                 .then((resp) => {
