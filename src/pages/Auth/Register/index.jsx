@@ -132,7 +132,7 @@ export default function Register() {
                     <p className={RegisterStyles.linkReg}><Link to={"/sign-in"}>{t('authLink')}</Link>
                     </p>
 
-                    {error && <div className={`${RegisterStyles.error}`}>{error}</div>}
+                    {(error && error !== 'Token not provided') && <div className={`${RegisterStyles.error}`}>{error?.email}</div>}
                 </div>
             </form>
         </div>

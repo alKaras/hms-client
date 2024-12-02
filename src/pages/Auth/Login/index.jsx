@@ -119,8 +119,18 @@ export default function Login() {
 
                         </div>
                         {errors.password && <div className={`${AuthStyles['error-style']}`}>{errors.password.message}</div>}
+
+
                         <button type="submit" className={`btn ${AuthStyles['btn']}`}>{t('login')}</button>
                         <p className={AuthStyles.linkReg}><Link to={"/sign-up"}>{t('registerLink')}</Link></p>
+
+                        {error && error !== 'Token not provided' && (
+                            <>
+                                <div style={{ color: 'red', fontWeight: 'bold' }}>
+                                    {error}
+                                </div>
+                            </>
+                        )}
                     </div>
                 </form>
             </div>

@@ -135,12 +135,6 @@ export const importDoctors = async(file) => {
     })
 }
 
-/**
- * Get DoctorList by service id method
- * @param {"service_id"} params 
- * @method POST
- * @returns 
- */
 export const fetchDoctorByService = async(params) => {
     return await axios.post(`doctors/getbyservice`, params);
 }
@@ -214,24 +208,6 @@ export const getFreeDates = async(params) => {
     return await axios.post('timeslots/free/get', params);
 }
 
-// /**
-//  * Get Timeslot by Doctor method | timeslots/getbydoctor POST
-//  * @param {"doctor_id"} params 
-//  * @returns 
-//  */
-// export const getTimeSlotsByDoctor = async(params) => {
-//     return await axios.post(`timeslots/getbydoctor`, params);
-// }
-
-// /**
-//  * Get Timeslot By Service method | timeslots/getbyservice
-//  * @param {"service_id"} params
-//  * @method POST
-//  * @returns 
-//  */
-// export const getTimeSlotsByService = async(params) => {
-//     return await axios.post(`timeslots/getbyservice`, params);
-// }
 
 /**
  * Get Timeslot by specific date method | timeslots/getbydate POST doctor_id/service_id optional
