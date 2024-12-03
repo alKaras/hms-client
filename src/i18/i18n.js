@@ -243,10 +243,12 @@ i18n
                     emptyDoctors: "There are no doctors available for this service",
                     attach: "Attach",
                     checkSlots: "Check slots",
+                    type: "Type",
                 },
             },
             uk: {
                 translation: {
+                    type: "Тип",
                     attach: "Прикріпити",
                     checkSlots: "Перевірити талони",
                     emptyDoctors: "Для відділення цієї послуги немає вільних лікарів",
