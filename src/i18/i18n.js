@@ -244,10 +244,12 @@ i18n
                     attach: "Attach",
                     checkSlots: "Check slots",
                     type: "Type",
+                    link: 'Link',
                 },
             },
             uk: {
                 translation: {
+                    link: "Посилання",
                     type: "Тип",
                     attach: "Прикріпити",
                     checkSlots: "Перевірити талони",

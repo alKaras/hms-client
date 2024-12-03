@@ -14,6 +14,7 @@ export const ActionServices = () => {
     const [hospitalDepLoaded, setHospitalDepLoaded] = useState(false);
 
     const { _id } = useParams();
+    const [isCreated, setIsCreated] = useState(false);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const hospitalId = queryParams.get('hospital');
@@ -46,20 +47,17 @@ export const ActionServices = () => {
                 }).catch((err) => {
                     console.log(err);
                 })
+
+            if (isCreated) {
+                navigate(`/adminpanel/settings/${hospitalId}/hospital`);
+            }
         }
 
 
-    }, [hospitalId, isLogged])
 
-    const handleDepartmentChange = (e) => {
-        const selectedAlias = e.target.value;
-        setDepartmentAlias(selectedAlias);
-        fetchDoctorsBySelectedDep(e);
-    }
+    }, [hospitalId, isLogged, isCreated])
 
-    const fetchDoctorsBySelectedDep = async (e) => {
-        e.preventDefault();
-        setHospitalDoctorsLoaded(false);
+    useEffect(() => {
         if (departmentAlias) {
             const params = {
                 hospital_id: hospitalId,
@@ -76,14 +74,41 @@ export const ActionServices = () => {
                     setHospitalDoctorsLoaded(false);
                 })
         }
+    }, [departmentAlias])
+
+    const handleDepartmentChange = (e) => {
+        const selectedAlias = e.target.value;
+        setDepartmentAlias(selectedAlias);
     }
 
-    const findDoctorsByOption = async (e) => {
-        fetchDoctorsBySelectedDep(e);
-    }
+    // const fetchDoctorsBySelectedDep = async (e) => {
+    //     e.preventDefault();
+    //     setHospitalDoctorsLoaded(false);
+    //     if (departmentAlias) {
+    //         const params = {
+    //             hospital_id: hospitalId,
+    //             dep_alias: departmentAlias
+    //         }
+    //         fetchHospitalDoctors(params)
+    //             .then((resp) => {
+    //                 setHospDoctors(resp.data.doctors);
+    //                 setHospitalDoctorsLoaded(true);
+    //                 console.log(resp.data.doctors);
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //                 setHospitalDoctorsLoaded(false);
+    //             })
+    //     }
+    // }
+
+    // const findDoctorsByOption = async (e) => {
+    //     fetchDoctorsBySelectedDep(e);
+    // }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
 
         if (!name || !departmentAlias || !doctorId) {
             alert("Please fill out all required fields.");
@@ -100,6 +125,8 @@ export const ActionServices = () => {
         try {
             await createService(params);
             alert("Service created successfully");
+            setIsCreated(true);
+
         } catch (error) {
             console.error("Error creating service: ", error);
 
@@ -145,8 +172,8 @@ export const ActionServices = () => {
                                         <label>{t('departments')}</label>
                                         <select className={ActionServicesStyles['select-service']} value={departmentAlias} onChange={handleDepartmentChange} required>
                                             <option value="" disabled>{t('chdep')}</option>
-                                            {hospitalDepCollection.map(dep => (
-                                                <option key={dep.id} value={dep.alias}>
+                                            {hospitalDepCollection.map((dep, index) => (
+                                                <option key={index} value={dep.alias}>
                                                     {dep.content.title}
                                                 </option>
                                             ))}
@@ -160,12 +187,14 @@ export const ActionServices = () => {
                         <div className="d-flex flex-column">
                             <label>{t('doctor')}</label>
                             <select className={ActionServicesStyles['select-service']} value={doctorId} onChange={(e) => setDoctorId(e.target.value)} required>
-                                <option value="" disabled>{t('chdoc')}</option>
-                                {hospitalDoctorsCollection.map(doctor => (
+                                <option value="" disabled={hospitalDoctorsLoaded}>{t('chdoc')}</option>
+                                {hospitalDoctorsLoaded ? hospitalDoctorsCollection.map(doctor => (
                                     <option key={doctor.id} value={doctor.id}>
                                         {doctor.name} {doctor.email}
                                     </option>
-                                ))}
+                                )) : (<>
+
+                                </>)}
                             </select>
                         </div>
 

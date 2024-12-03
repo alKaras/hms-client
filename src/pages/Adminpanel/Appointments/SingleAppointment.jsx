@@ -133,7 +133,7 @@ export const SingleAppointment = ({ forUser }) => {
                                     {appointment.service.isOnline ? (
                                         <>
                                             <p>
-                                                <strong>{t('Link')}</strong> {appointment.meetLink}
+                                                <strong>{t('link')}:</strong> {appointment.meetLink}
                                             </p>
                                         </>) : (<></>)}
 

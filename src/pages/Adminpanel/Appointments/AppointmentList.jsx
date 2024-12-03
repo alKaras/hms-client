@@ -179,6 +179,7 @@ export const AppointmentList = ({ forUser }) => {
                                 <th>{t('doctor')}</th>
                                 <th>{t('service')}</th>
                                 <th>{t('patient')}</th>
+                                {/* <th>{t('type')}</th> */}
                                 <th>{t('startTime')}</th>
                                 <th>{t('status')}</th>
                                 <th>{t('actions')}</th>
@@ -197,6 +198,9 @@ export const AppointmentList = ({ forUser }) => {
                                     <td>
                                         {item.patient.name} {item.patient.surname} ({item.patient.email} | {item.patient.phone})
                                     </td>
+                                    {/* <td>
+                                        {item.service.isOnline ? t('online') : t('offline')}
+                                    </td> */}
                                     <td>
                                         {format(new Date(item.service.start_time), 'dd.MM.yyyy HH:mm')}
                                     </td>
@@ -228,6 +232,7 @@ export const AppointmentList = ({ forUser }) => {
                                             <Button
                                                 style={{ marginLeft: '10px' }}
                                                 className='btn btn-secondary'
+                                                title={'copy meet link'}
                                                 onClick={(e) => copyLinkToClipBoard(e, item.meetLink)}
                                             >
                                                 <i class="fa-regular fa-copy"></i>

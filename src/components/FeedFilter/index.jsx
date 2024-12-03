@@ -77,10 +77,19 @@ export default function FeedFilter({
         const value = e.target.value;
 
         setTitle(value);
-        setConditions((prevConditions) => [
-            ...prevConditions.filter(cond => cond[0] !== 'title'),
-            ['hospital_title', 'LIKE', `%${value}%`]
-        ]);
+        // setConditions((prevConditions) => [
+        //     ...prevConditions.filter(cond => cond[0] !== 'title'),
+        //     ['hospital_title', 'LIKE', `%${value}%`]
+        // ]);
+        setConditions((prevConditions) => {
+            const filteredConditions = prevConditions.filter(cond => cond[0] !== 'hospital_title');
+
+            if (value.trim()) {
+                filteredConditions.push(['hospital_title', 'LIKE', `%${value}%`]);
+            }
+
+            return filteredConditions;
+        });
     }
 
     const handleStatusChange = (e) => {
