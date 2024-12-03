@@ -124,7 +124,7 @@ export default function Login() {
                         <button type="submit" className={`btn ${AuthStyles['btn']}`}>{t('login')}</button>
                         <p className={AuthStyles.linkReg}><Link to={"/sign-up"}>{t('registerLink')}</Link></p>
 
-                        {error && error !== 'Token not provided' && (
+                        {error && error !== 'Token not provided' && error !== 'Token has expired' && (
                             <>
                                 <div style={{ color: 'red', fontWeight: 'bold' }}>
                                     {error}
