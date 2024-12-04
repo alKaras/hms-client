@@ -121,32 +121,32 @@ export const TimeSlotPicker = ({
 
                 <h2 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '25px' }} >{t('timeslots')} {isDoctorPage ? t('forConsult') : ''}</h2>
 
-                {(!isDoctor) ? (
-                    <div className='d-flex justify-between align-items-center'>
-                        <h3 style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '25px' }}>{t('availableSlots')}: </h3>
+                {/* {(!isDoctor) ? ( */}
+                <div className='d-flex justify-between align-items-center'>
+                    <h3 style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '25px' }}>{t('availableSlots')}: </h3>
 
-                        <ul className='d-flex justify-between align-items-center'>
-                            {(isSlotLoaded && slotStats.length > 0) ? slotStats.map((slot) => (
+                    <ul className='d-flex justify-between align-items-center'>
+                        {(isSlotLoaded && slotStats.length > 0) ? slotStats.map((slot) => (
+                            <>
+                                <li style={{ border: '1px solid black', borderRadius: '5px', padding: '10px', marginLeft: '10px' }}>
+                                    <p style={{ marginBottom: '5px', fontWeight: 'bold' }}>{[slot.serviceId]} {slot.serviceName}</p>
+                                    <p style={{ marginBottom: '5px' }}>{t('date')}: {format(new Date(slot.date), 'dd.MM.yyyy')}</p>
+                                    <p style={{ margin: 0 }}>{t('numofavailable')} {slot.free_slots}</p>
+                                </li >
+                            </>
+
+                        ))
+                            : (
                                 <>
-                                    <li style={{ border: '1px solid black', borderRadius: '5px', padding: '10px', marginLeft: '10px' }}>
-                                        <p style={{ marginBottom: '5px', fontWeight: 'bold' }}>{[slot.serviceId]} {slot.serviceName}</p>
-                                        <p style={{ marginBottom: '5px' }}>{t('date')}: {format(new Date(slot.date), 'dd.MM.yyyy')}</p>
-                                        <p style={{ margin: 0 }}>{t('numofavailable')} {slot.free_slots}</p>
-                                    </li >
+                                    {t('emptyAvailableSlots')}
                                 </>
-
-                            ))
-                                : (
-                                    <>
-                                        {t('emptyAvailableSlots')}
-                                    </>
-                                )}
-                        </ul>
-                    </div>
-                ) : (
-                    <>
-                    </>
-                )}
+                            )}
+                    </ul>
+                </div>
+                {/* ) : ( */}
+                {/* <>
+                </> */}
+                {/* )} */}
 
 
 

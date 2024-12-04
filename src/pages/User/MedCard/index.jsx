@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../../components/Header'
 import MedcardStyles from './MedCard.module.scss'
-import { useSelector } from 'react-redux';
-import { infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMe, infoAboutUser, selectIsLogged } from '../../../redux/slices/authSlice';
 import { fetchUserMedCard } from '../../../api/httpApiClient.js';
 import { Button, Spinner } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 
 export const MedCard = () => {
     const [loaded, setLoaded] = useState(false);
+    const dispatch = useDispatch();
 
     const [medcardData, setMedcardData] = useState(null);
     const user = useSelector(infoAboutUser);
@@ -35,6 +36,10 @@ export const MedCard = () => {
                     setNoRecord(true);
                 }
             })
+
+            if (user.medcard === null) {
+                dispatch(getMe());
+            }
         }
     }, [userId])
 

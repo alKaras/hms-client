@@ -50,7 +50,7 @@ export default function Header() {
             <LinkContainer to={
                 isUser ? '/' :
                     isDoctor ? '/adminpanel/services' :
-                        isManager ? '/adminpanel/users' : '/adminpanel/hospitals'}>
+                        isManager ? '/adminpanel/users' : isAdmin ? '/adminpanel/hospitals' : '/'}>
                 <Navbar.Brand className='d-flex align-items-center'>
                     <img
                         src="/assets/logo/logo.svg"

@@ -126,7 +126,7 @@ export default function Reports() {
                 <div style={{ marginTop: '50px' }}>
                     {isLoaded ? (
                         <>
-                            <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '15px' }}>{t('avgServicePerDay')}</h2>
+                            <h2 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '15px' }}>{t('information')}</h2>
                             <Table style={{ marginBottom: '25px' }}>
                                 <thead>
                                     <tr className='text-center'>

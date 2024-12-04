@@ -37,7 +37,7 @@ export const MedCardAction = ({ isEdit }) => {
 
     const user = useSelector(infoAboutUser);
     const isLogged = useSelector(selectIsLogged);
-    const isAllowedToView = (isLogged && user.roles === 'user') && (Number(user.medcard) === Number(_id));
+    const isAllowedToView = isEdit ? ((isLogged && user.roles === 'user') && (Number(user.medcard) === Number(_id))) : isLogged && user.roles === 'user';
 
     const { i18n } = useTranslation();
 
