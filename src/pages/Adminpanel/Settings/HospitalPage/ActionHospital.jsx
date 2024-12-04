@@ -26,14 +26,16 @@ export default function ActionHospital({ isEdit }) {
 
     const { i18n } = useTranslation();
 
-    const isAllowedToEdit = (isLogged && isEdit) && ((isManager && (Number(user.hospitalId) === Number(_id))) || user.roles === 'admin');
+    const isAllowedToEditOrCreate = isEdit ?
+        isLogged && ((isManager && (Number(user.hospitalId) === Number(_id))) || user.roles === 'admin')
+        : isLogged && user.roles === 'admin';
 
 
     useEffect(() => {
         const savedLanguage = localStorage.getItem('language') || 'uk';
         i18n.changeLanguage(savedLanguage);
         if (isLogged) {
-            if (!isAllowedToEdit) {
+            if (!isAllowedToEditOrCreate) {
                 navigate('/404');
             }
             if (isEdit) {

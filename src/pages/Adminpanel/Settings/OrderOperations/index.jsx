@@ -329,6 +329,7 @@ export const OrderOperations = ({ isManager }) => {
                                                         department={item.timeslot.department.title}
                                                         price={item.timeslot.price}
                                                         key={ind}
+                                                        id={item.timeslot.id}
                                                         canDownload={specificOrder.paid_status !== 'CANCELED' && specificOrder.paid_status !== 'PENDING'}
 
                                                     />
